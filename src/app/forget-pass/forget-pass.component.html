@@ -1,0 +1,76 @@
+<div class="outer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <div class="panel border bg-white">
+          <div class="panel-heading">
+            <!-- <h3 class="pt-3 font-weight-bold">Sign up</h3> -->
+            <img
+              id="profile-img"
+              src="../../assets/img/DAT.png"
+              class="profile-img-card img-responsive"
+            />
+            <!-- <span class="notice-logo">Radiance</span> -->
+          </div>
+
+          <div class="panel-body p-3">
+            <form [formGroup]="forgetPassForm" (ngSubmit)="onSubmit()">
+              <p class="notice-msg text-center pt-3">
+                We just need your registered email address to send you password
+                reset link.
+              </p>
+
+              <div class="form-group pt-3">
+                <div class="input-field">
+                  <span class="fa fa-envelope p-2"> </span>
+                  <input
+                    [(ngModel)]="email"
+                    formControlName="uEmail"
+                    type="email"
+                    placeholder="Enter your Email"
+                  />
+                </div>
+              </div>
+              <small
+                *ngIf="
+                  forgetPassForm.controls['uEmail'].dirty &&
+                  forgetPassForm.hasError('required', 'uEmail')
+                "
+                class="text-danger"
+                >*Email is required.</small
+              >
+              <small
+                *ngIf="
+                  forgetPassForm.controls['uEmail'].dirty &&
+                  forgetPassForm.hasError('pattern', 'uEmail')
+                "
+                class="text-danger"
+                >*Please enter valid email.</small
+              >
+
+              <div class="form-group custom-btn">
+                <button
+                  type="reset"
+                  class="btn btn-secondary btn-fill btn-block"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  [disabled]="forgetPassForm.invalid"
+                  type="submit"
+                  class="btn btn-primary btn-fill btn-block"
+                >
+                  Send
+                </button>
+              </div>
+              <div class="text-center text-muted">
+                <a id="forget" routerLink="/login">&lt; back to login</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
