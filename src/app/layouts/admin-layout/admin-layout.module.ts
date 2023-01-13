@@ -36,7 +36,6 @@ import { ChangePasswordComponent } from "app/change-password/change-password.com
     HomeComponent,
     UserProfileComponent,
     NotificationsComponent,
-    DailyComponent,
     WeeklyComponent,
     ScheduleComponent,
     ChangePasswordComponent,

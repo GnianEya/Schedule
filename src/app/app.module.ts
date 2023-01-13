@@ -13,6 +13,14 @@ import { ForgetPassComponent } from "./forget-pass/forget-pass.component";
 import { PasswordComponent } from "./password/password.component";
 import { GetstartedComponent } from "./getstarted/getstarted.component";
 import { UserLayoutComponent } from "./layouts/user-layout/user-layout.component";
+import { BrowserModule } from "@angular/platform-browser";
+import { OverlayModule } from "@angular/cdk/overlay";
+import { MatDialogModule } from "@angular/material/dialog";
+import { FullCalendarModule } from "@fullcalendar/angular";
+import { FilterPipe } from "services/filter.pipe";
+import { PopupModalComponent } from "./popup-modal/popup-modal.component";
+import { DailyComponent } from "./daily/daily.component";
+import { PasswordConfirmationPopupComponent } from "./password-confirmation-popup/password-confirmation-popup.component";
 
 @NgModule({
   imports: [
@@ -23,6 +31,10 @@ import { UserLayoutComponent } from "./layouts/user-layout/user-layout.component
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
+    BrowserModule,
+    OverlayModule,
+    FullCalendarModule,
+    MatDialogModule,
   ],
   declarations: [
     AppComponent,
@@ -33,6 +45,10 @@ import { UserLayoutComponent } from "./layouts/user-layout/user-layout.component
     PasswordComponent,
     GetstartedComponent,
     UserLayoutComponent,
+    FilterPipe,
+    PopupModalComponent,
+    DailyComponent,
+    PasswordConfirmationPopupComponent
   ],
   providers: [],
   bootstrap: [AppComponent],
