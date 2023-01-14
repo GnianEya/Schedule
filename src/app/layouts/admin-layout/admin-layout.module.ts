@@ -10,7 +10,7 @@ import { MatRippleModule } from "@angular/material/core";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSelectModule } from "@angular/material/select";
-
+import { OverlayModule } from "@angular/cdk/overlay";
 import { DailyComponent } from "app/daily/daily.component";
 import { ScheduleComponent } from "app/schedule/schedule.component";
 import { HomeComponent } from "app/home/home.component";
@@ -33,8 +33,7 @@ import { ChangePasswordComponent } from "app/change-password/change-password.com
   declarations: [
     HomeComponent,
     UserProfileComponent,
-    DailyComponent,
-    WeeklyComponent,
+
     ScheduleComponent,
     ChangePasswordComponent,
   ],
