@@ -65,7 +65,7 @@ export class DailyComponent implements OnInit,OnChanges{
   eventTitle:any;
   eventStartDate:any;
   eventStartTime:any;
-  url = 'http://localhost:8080/user/serchUsesDetails';
+  url = 'http://localhost:8081/user/serchUsesDetails';
   testImage: any;
   eventData:any;
   optimizedEventData:any;
@@ -86,6 +86,7 @@ export class DailyComponent implements OnInit,OnChanges{
   scheduleIdHost:any;
   attendeesHost:any;
   optimizedattendeesHost:any;
+  search_no_data:boolean=false;
 constructor(private dialogView:MatDialog,private data:DataShareService,private httpService: HttpServiceService,private sanitizer: DomSanitizer){}
 @ViewChild("calendar", { static: true })
   calendarComponent!: FullCalendarComponent;
@@ -112,7 +113,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
 
     //get logined username
 
-    this.httpService.getMethod("http://localhost:8080/user/serchUserProfile?userId="+this.currentLoginUserId).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/serchUserProfile?userId="+this.currentLoginUserId).subscribe(
       async (response)=>{
         this.currentLoginUsernameHost=response;
         console.log("Current Logined User name Host : ",this.currentLoginUsernameHost);
@@ -127,7 +128,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
 
     //calendar
 
-    this.httpService.getMethod("http://localhost:8080/user/serchUserSchedule?userId="+this.currentLoginUserId)
+    this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+this.currentLoginUserId)
     .subscribe(
       async (response)=>{
         this.eventarray=response as any[];
@@ -234,7 +235,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
     this.searchCalendarOptions = {
       // schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
       timeZone: "local",
-      plugins: [dayGridPlugin, interactionPlugin],
+      plugins: [timeGridPlugin,dayGridPlugin, interactionPlugin],
       allDaySlot:false, //remove allday header
       contentHeight:400, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
@@ -334,7 +335,7 @@ console.log("Show : "+this.isDisplay);
     console.log("Event Start Time : ", this.eventStartTime);
 
     //get scheduleId
-    this.httpService.getMethod("http://localhost:8080/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
   async (response)=>{
    this.scheduleIdHost=response;
     console.log("Schedule Id Host : ",this.scheduleIdHost);
@@ -342,7 +343,7 @@ console.log("Show : "+this.isDisplay);
       (data)=>{
         this.scheduleId=data.id;
         console.log("Schedule Id : ",this.scheduleId);
-        this.httpService.getMethod("http://localhost:8080/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
+        this.httpService.getMethod("http://localhost:8081/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
     async (response)=>{
     this.attendeesHost=response;
     console.log("Attendee Host : ",this.attendeesHost);
@@ -353,7 +354,7 @@ console.log("Show : "+this.isDisplay);
   }
 );
 
-    this.httpService.getMethod("http://localhost:8080/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
       async (response)=>{
         this.eventData=response;
         console.log("Event Data : ",this.eventData);
@@ -388,30 +389,10 @@ console.log("Show : "+this.isDisplay);
     console.log("Attendee : ",this.attendeesHost);
 
     if(this.isEditable){
-      // Swal.fire({
-      //   title: 'Meeting Details',
-      //   icon: 'info',
-      //   html:'Title'+
-      //           '<td class="text-primary">{{title}}</td>'+
-      //       '</tr>'+
-      //       '<tr>'+
-      //           <td>Description</td>
-      //           <td class="text-primary">{{description}}</td>
-      //       </tr>
-      //       <tr>
-      //           <td>Meeting start at</td>
-      //           <td class="text-primary">{{start_time}}</td>
-      //       </tr>
-      //       <tr>
-      //           <td>Approximatly end at &nbsp;&nbsp;&nbsp;</td>
-      //           <td class="text-primary">{{approximated_end_time}}</td>
-      //       </tr>'
-      // }
-      // );
       this.dialogView.open(PopupModalComponent,{
         data:{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end},
-        width: '25vw', //sets width of dialog
-          height:'50vh', //sets width of dialog
+        width: '40vw', //sets width of dialog
+          height:'70vh', //sets width of dialog
           maxWidth: '100vw', //overrides default width of dialog
           maxHeight: '100vh', //overrides default height of dialog
           disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
@@ -430,7 +411,7 @@ console.log("Show : "+this.isDisplay);
     this.eventStartTime=arg.event.startStr.substring(11,19);
     console.log("Event Start Time : ", this.eventStartTime);
 
-    this.httpService.getMethod("http://localhost:8080/user/eventDetails?userId="+this.searchUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.searchUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
       async (response)=>{
         this.searchEventData=response;
         console.log("Search Event Data : ",this.searchEventData);
@@ -465,15 +446,15 @@ console.log("Show : "+this.isDisplay);
 
    
     if(this.isEditable){
-      // this.dialogView.open(PopupModalComponent,{
-      //   data:{title:this.searchtitle,description:this.searchdescription,attendees:this.searchattendees,start:this.searchstart,end:this.searchend},
-      //   width: '25vw', //sets width of dialog
-      //     height:'50vh', //sets width of dialog
-      //     maxWidth: '100vw', //overrides default width of dialog
-      //     maxHeight: '100vh', //overrides default height of dialog
-      //     disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+       this.dialogView.open(PopupModalComponent,{
+         data:{title:this.searchtitle,description:this.searchdescription,attendees:this.searchattendees,start:this.searchstart,end:this.searchend},
+         width: '40vw', //sets width of dialog
+           height:'70vh', //sets width of dialog
+           maxWidth: '100vw', //overrides default width of dialog
+           maxHeight: '100vh', //overrides default height of dialog
+           disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
         
-      // });
+       });
     }else{
       console.log("Meeting passed through.");
     }
@@ -503,6 +484,7 @@ console.log("Show : "+this.isDisplay);
       //add to local Storage
       this.searchUserIdArray.push(this.searchUserId);
        this.isOpen = !this.isOpen;
+       this.search_no_data=!this.search_no_data;
      
     }
 
@@ -510,41 +492,46 @@ console.log("Show : "+this.isDisplay);
 
   isShow() {
     console.log("Search Show .");
-    this.data.changeMessage(true);
-    this.httpService.getMethod("http://localhost:8080/user/serchUserSchedule?userId="+this.searchUserId).subscribe(
-      async (response)=>{
-        this.searchEventArray=response as any[];
-        console.log("The response : ",response);
-        this.optimizedSearchEventArray=this.searchEventArray.map(
-          (e)=>{
-            var start=e.start+'T'+e.start_time;
-            var end=e.end+'T'+e.end_time;
-            return{
-              resourceId: "1",
-              title:e.title,
-              start:start,
-              end:end,
-              color:this.colorization(e.status)
-            };
-          });
-          this.searchCalendarOptions.events=this.optimizedSearchEventArray;
-      }
-    );
-    this.data.currentMessage.subscribe(msg=>this.isDisplay=msg);
-console.log("Show : "+this.isDisplay);
- if(this.isDisplay==true){
-  console.log("isStyleDisplay :  true");
- }else{
-  console.log("isStyleDisplay : false");
- }
- 
- //filter no inclusive same item
- localStorage.setItem("Search_EVENT_KEY@userId",JSON.stringify(this.searchUserIdArray));
- this.userIdinLS=JSON.parse(localStorage.getItem("Search_EVENT_KEY@userId")!);
- console.log("search user ID in local Storage : ",this.userIdinLS);
- console.log(typeof this.userIdinLS);
- console.log("search user ID in local Storage with index : ",this.userIdinLS[0],this.userIdinLS[1],this.userIdinLS[2]);
-    this.staffname=this.staffnamefetch;
+    if(this.search_no_data){
+      this.data.changeMessage(true);
+      this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+this.searchUserId).subscribe(
+        async (response)=>{
+          this.searchEventArray=response as any[];
+          console.log("The response : ",response);
+          this.optimizedSearchEventArray=this.searchEventArray.map(
+            (e)=>{
+              var start=e.start+'T'+e.start_time;
+              var end=e.end+'T'+e.end_time;
+              return{
+                resourceId: "1",
+                title:e.title,
+                start:start,
+                end:end,
+                color:this.colorization(e.status)
+              };
+            });
+            this.searchCalendarOptions.events=this.optimizedSearchEventArray;
+        }
+      );
+      this.data.currentMessage.subscribe(msg=>this.isDisplay=msg);
+  console.log("Show : "+this.isDisplay);
+   if(this.isDisplay==true){
+    console.log("isStyleDisplay :  true");
+   }else{
+    console.log("isStyleDisplay : false");
+   }
+   
+   //filter no inclusive same item
+   localStorage.setItem("Search_EVENT_KEY@userId",JSON.stringify(this.searchUserIdArray));
+   this.userIdinLS=JSON.parse(localStorage.getItem("Search_EVENT_KEY@userId")!);
+   console.log("search user ID in local Storage : ",this.userIdinLS);
+   console.log(typeof this.userIdinLS);
+   console.log("search user ID in local Storage with index : ",this.userIdinLS[0],this.userIdinLS[1],this.userIdinLS[2]);
+      this.staffname=this.staffnamefetch;
+    
+      this.search_no_data=!this.search_no_data;
+
+    }
   }
 
   previousfetch(){
@@ -566,7 +553,7 @@ console.log("Show : "+this.isDisplay);
         this.isDisplay=true;
         
        }
-       this.httpService.getMethod("http://localhost:8080/user/serchUserSchedule?userId="+previousSearchUserId).subscribe(
+       this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+previousSearchUserId).subscribe(
       async (response)=>{
         this.previousUser=response as any[];
         console.log("The response : ",response);
@@ -621,7 +608,7 @@ console.log("Show : "+this.isDisplay);
       
      }
 
-     this.httpService.getMethod("http://localhost:8080/user/serchUserSchedule?userId="+nextSearchUserId).subscribe(
+     this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+nextSearchUserId).subscribe(
       async (response)=>{
         this.nextUser=response as any[];
         console.log("The response : ",response);
@@ -661,7 +648,7 @@ console.log("Show : "+this.isDisplay);
 
   grapAttandee(id:any,title:string,start:any,starttime:any){
     //get scheduleId
-    this.httpService.getMethod("http://localhost:8080/user/eventDetails?userId="+id+"&title="+title+"&start="+start+"&starttime="+starttime).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+id+"&title="+title+"&start="+start+"&starttime="+starttime).subscribe(
   async (response)=>{
    this.scheduleIdHost=response;
     console.log("Schedule Id Host : ",this.scheduleIdHost);
@@ -669,7 +656,7 @@ console.log("Show : "+this.isDisplay);
       (data)=>{
         this.scheduleId=data.id;
         console.log("Schedule Id : ",this.scheduleId);
-        this.httpService.getMethod("http://localhost:8080/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
+        this.httpService.getMethod("http://localhost:8081/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
     async (response)=>{
     this.attendeesHost=response;
     console.log("Attendee Host : ",this.attendeesHost);

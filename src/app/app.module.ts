@@ -21,6 +21,7 @@ import { FilterPipe } from "services/filter.pipe";
 import { PopupModalComponent } from "./popup-modal/popup-modal.component";
 import { DailyComponent } from "./daily/daily.component";
 import { PasswordConfirmationPopupComponent } from "./password-confirmation-popup/password-confirmation-popup.component";
+import { WeeklyComponent } from "./weekly/weekly.component";
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { PasswordConfirmationPopupComponent } from "./password-confirmation-popu
     FilterPipe,
     PopupModalComponent,
     DailyComponent,
+    WeeklyComponent,
     PasswordConfirmationPopupComponent
   ],
   providers: [],
