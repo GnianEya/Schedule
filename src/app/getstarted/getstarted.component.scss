@@ -4,6 +4,7 @@ nav {
 
   // background: rgba(0, 0, 0, 0.6);
   position: fixed;
+  // margin-top: 2%;
 }
 
 .mainnav {
@@ -12,21 +13,21 @@ nav {
   display: flex;
   /*justify-content: center;
 	align-items:center;*/
-  margin-top: 20px;
+  margin-top: 2%;
 }
 
 .mainnav li a {
-  color: #143670;
+  color: #4154f1;
   text-decoration: none;
   font-size: 20px;
-  transition: color 2s;
+  transition: color 0.5s;
 }
 
 .mainnav li a.login-btn {
-  background: #cbdaf5;
+  background: #fff;
   padding: 8px 15px;
   font-weight: 500;
-  border: 1px solid #cbdaf5;
+  border: 1px solid #4154f1;
   border-radius: 4px;
 }
 
@@ -43,10 +44,15 @@ nav {
   display: inline-block;
   color: #143670;
   text-decoration: none;
-  font-size: 30px;
+  font-size: 25px;
   margin-top: 15px;
   font-weight: 600;
   margin-left: 7%;
+}
+
+.logo span {
+  font-size: 40px;
+  color: #031080;
 }
 .logo-dat {
   margin-left: 7%;
@@ -58,7 +64,13 @@ nav {
 .mainnav li a.getstarted:hover {
   color: #4154f1;
   background-color: #fff;
-  border: 1px solid #143670;
+  border: 1px solid #4154f1;
+}
+
+.mainnav li a.login-btn:hover {
+  color: #fff;
+  background-color: #4154f1;
+  border: 1px solid #4154f1;
 }
 
 header {
@@ -73,21 +85,22 @@ header {
 
 .header {
   position: absolute;
-  top: 20%;
+  top: 25%;
   left: 7%;
 }
 .header h1 {
   margin: 0;
   font-size: 40px;
-  font-weight: 600;
+  font-weight: 400;
   color: #143670;
   margin-bottom: 5%;
 }
 
 .header h2 {
-  color: #444444;
+  color: #495568;
   margin: 15px 0 0 0;
-  font-size: 24px;
+  font-size: 22px;
+  font-weight: 500;
 }
 
 .header .btn-get-started {
@@ -110,5 +123,5 @@ header {
 .header .btn-get-started:hover {
   color: #4154f1;
   background-color: #fff;
-  border: 1px solid #143670;
+  border: 1px solid #4154f1;
 }

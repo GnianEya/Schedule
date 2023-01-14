@@ -1,7 +1,7 @@
 export class User {
   empId!: Number;
-  name!: String;
+  uname!: String;
   password!: String;
   coPassword!: String;
-  email!: String;
+  mail!: String;
 }

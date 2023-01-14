@@ -1,7 +1,7 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { AppRoutingModule } from "./app.routing";
 import { ComponentsModule } from "./components/components.module";
@@ -13,6 +13,10 @@ import { ForgetPassComponent } from "./forget-pass/forget-pass.component";
 import { PasswordComponent } from "./password/password.component";
 import { GetstartedComponent } from "./getstarted/getstarted.component";
 import { UserLayoutComponent } from "./layouts/user-layout/user-layout.component";
+import { AuthGuard } from "_auth/auth.guard";
+import { AuthInterceptor } from "_auth/auth.interceptor";
+import { UserService } from "services/user.service";
+import { PasswordService } from "services/password.service";
 
 @NgModule({
   imports: [
@@ -34,7 +38,16 @@ import { UserLayoutComponent } from "./layouts/user-layout/user-layout.component
     GetstartedComponent,
     UserLayoutComponent,
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    UserService,
+    PasswordService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

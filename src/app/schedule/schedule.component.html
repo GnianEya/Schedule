@@ -415,17 +415,35 @@
                     <label class="col-form-label">Attached</label>
                   </div>
                 </div>
-                <div class="col-md-8">
+                <!-- <div class="col-md-8">
                   <div class="form-group">
                     <input
-                      type="file"
-                      id="file"
-                      multiple
                       (change)="saveFile($event)"
+                      type="file"
+                      class=""
+                      id=""
+                      required
+                      multiple="multiple"
                     />
+
                     <div *ngIf="errorMessage" class="error">
                       {{ errorMessage }}
                     </div>
+                  </div>
+                </div> -->
+
+                <div class="col-md-8">
+                  <div class="form-control">
+                    <input
+                      type="file"
+                      class=""
+                      id=""
+                      (change)="saveFile($event)"
+                      multiple="multiple"
+                    />
+                  </div>
+                  <div *ngIf="errorMessage" class="error">
+                    {{ errorMessage }}
                   </div>
                 </div>
               </div>
@@ -505,6 +523,14 @@
                 </div>
               </div>
             </form>
+
+            <!-- <div class="col-md-6">
+              <form action="" style="background: red">
+                <div class="form-control">
+                  <input type="file" class="" />
+                </div>
+              </form>
+            </div> -->
           </div>
         </div>
       </div>

@@ -52,6 +52,12 @@ const routes: Routes = [
       },
     ],
   },
+  //error page
+  // {
+  //   path: "**",
+  //   redirectTo: "getstarted",
+  //   pathMatch: "full",
+  // },
 ];
 
 @NgModule({

@@ -7,7 +7,7 @@ import { User } from "../models/user";
   providedIn: "root",
 })
 export class UserCrudService {
-  private baseUrl = "http://localhost:8081/register";
+  private baseUrl = "http://localhost:8081/user/register";
   constructor(private httpClient: HttpClient) {}
 
   addUser(user: User): Observable<Object> {

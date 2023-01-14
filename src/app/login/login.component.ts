@@ -10,6 +10,7 @@ import { User } from "../../models/user";
 import { UserAuthService } from "../../services/user-auth.service";
 import { UserService } from "../../services/user.service";
 import { NgToastService } from "ng-angular-popup";
+import { resolve } from "path";
 
 @Component({
   selector: "app-login",
@@ -58,6 +59,8 @@ export class LoginComponent implements OnInit {
       (response: any) => {
         this.userAuthService.setRoles(response.user.role);
         this.userAuthService.setToken(response.jwtToken);
+        this.userAuthService.setLoginUserId(response.user.userId);
+        this.userAuthService.setLoginUserName(response.user.uname);
 
         const role = response.user.role[0].roleName;
         if (role === "organizer") {
@@ -67,7 +70,7 @@ export class LoginComponent implements OnInit {
             summary: "Login as admin role",
             duration: 5000,
           });
-          this.router.navigate(["/admin"]);
+          this.router.navigate(["/home"]);
         } else {
           // alert('** Login as user role.');
           this.toast.success({
@@ -75,7 +78,7 @@ export class LoginComponent implements OnInit {
             summary: "Login as user role",
             duration: 5000,
           });
-          this.router.navigate(["/user"]);
+          this.router.navigate(["/home"]);
         }
       },
       (error: any) => {
