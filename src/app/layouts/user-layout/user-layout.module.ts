@@ -12,7 +12,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { AddEmployeeComponent } from "app/add-employee/add-employee.component";
 import { EmployeeListComponent } from "app/employee-list/employee-list.component";
 import { DepartmentsComponent } from "app/departments/departments.component";
-import { TableListComponent } from "app/table-list/table-list.component";
 
 @NgModule({
   imports: [
@@ -30,7 +29,6 @@ import { TableListComponent } from "app/table-list/table-list.component";
   declarations: [
     AddEmployeeComponent,
     EmployeeListComponent,
-    TableListComponent,
     DepartmentsComponent,
   ],
 })

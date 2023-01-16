@@ -1,15 +1,26 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-9 mx-auto">
         <div class="card">
           <div class="card-header card-header-primary">
             <h4 class="card-title">Home Page</h4>
             <p class="card-category">Here is a subtitle for this home page</p>
           </div>
-          <div class="card-body">
-           
-<full-calendar [options]="calendarOptions"></full-calendar>
+          <div class="card-body" style="display: flex">
+            <div class="col-md-5">
+              <div class="row">
+                <img
+                  src="../../assets/img/office.jpg"
+                  alt="calendar-img"
+                  class="img-responsive"
+                  style="max-width: 100%; height: auto; margin-top: 25%"
+                />
+              </div>
+            </div>
+            <div class="col-md-7">
+              <full-calendar [options]="calendarOptions"></full-calendar>
+            </div>
           </div>
         </div>
       </div>
@@ -18,17 +29,11 @@
 </div>
 
 <div>
-
-  <div class="col-md-6" style="display:none">
+  <div class="col-md-6" style="display: none">
     <form [formGroup]="testForm" (ngSubmit)="onSubmit()">
       <div class="col-md-4">
         <div class="form-group">
-          <select
-            class="form-control"
-            id=""
-            name=""
-           
-          >
+          <select class="form-control" id="" name="">
             <option disabled selected>Select department</option>
             <option
               *ngFor="let departments of department"
@@ -39,12 +44,13 @@
           </select>
         </div>
       </div>
-</form>
+    </form>
   </div>
- 
-<!-- <full-calendar [options]="calendarOptions">
+
+  <!-- <full-calendar [options]="calendarOptions">
   <ng-template #eventContent let-arg>
     <b>{{arg.timeText}}</b>
     <i>{{arg.event.title}}</i>
   </ng-template>
 </full-calendar> -->
+</div>

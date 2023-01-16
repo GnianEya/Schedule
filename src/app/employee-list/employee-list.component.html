@@ -1,16 +1,44 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-10 mx-auto">
         <div class="card">
-          <div class="card-header card-header-success">
-            <h4 class="card-title">Emp List Page</h4>
+          <div class="card-header card-header-primary">
+            <h4 class="card-title">Employee Data Table</h4>
             <p class="card-category">
-              Here is a subtitle for this Emp-list page
+              Here is a subtitle for this employe data table
             </p>
           </div>
           <div class="card-body">
-            <div class="row">Employee List</div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Position</th>
+                  <th>Action</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>5001</td>
+                    <td>Naing Naing</td>
+                    <td class="text-primary">ayemohmohnaing18@gmail.com</td>
+                    <td>Intern</td>
+                    <td>
+                      <button class="btn btn-primary">Update</button>
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        style="margin-left: 10px"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
