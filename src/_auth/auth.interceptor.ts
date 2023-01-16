@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private userAuthService: UserAuthService,
     private router: Router
-  ) {}
+  ) { }
 
   intercept(
     req: HttpRequest<any>,
@@ -26,9 +26,14 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req.clone());
     }
 
-    const token = this.userAuthService.getToken();
+    var token = this.userAuthService.getToken();
+    // console.log(token);
+    // if (token === '') {
+    //   this.router.navigate(["/login"]);
+    // }
 
     req = this.addToken(req, token);
+
 
     return next.handle(req).pipe(
       catchError((err: HttpErrorResponse) => {

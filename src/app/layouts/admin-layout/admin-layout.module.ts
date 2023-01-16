@@ -31,7 +31,7 @@ import { ChangePasswordComponent } from "app/change-password/change-password.com
     MatTooltipModule,
   ],
   declarations: [
-    HomeComponent,
+   
     UserProfileComponent,
 
     ScheduleComponent,

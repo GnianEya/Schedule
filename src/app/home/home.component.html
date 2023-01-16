@@ -8,10 +8,43 @@
             <p class="card-category">Here is a subtitle for this home page</p>
           </div>
           <div class="card-body">
-            <div class="row">Home</div>
+           
+<full-calendar [options]="calendarOptions"></full-calendar>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<div>
+
+  <div class="col-md-6" style="display:none">
+    <form [formGroup]="testForm" (ngSubmit)="onSubmit()">
+      <div class="col-md-4">
+        <div class="form-group">
+          <select
+            class="form-control"
+            id=""
+            name=""
+           
+          >
+            <option disabled selected>Select department</option>
+            <option
+              *ngFor="let departments of department"
+              value="{{ departments.departmentId }}"
+            >
+              {{ departments.departmentName }}
+            </option>
+          </select>
+        </div>
+      </div>
+</form>
+  </div>
+ 
+<!-- <full-calendar [options]="calendarOptions">
+  <ng-template #eventContent let-arg>
+    <b>{{arg.timeText}}</b>
+    <i>{{arg.event.title}}</i>
+  </ng-template>
+</full-calendar> -->

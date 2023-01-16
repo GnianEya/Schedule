@@ -28,6 +28,27 @@ import { PopupModalComponent } from "./popup-modal/popup-modal.component";
 import { DailyComponent } from "./daily/daily.component";
 import { PasswordConfirmationPopupComponent } from "./password-confirmation-popup/password-confirmation-popup.component";
 import { WeeklyComponent } from "./weekly/weekly.component";
+import { HomeComponent } from "./home/home.component";
+
+//wmk
+//import { FullCalendarModule } from "@fullcalendar/angular";
+// import interactionPlugin from '@fullcalendar/interaction';
+// import dayGridPlugin from '@fullcalendar/daygrid'
+
+// FullCalendarModule.registerPlugins([
+//   interactionPlugin,
+//   dayGridPlugin
+// ]);
+
+// FullCalendarModule.regis([
+//   interactionPlugin,
+//   dayGridPlugin
+// ]);
+
+
+
+
+
 
 @NgModule({
   imports: [
@@ -44,6 +65,7 @@ import { WeeklyComponent } from "./weekly/weekly.component";
     MatDialogModule,
   ],
   declarations: [
+    HomeComponent,
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
