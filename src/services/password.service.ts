@@ -28,8 +28,8 @@ export class PasswordService {
 
   //change-password
   changePassword(changePassword: ChangePassword): Observable<Object> {
-    return this.httpClient.post(
-      this.baseUrl + "/password/change_password",
+    return this.httpClient.put(
+      this.baseUrl + "/user/changePassword",
       changePassword
     );
   }

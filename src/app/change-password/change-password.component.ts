@@ -66,20 +66,21 @@ export class ChangePasswordComponent {
 
   //form submit
   onSubmit() {
+    this.changePassword.currentUserId = JSON.parse(localStorage.getItem("id"));
     console.log(this.changePassword);
-    // this.savePassword();
+    this.savePassword();
   }
 
   //start methods
 
-  // savePassword() {
-  //   this.passwordService.changePassword(this.changePassword).subscribe(
-  //     (data: any) => {
-  //       console.log(data);
-  //     },
-  //     (error) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
+  savePassword() {
+    this.passwordService.changePassword(this.changePassword).subscribe(
+      (data: any) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 }

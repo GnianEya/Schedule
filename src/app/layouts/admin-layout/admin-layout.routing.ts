@@ -9,7 +9,12 @@ import { ChangePasswordComponent } from "app/change-password/change-password.com
 import { AuthGuard } from "_auth/auth.guard";
 
 export const AdminLayoutRoutes: Routes = [
-  { path: "home", component: HomeComponent },
+  {
+    path: "home",
+    component: HomeComponent,
+    // canActivate: [AuthGuard],
+    // data: { roles: ["organizer", "member"] },
+  },
   { path: "user-profile", component: UserProfileComponent },
   { path: "daily", component: DailyComponent },
   {
