@@ -408,6 +408,7 @@ export class ScheduleComponent implements OnInit {
     this.schedule.membersList = this.preselected;
     this.schedule.schduleFile = this.selectFile;
     this.schedule.place = this.place;
+    this.schedule.createUser=JSON.parse(localStorage.getItem('id'));
     this.addSchedule();
     this.saveFiles();
     console.log(this.selectFile);

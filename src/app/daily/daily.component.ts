@@ -36,7 +36,7 @@ export class DailyComponent implements OnInit,OnChanges{
   isDisplay:boolean=false;
   calendarOptions: any;
   isEditable=true;
-  currentLoginUserId=2001; //acquire from local storage
+  currentLoginUserId:number; 
   currentLoginUsername='';
   currentLoginUsernameHost:any;
   eventarray:any[]=[];
@@ -110,6 +110,13 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
     
     
     console.log("init : "+this.isDisplay);
+
+    this.currentLoginUserId=JSON.parse(localStorage.getItem("id"));
+    console.log("Current Logined User ID : ",this.currentLoginUserId);
+
+    this.currentLoginUsername=JSON.parse(localStorage.getItem("name"));
+    console.log("Current Logined User Name : ",this.currentLoginUsername);
+    
 
     //get logined username
 
@@ -188,13 +195,16 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       timeZone: "local",
       plugins: [timeGridPlugin,dayGridPlugin,interactionPlugin],
       allDaySlot:false, //remove allday header
-      contentHeight:400, //remove scroll bar and specify hight
+      contentHeight:500, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
+      slotMinTime:'07:00:00',
+      slotMaxTime:'19:00:00',
       selectable: true,
       dayMaxEventRows: true,
       dayMaxEvents: true,
       handleWindowResize:true, //to be responsive to window size
       initialView: "timeGridDay",
+      themeSystem:'bootstrap',
       // dateClick: this.onDateClick.bind(this),
       // events:this.optimizedeventarray,
       eventClick: this.isEditable? this.handleEventClick.bind(this):null,
@@ -225,10 +235,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       scrollTime: '07:00', //initial cursor
       aspectRatio: 0.0,
       slotDuration:'00:15:00', //time interval
-      validRange: {
-        start: "00:00",
-        end: "06:00"
-      }
+      
     };
 
     //searchCalendar
@@ -237,7 +244,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       timeZone: "local",
       plugins: [timeGridPlugin,dayGridPlugin, interactionPlugin],
       allDaySlot:false, //remove allday header
-      contentHeight:400, //remove scroll bar and specify hight
+      contentHeight:500, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
       selectable: true,
       dayMaxEventRows: true,
@@ -245,6 +252,9 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       handleWindowResize:true, //to be responsive to window size
       // eventStartEditable: false,
       initialView: "timeGridDay",
+      themeSystem:'bootstrap',
+      slotMinTime:'07:00:00',
+      slotMaxTime:'19:00:00',
       // dateClick: this.onDateClick.bind(this),
       // events: this.eventarray,
       eventClick: this.isEditable? this.searchHandleEventClick.bind(this):null,
@@ -275,10 +285,6 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       scrollTime: '07:00', //initial cursor
       aspectRatio: 0.0,
       slotDuration:'00:15:00', //time interval
-      validRange: {
-        start: "00:00",
-        end: "06:00"
-      },
       // slotLaneClassNames:"pg"
     };
 

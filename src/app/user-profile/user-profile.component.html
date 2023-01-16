@@ -21,7 +21,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Nick Name</label>
-                                        <input type="text" class="form-control" placeholder="Nick Name" (keyup)="getNickname(nn.value)" #nn>
+                                        <input type="text" class="form-control" placeholder="Nick Name" [value]="nickname" (keyup)="getNickname(nn.value)" #nn>
                                     </div>
                                 </div>
                                 <div class="col-md-4">

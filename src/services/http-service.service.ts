@@ -12,4 +12,7 @@ export class HttpServiceService {
   postMethod(url:string){
     return this.http.post(url,[]);
   }
+  putMethod(url:string,body:any){
+    return this.http.put<any>(url,body);
+  }
 }

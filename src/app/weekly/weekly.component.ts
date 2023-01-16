@@ -24,7 +24,7 @@ import { HttpServiceService } from '../../services/http-service.service';
   styleUrls: ['./weekly.component.scss']
 })
 export class WeeklyComponent implements OnInit {
-currentUserID=2000; //acquire from localStorage
+currentUserID:number;
 searchText='';
 isOpen=false;
 dataFromPicker="";
@@ -47,6 +47,8 @@ usernameTeam:any;
     ) { }
 
   ngOnInit() {
+    this.currentUserID=JSON.parse(localStorage.getItem("id"));
+    console.log("Current User ID : ",this.currentUserID);
     console.log("Date Picked : ",this.dataFromPicker);
     console.log("key up ",this.isOpen);
     console.log("Search text : ",this.searchText);
