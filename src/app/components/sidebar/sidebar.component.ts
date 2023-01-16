@@ -9,14 +9,35 @@ declare interface RouteInfo {
 }
 export const ROUTES1: RouteInfo[] = [
   { path: "/home", title: "Home", icon: "home", class: "" },
-  { path: "/user-profile", title: "User Profile", icon: "person", class: "" },
+
   { path: "/daily", title: "Daily", icon: "newspaper", class: "" },
   { path: "/weekly", title: "Weekly", icon: "bookmarks", class: "" },
   { path: "/schedule", title: "Schedule", icon: "book", class: "" },
+  // {
+  //   path: "/changePassword",
+  //   title: "Change Password",
+  //   icon: "lock",
+  //   class: "",
+  // },
+  // {
+  //   path: "/user-profile",
+  //   title: "User Profile",
+  //   icon: "person",
+  //   class: "",
+  // },
+];
+
+export const ROUTES01: RouteInfo[] = [
   {
     path: "/changePassword",
     title: "Change Password",
     icon: "lock",
+    class: "",
+  },
+  {
+    path: "/user-profile",
+    title: "User Profile",
+    icon: "person",
     class: "",
   },
 ];
@@ -39,5 +60,9 @@ export class SidebarComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  clear() {
+    localStorage.clear();
   }
 }

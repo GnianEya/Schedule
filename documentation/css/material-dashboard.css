@@ -16305,7 +16305,7 @@ fieldset[disabled] .form-group .form-control {
 .nav-pills.nav-pills-danger .nav-item .nav-link.active,
 .nav-pills.nav-pills-danger .nav-item .nav-link.active:focus,
 .nav-pills.nav-pills-danger .nav-item .nav-link.active:hover {
-  background-color: #f44336;
+  background-color: #4f86f7;
   -webkit-box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
     0 7px 10px -5px rgba(244, 67, 54, 0.4);
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
@@ -18525,7 +18525,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
     0 7px 10px -5px rgba(255, 152, 0, 0.4);
 }
 .sidebar[data-color="danger"] li.active > a {
-  background-color: #f44336;
+  background-color: #4f86f7;
   -webkit-box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
     0 7px 10px -5px rgba(244, 67, 54, 0.4);
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
@@ -18563,51 +18563,51 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   i {
   color: rgba(60, 72, 88, 0.8);
 }
-.sidebar[data-background-color="red"] .nav .nav-item .nav-link {
+.sidebar[data-background-color="azure"] .nav .nav-item .nav-link {
   color: #fff;
 }
-.sidebar[data-background-color="red"] .nav .nav-item i {
+.sidebar[data-background-color="azure"] .nav .nav-item i {
   color: rgba(255, 255, 255, 0.8);
 }
-.sidebar[data-background-color="red"]
+.sidebar[data-background-color="azure"]
   .nav
   .nav-item.active
   [data-toggle="collapse"],
-.sidebar[data-background-color="red"]
+.sidebar[data-background-color="azure"]
   .nav
   .nav-item:hover
   [data-toggle="collapse"] {
   color: #fff;
 }
-.sidebar[data-background-color="red"]
+.sidebar[data-background-color="azure"]
   .nav
   .nav-item.active
   [data-toggle="collapse"]
   i,
-.sidebar[data-background-color="red"]
+.sidebar[data-background-color="azure"]
   .nav
   .nav-item:hover
   [data-toggle="collapse"]
   i {
   color: rgba(255, 255, 255, 0.8);
 }
-.sidebar[data-background-color="red"] .user a {
+.sidebar[data-background-color="azure"] .user a {
   color: #fff;
 }
-.sidebar[data-background-color="red"] .simple-text {
+.sidebar[data-background-color="azure"] .simple-text {
   color: #fff;
 }
-.sidebar[data-background-color="red"] .sidebar-background:after {
+.sidebar[data-background-color="azure"] .sidebar-background:after {
   background: #f44336;
   opacity: 0.8;
 }
-.sidebar[data-background-color="red"] .user:after,
-.sidebar[data-background-color="red"] .logo:after,
-.sidebar[data-background-color="red"] .nav li.separator:after {
+.sidebar[data-background-color="azure"] .user:after,
+.sidebar[data-background-color="azure"] .logo:after,
+.sidebar[data-background-color="azure"] .nav li.separator:after {
   background-color: rgba(255, 255, 255, 0.3);
 }
-.sidebar[data-background-color="red"] .nav li:hover:not(.active) > a,
-.sidebar[data-background-color="red"]
+.sidebar[data-background-color="azure"] .nav li:hover:not(.active) > a,
+.sidebar[data-background-color="azure"]
   .nav
   li.active
   > [data-toggle="collapse"] {

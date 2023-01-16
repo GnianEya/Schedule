@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef } from "@angular/core";
-import { ROUTES1 } from "../sidebar/sidebar.component";
+import { ROUTES01, ROUTES1 } from "../sidebar/sidebar.component";
 import {
   Location,
   LocationStrategy,
@@ -18,6 +18,8 @@ export class NavbarComponent implements OnInit {
   mobile_menu_visible: any = 0;
   private toggleButton: any;
   private sidebarVisible: boolean;
+  private title01: any[];
+  // private title02: any;
 
   constructor(
     location: Location,
@@ -30,6 +32,8 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.listTitles = ROUTES1.filter((listTitle) => listTitle);
+    this.title01 = ROUTES01.filter((list) => list);
+    // this.title02 = ROUTES02;
     const navbar: HTMLElement = this.element.nativeElement;
     this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
     this.router.events.subscribe((event) => {
@@ -120,6 +124,7 @@ export class NavbarComponent implements OnInit {
 
   getTitle() {
     var titlee = this.location.prepareExternalUrl(this.location.path());
+
     if (titlee.charAt(0) === "#") {
       titlee = titlee.slice(1);
     }
@@ -129,6 +134,13 @@ export class NavbarComponent implements OnInit {
         return this.listTitles[item].title;
       }
     }
-    return "Home";
+
+    for (var i = 0; i < this.title01.length; i++) {
+      if (this.title01[i].path === titlee) {
+        return this.title01[i].title;
+      }
+    }
+
+    return "";
   }
 }
