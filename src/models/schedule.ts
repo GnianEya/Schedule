@@ -21,4 +21,4 @@ export class Schedule {
   //schduleFile?: File;
   uname!: String;
   userId!: String;
-}
+  createUser!:Number;}

@@ -31,7 +31,7 @@ import { Component,OnInit } from '@angular/core';
 })
 export class UserProfileComponent implements OnInit {
 isEdit:boolean=false;
-currentUserID=2000; //acquire from local storage
+currentUserID:number;
 selectedFile :File;
 showAtOnceProfile:any;
 validatedProfileDTO:ProfileDTO;
@@ -59,6 +59,8 @@ userdetails:any;
     ) { }
 
   ngOnInit() {
+    this.currentUserID=JSON.parse(localStorage.getItem("id"));
+    console.log("Current User Id : ",this.currentUserID);
     this.HttpService.getMethod('http://localhost:8081/user/serchUserProfile?userId='+this.currentUserID).subscribe(
      async (params) => {
       this.userdetails=params;
@@ -164,12 +166,13 @@ userdetails:any;
             authority:data.authority,
             password:data.password,
             team:data.team,
-            nickname:data.nickname,
+            nickname:data.nickName,
             userId:data.userId,
             username:data.uname,
             mail:data.mail,
             biography:data.biography
           }
+          
         }
       );
       console.log("username: ",this.editProfileData);
@@ -177,11 +180,12 @@ userdetails:any;
 this.editProfile.map(
   (data)=>{
     this.username=data.uname;
-    this.nickname=data.nickname;
+    this.nickname=data.nickName;
     this.team=data.team;
     this.biography=data.biography;
     this.mail=data.mail;
     console.log("username "+this.username);
+    console.log("Nick name",this.nickname);
   }
 );
 

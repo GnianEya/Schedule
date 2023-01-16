@@ -9,6 +9,8 @@ import { Router } from "@angular/router";
 import { NgToastService } from "ng-angular-popup";
 import { User } from "../../models/user";
 import { UserCrudService } from "../../services/user-crud.service";
+import { HttpServiceService } from "services/http-service.service";
+import { ScheduleService } from "services/schedule.service";
 
 @Component({
   selector: "app-signup",
@@ -23,15 +25,21 @@ export class SignupComponent {
   submitted: boolean = false;
   users!: User[];
   user: User = new User();
+  currentUserLogin:number;
+  base64data:any;
 
   constructor(
     private fb: FormBuilder,
     private userCrudService: UserCrudService,
     private router: Router,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private httpService:HttpServiceService,
+    private scheduleService:ScheduleService
   ) {}
 
   ngOnInit(): void {
+    //get logined user id
+    this.currentUserLogin=JSON.parse(localStorage.getItem("id"));
     //validation
     this.signUpForm = this.fb.group({
       employeeId: new FormControl(null, [
@@ -102,10 +110,15 @@ export class SignupComponent {
       }
     );
   }
+
+
   goToHome() {
     this.router.navigate(["/login"]);
   }
   goToError() {
     this.router.navigate(["/error"]);
   }
+
+ 
+
 }
