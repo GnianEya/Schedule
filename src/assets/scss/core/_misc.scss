@@ -1,7 +1,17 @@
 body {
-  background-color: #e8eaf6;
-  color: $black-color;
+  // background-color: #e8eaf6;
+  background-image: radial-gradient(
+      rgba(202, 222, 236, 0.896),
+      rgba(91, 122, 226, 0.75)
+    ),
+    url("../../../assets/img/office.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  // color: $black-color;
+  color: #e9edfa;
   font-weight: 300;
+  overflow: hidden;
 }
 
 legend {

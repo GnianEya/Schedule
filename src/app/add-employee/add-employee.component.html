@@ -10,7 +10,7 @@
             </p>
           </div>
           <div class="card-body">
-            <form (ngSubmit)="onSubmit()">
+            <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group pt-3">
@@ -20,9 +20,28 @@
                         type="text"
                         placeholder="ID"
                         class="form-control"
+                        formControlName="id"
+                        [(ngModel)]="employee.employeeId"
                       />
                     </div>
                   </div>
+                  <small
+                    *ngIf="
+                      employeeForm.controls['id'].dirty &&
+                      employeeForm.hasError('required', 'id')
+                    "
+                    class="text-danger"
+                    >*ID is required.</small
+                  >
+
+                  <small
+                    *ngIf="
+                      employeeForm.controls['id'].dirty &&
+                      employeeForm.hasError('minlength', 'id')
+                    "
+                    class="text-danger"
+                    >*ID must be 4 digits.</small
+                  >
                 </div>
 
                 <div class="col-md-6">
@@ -33,9 +52,19 @@
                         type="text"
                         placeholder="Name"
                         class="form-control"
+                        formControlName="name"
+                        [(ngModel)]="employee.employeeName"
                       />
                     </div>
                   </div>
+                  <small
+                    *ngIf="
+                      employeeForm.controls['name'].dirty &&
+                      employeeForm.hasError('required', 'name')
+                    "
+                    class="text-danger"
+                    >*Name is required.</small
+                  >
                 </div>
               </div>
 
@@ -43,51 +72,66 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <div class="input-field">
-                      <span class="fa fa-at p-2"> </span>
-                      <input
-                        type="email"
-                        placeholder="Email"
-                        class="form-control"
-                      />
+                      <span class="fa fa-bars p-2"> </span>
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (change)="onSelect($event)"
+                      >
+                        <option disabled selected>Select department</option>
+                        <option
+                          *ngFor="let departments of department"
+                          value="{{ departments.departmentId }}"
+                        >
+                          {{ departments.departmentName }}
+                        </option>
+                      </select>
                     </div>
                   </div>
                 </div>
 
                 <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-bars p-2"> </span>
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (change)="onSelect1($event)"
+                      >
+                        <option disabled selected>Select team</option>
+                        <option
+                          *ngFor="let teams of team"
+                          value="{{ teams.teamId }}"
+                        >
+                          {{ teams.teamName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
                   <div class="form-group">
                     <div class="input-field">
                       <span class="fa fa-briefcase p-2"> </span>
-                      <select class="form-control select-class" id="" name="">
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (click)="onSelectPosition($event)"
+                      >
                         <option disabled selected>Select position</option>
-                        <option>Team Leader</option>
-                        <option>Intern</option>
-                        <option>Manager</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-field">
-                      <span class="fa fa-bars p-2"> </span>
-                      <select class="form-control select-class" id="" name="">
-                        <option disabled selected>Select department</option>
-                        <option>offshore</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-field">
-                      <span class="fa fa-bars p-2"> </span>
-                      <select class="form-control select-class" id="" name="">
-                        <option disabled selected>Select Team</option>
-                        <option>POS</option>
+                        <option
+                          *ngFor="let positions of positionArr"
+                          value="{{ positions }}"
+                        >
+                          {{ positions }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -108,6 +152,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <button
+                      [disabled]="employeeForm.invalid"
                       type="submit"
                       class="btn btn-fill btn-primary btn-block mt-4"
                     >

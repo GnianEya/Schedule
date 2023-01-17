@@ -1,7 +1,7 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-10 mx-auto">
+      <div class="col-md-9 mx-auto">
         <div class="card">
           <div class="card-header card-header-primary">
             <h4 class="card-title">Department Data</h4>
@@ -17,11 +17,23 @@
                   <th>Team Name</th>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>001</td>
-                    <td class="text-primary">Offshore-1</td>
+                  <tr *ngFor="let departments of department">
+                    <td>{{ departments.departmentId }}</td>
+                    <td style="color: #3c4858; font-weight: bolder">
+                      {{ departments.departmentName }}
+                    </td>
 
-                    <td>POS</td>
+                    <td>
+                      <tr *ngFor="let teams of team">
+                        <div
+                          *ngIf="
+                            departments.departmentId === teams.departmentId
+                          "
+                        >
+                          <td>{{ teams.teamName }}</td>
+                        </div>
+                      </tr>
+                    </td>
                   </tr>
                 </tbody>
               </table>
