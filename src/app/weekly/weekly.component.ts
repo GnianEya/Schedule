@@ -136,15 +136,15 @@ usernameTeam:any;
   });
  }
 
-getUsername(index:number){
-console.log("Clicked "+index);
+getUsername(staff:any){
+console.log("Clicked staff info in card : ",staff);
 
   if (this.isOpen == true) {
-    this.searchUserId=this.searchFiltering[index].userId;
+    this.searchUserId=staff.userId;
     console.log("Search UserId : ",this.searchUserId);
-    this.searchUsername = this.searchFiltering[index].uname;
+    this.searchUsername = staff.username;
     console.log("Search Username : "+this.searchUsername);
-    this.searchTeamname = this.searchFiltering[index].teamName;
+    this.searchTeamname = staff.departmentname;
     console.log("Search Team name : ",this.searchTeamname);
     this.searchText=this.searchUsername;
     this.isOpen = !this.isOpen;

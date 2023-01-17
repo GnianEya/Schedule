@@ -136,7 +136,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
     //calendar
 
     this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+this.currentLoginUserId)
-    .subscribe(
+    .subscribe( 
       async (response)=>{
         this.eventarray=response as any[];
         
@@ -145,6 +145,14 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
           (e)=>{
             var start=e.start+'T'+e.start_time;
             var end=e.end+'T'+e.end_time;
+            var startdate=e.start;
+            var enddate=e.end;
+            if(startdate==enddate){
+              console.log("Single Day Event",e.start,e.end);
+
+            }else{
+              console.log("Multiple Day Event");
+            }
             return{
               resourceId: "1",
               title:e.title,
@@ -206,7 +214,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       initialView: "timeGridDay",
       themeSystem:'bootstrap',
       // dateClick: this.onDateClick.bind(this),
-      // events:this.optimizedeventarray,
+      // events:this.eventarray,
       eventClick: this.isEditable? this.handleEventClick.bind(this):null,
       eventTimeFormat: { // like '14:30:00'
         hour: '2-digit',
@@ -256,7 +264,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       slotMinTime:'07:00:00',
       slotMaxTime:'19:00:00',
       // dateClick: this.onDateClick.bind(this),
-      // events: this.eventarray,
+      events: this.eventarray,
       eventClick: this.isEditable? this.searchHandleEventClick.bind(this):null,
       eventTimeFormat: { // like '14:30:00'
         hour: '2-digit',
@@ -311,11 +319,13 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
         )
       }
     });
-    this.isDisplay=!this.isDisplay;
+    if(this.isDisplay){
+      this.isDisplay=!this.isDisplay;
+    }
     console.log("U removed search User Id : ",this.searchUserId);
     this.searchUserIdArray=this.searchUserIdArray.filter(item=>item!=this.searchUserId);
     console.log("Search User array after removing : ",this.searchUserIdArray);
-    localStorage.clear();
+    //localStorage.clear();
     localStorage.setItem("Search_EVENT_KEY@userId",JSON.stringify(this.searchUserIdArray));
     console.log("New re-allocation array in local storage : ",localStorage.getItem("Search_EVENT_KEY@userId"));
   }
@@ -479,13 +489,16 @@ console.log("Show : "+this.isDisplay);
     return this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,'+byte);
   }
 
-  getUsername(id: string, index: number) {
-    console.log(this.responseStaff[index]);
+  getUsername(staff: any ) {
+    console.log("Debug => " , this.responseStaff);
+    console.log("Debug => ", staff);
     console.log(this.staffname);
     if (this.isOpen == true) {
-      this.searchText = this.responseStaff[index].uname;
-      this.staffnamefetch = this.responseStaff[index].uname;
-      this.searchUserId=this.responseStaff[index].userId;
+      this.searchText = staff.username;
+      this.staffnamefetch = staff.username
+      this.searchUserId=staff.userId
+      console.log("search User Id : ",this.searchUserId);
+      console.log("Search User Name : ",this.searchText);
       console.log(this.searchText+" : "+this.searchUserId);
       //add to local Storage
       this.searchUserIdArray.push(this.searchUserId);
