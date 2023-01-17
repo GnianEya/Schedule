@@ -19,59 +19,65 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <input
-                      type="date"
-                      #dateInput
-                      (change)="onChangeStart(dateInput.value)"
-                      min="{{ currentDate | date : 'yyyy-MM-dd' }}"
-                      class="form-control"
-                      formControlName="start"
-                      id="start"
-                      name="date"
-                      required
-                    />
+                    <div class="input-field">
+                      <input
+                        type="date"
+                        #dateInput
+                        (change)="onChangeStart(dateInput.value)"
+                        min="{{ currentDate | date : 'yyyy-MM-dd' }}"
+                        class="form-control select-class"
+                        formControlName="start"
+                        id="start"
+                        name="date"
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <select
-                      class="form-control mr-2"
-                      id="inputStartTimeHour"
-                      name="startHour"
-                      (click)="onSelectStartHour($event)"
-                    >
-                      <option disabled selected>Hour</option>
-
-                      <option
-                        class="time-option"
-                        *ngFor="let startHours of startHour"
-                        value="{{ startHours }}"
-                        [disabled]="shouldDisableHour(startHours)"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class mr-2"
+                        id="inputStartTimeHour"
+                        name="startHour"
+                        (click)="onSelectStartHour($event)"
                       >
-                        {{ startHours }}
-                      </option>
-                    </select>
+                        <option disabled selected>Hour</option>
+
+                        <option
+                          class="time-option"
+                          *ngFor="let startHours of startHour"
+                          value="{{ startHours }}"
+                          [disabled]="shouldDisableHour(startHours)"
+                        >
+                          {{ startHours }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <select
-                      class="form-control time-option"
-                      id="inputStartTimeMinute"
-                      name="startMinute"
-                      (click)="onSelectStartMin($event)"
-                    >
-                      <option disabled selected>Minute</option>
-
-                      <option
-                        class="time-option"
-                        *ngFor="let startMins of startMin"
-                        value="{{ startMins }}"
-                        [disabled]="shouldDisableMinute(startMins)"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class time-option"
+                        id="inputStartTimeMinute"
+                        name="startMinute"
+                        (click)="onSelectStartMin($event)"
                       >
-                        {{ startMins }}
-                      </option>
-                    </select>
+                        <option disabled selected>Minute</option>
+
+                        <option
+                          class="time-option"
+                          *ngFor="let startMins of startMin"
+                          value="{{ startMins }}"
+                          [disabled]="shouldDisableMinute(startMins)"
+                        >
+                          {{ startMins }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -86,56 +92,62 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <input
-                      #dateInput1
-                      (change)="onChangeEnd(dateInput1.value)"
-                      min="{{ selectStartDate | date : 'yyyy-MM-dd' }}"
-                      type="date"
-                      class="form-control"
-                      id="end"
-                      name="date"
-                      required
-                    />
+                    <div class="input-field">
+                      <input
+                        #dateInput1
+                        (change)="onChangeEnd(dateInput1.value)"
+                        min="{{ selectStartDate | date : 'yyyy-MM-dd' }}"
+                        type="date"
+                        class="form-control select-class"
+                        id="end"
+                        name="date"
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <select
-                      class="form-control mr-2"
-                      id="inputEndTimeHour"
-                      name="endHour"
-                      (change)="onSelectEndHour($event)"
-                    >
-                      <option disabled selected>Hour</option>
-
-                      <option
-                        *ngFor="let startHours of startHour"
-                        value="{{ startHours }}"
-                        [disabled]="shouldDisableHourEnd(startHours)"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class mr-2"
+                        id="inputEndTimeHour"
+                        name="endHour"
+                        (change)="onSelectEndHour($event)"
                       >
-                        {{ startHours }}
-                      </option>
-                    </select>
+                        <option disabled selected>Hour</option>
+
+                        <option
+                          *ngFor="let startHours of startHour"
+                          value="{{ startHours }}"
+                          [disabled]="shouldDisableHourEnd(startHours)"
+                        >
+                          {{ startHours }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <select
-                      class="form-control"
-                      id="inputEndTimeMinute"
-                      name="endMinute"
-                      (change)="onSelectEndMin($event)"
-                    >
-                      <option disabled selected>Minute</option>
-
-                      <option
-                        *ngFor="let startMins of startMin"
-                        value="{{ startMins }}"
-                        [disabled]="shouldDisableMinEnd(startMins)"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class"
+                        id="inputEndTimeMinute"
+                        name="endMinute"
+                        (change)="onSelectEndMin($event)"
                       >
-                        {{ startMins }}
-                      </option>
-                    </select>
+                        <option disabled selected>Minute</option>
+
+                        <option
+                          *ngFor="let startMins of startMin"
+                          value="{{ startMins }}"
+                          [disabled]="shouldDisableMinEnd(startMins)"
+                        >
+                          {{ startMins }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -150,14 +162,16 @@
                 </div>
                 <div class="col-md-8">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      formControlName="title"
-                      [(ngModel)]="schedule.title"
-                      id="title"
-                      name="title"
-                    />
+                    <div class="input-field">
+                      <input
+                        type="text"
+                        class="form-control select-class"
+                        formControlName="title"
+                        [(ngModel)]="schedule.title"
+                        id="title"
+                        name="title"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -174,15 +188,17 @@
                 </div>
                 <div class="col-md-8">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="description"
-                      name="description"
-                      formControlName="description"
-                      [(ngModel)]="schedule.description"
-                      required
-                    />
+                    <div class="input-field">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="description"
+                        name="description"
+                        formControlName="description"
+                        [(ngModel)]="schedule.description"
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -199,38 +215,42 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <select
-                      class="form-control"
-                      id=""
-                      name=""
-                      (change)="onSelect($event)"
-                    >
-                      <option disabled selected>Select department</option>
-                      <option
-                        *ngFor="let departments of department"
-                        value="{{ departments.departmentId }}"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (change)="onSelect($event)"
                       >
-                        {{ departments.departmentName }}
-                      </option>
-                    </select>
+                        <option disabled selected>Select department</option>
+                        <option
+                          *ngFor="let departments of department"
+                          value="{{ departments.departmentId }}"
+                        >
+                          {{ departments.departmentName }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <select
-                      class="form-control"
-                      id=""
-                      name=""
-                      (change)="onSelect1($event)"
-                    >
-                      <option disabled selected>Select team</option>
-                      <option
-                        *ngFor="let teams of team"
-                        value="{{ teams.teamId }}"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class"
+                        id=""
+                        name=""
+                        (change)="onSelect1($event)"
                       >
-                        {{ teams.teamName }}
-                      </option>
-                    </select>
+                        <option disabled selected>Select team</option>
+                        <option
+                          *ngFor="let teams of team"
+                          value="{{ teams.teamId }}"
+                        >
+                          {{ teams.teamName }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -239,26 +259,28 @@
                 <div class="col-md-4"></div>
                 <div class="col-md-3">
                   <div class="form-group">
-                    <select
-                      class="form-control"
-                      (change)="onSelect3($event)"
-                      name=""
-                      id="leftValues"
-                      size="5"
-                      multiple
-                    >
-                      <option disabled selected>selected member</option>
-
-                      <option
-                        *ngFor="
-                          let preselectedMember of preselected;
-                          let idx = idx
-                        "
-                        value="{{ preselectedMember.userId }}"
+                    <div class="input-field">
+                      <select
+                        class="form-control select-class"
+                        (change)="onSelect3($event)"
+                        name=""
+                        id="leftValues"
+                        size="5"
+                        multiple
                       >
-                        {{ preselectedMember.uname }}
-                      </option>
-                    </select>
+                        <option disabled selected>selected member</option>
+
+                        <option
+                          *ngFor="
+                            let preselectedMember of preselected;
+                            let idx = idx
+                          "
+                          value="{{ preselectedMember.userId }}"
+                        >
+                          {{ preselectedMember.uname }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-1" style="float: left">
@@ -285,22 +307,24 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <select
-                      (change)="onSelect2($event)"
-                      class="form-select form-control"
-                      multiple
-                      aria-label="multiple select example"
-                      id="members rightValues"
-                    >
-                      <option disabled selected>Select member</option>
-                      <option
-                        *ngFor="let members of member"
-                        value="{{ members.userId }}"
+                    <div class="input-field">
+                      <select
+                        (change)="onSelect2($event)"
+                        class="form-select form-control select-class"
+                        multiple
+                        aria-label="multiple select example"
+                        id="members rightValues"
                       >
-                        <!-- [disabled]="shouldDisableMember(members.userId)" -->
-                        {{ members.uname }}
-                      </option>
-                    </select>
+                        <option disabled selected>Select member</option>
+                        <option
+                          *ngFor="let members of member"
+                          value="{{ members.userId }}"
+                        >
+                          <!-- [disabled]="shouldDisableMember(members.userId)" -->
+                          {{ members.uname }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -322,26 +346,28 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <select
-                      (change)="onSelect4($event)"
-                      class="form-select form-control"
-                      multiple
-                      aria-label="multiple select example"
-                      id="members rightValues"
-                    >
-                      unavailableArr
-                      <option disabled selected>Unavailabled member</option>
-                      <option
-                        *ngFor="
-                          let multiselectedUser of unavailableArr;
-                          let index = index
-                        "
-                        value="{{ multiselectedUser.userId }}"
+                    <div class="input-field">
+                      <select
+                        (change)="onSelect4($event)"
+                        class="form-select form-control select-class"
+                        multiple
+                        aria-label="multiple select example"
+                        id="members rightValues"
                       >
-                        {{ multiselectedUser.uname }}
-                        <!-- <a (click)="removeSelectedUser(index)">remove</a> -->
-                      </option>
-                    </select>
+                        unavailableArr
+                        <option disabled selected>Unavailabled member</option>
+                        <option
+                          *ngFor="
+                            let multiselectedUser of unavailableArr;
+                            let index = index
+                          "
+                          value="{{ multiselectedUser.userId }}"
+                        >
+                          {{ multiselectedUser.uname }}
+                          <!-- <a (click)="removeSelectedUser(index)">remove</a> -->
+                        </option>
+                      </select>
+                    </div>
 
                     <!-- <span
                       class="col-md-12 sch-div"
@@ -481,19 +507,21 @@
                 </div>
                 <div class="col-md-8">
                   <div class="form-group">
-                    <select
-                      class="form-select form-control"
-                      aria-label="Default select example"
-                      (change)="onSelectPlace($event)"
-                    >
-                      <option disabled selected>Select meeting place</option>
-                      <option
-                        *ngFor="let departments of department"
-                        value="{{ departments.departmentName }}"
+                    <div class="input-field">
+                      <select
+                        class="form-select form-control select-class"
+                        aria-label="Default select example"
+                        (change)="onSelectPlace($event)"
                       >
-                        {{ departments.departmentName }}
-                      </option>
-                    </select>
+                        <option disabled selected>Select meeting place</option>
+                        <option
+                          *ngFor="let departments of department"
+                          value="{{ departments.departmentName }}"
+                        >
+                          {{ departments.departmentName }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>

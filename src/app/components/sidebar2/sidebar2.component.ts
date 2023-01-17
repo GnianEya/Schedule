@@ -15,12 +15,7 @@ export const ROUTES2: RouteInfo[] = [
     icon: "list",
     class: "",
   },
-  {
-    path: "/table-list",
-    title: "Table List",
-    icon: "content_paste",
-    class: "",
-  },
+
   {
     path: "/addEmployee",
     title: "ADD Employee",

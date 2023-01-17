@@ -1,1 +1,125 @@
-<p>add-employee works!</p>
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <div class="card">
+          <div class="card-header card-header-primary">
+            <h4 class="card-title">Add Employee Data</h4>
+            <p class="card-category">
+              Here is a subtitle for this employee data
+            </p>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group pt-3">
+                    <div class="input-field">
+                      <span class="fa fa-id-card p-2"> </span>
+                      <input
+                        type="text"
+                        placeholder="ID"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group pt-3">
+                    <div class="input-field">
+                      <span class="fa fa-user p-2"> </span>
+                      <input
+                        type="text"
+                        placeholder="Name"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-at p-2"> </span>
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-briefcase p-2"> </span>
+                      <select class="form-control select-class" id="" name="">
+                        <option disabled selected>Select position</option>
+                        <option>Team Leader</option>
+                        <option>Intern</option>
+                        <option>Manager</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-bars p-2"> </span>
+                      <select class="form-control select-class" id="" name="">
+                        <option disabled selected>Select department</option>
+                        <option>offshore</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <div class="input-field">
+                      <span class="fa fa-bars p-2"> </span>
+                      <select class="form-control select-class" id="" name="">
+                        <option disabled selected>Select Team</option>
+                        <option>POS</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <button
+                      type="reset"
+                      class="btn btn-fill btn-dark btn-block mt-4"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <button
+                      type="submit"
+                      class="btn btn-fill btn-primary btn-block mt-4"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
