@@ -29,6 +29,7 @@ import { DailyComponent } from "./daily/daily.component";
 import { PasswordConfirmationPopupComponent } from "./password-confirmation-popup/password-confirmation-popup.component";
 import { WeeklyComponent } from "./weekly/weekly.component";
 import { HomeComponent } from "./home/home.component";
+import { MatTabsModule } from '@angular/material/tabs';
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -63,6 +64,7 @@ import { HomeComponent } from "./home/home.component";
     OverlayModule,
     FullCalendarModule,
     MatDialogModule,
+    MatTabsModule
   ],
   declarations: [
     HomeComponent,
