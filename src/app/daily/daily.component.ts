@@ -1,6 +1,6 @@
 
 import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DataShareService } from '../../services/data-share.service';
 import { BehaviorSubject } from 'rxjs';
 //calendar
@@ -143,16 +143,8 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
         console.log("The response : ",response);
         this.optimizedeventarray=this.eventarray.map(
           (e)=>{
-            var start=e.start+'T'+e.start_time;
-            var end=e.end+'T'+e.end_time;
-            var startdate=e.start;
-            var enddate=e.end;
-            if(startdate==enddate){
-              console.log("Single Day Event",e.start,e.end);
-
-            }else{
-              console.log("Multiple Day Event");
-            }
+            var start=e.start+'T'+e.startTime;
+            var end=e.end+'T'+e.endTime;
             return{
               resourceId: "1",
               title:e.title,
@@ -234,7 +226,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       headerToolbar: {
         left: '',
         center: '',
-        right: 'prev,next today'
+        right: 'prev,today,next'
       },
       dayHeaders:true, //remove header
       hiddenDays: [ 0, 6 ],
@@ -284,7 +276,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       headerToolbar: {
         left: '',
         center: '',
-        right: 'prev,next today'
+        right: 'prev,today,next'
       },
       dayHeaders:true, //remove header
       hiddenDays: [ 0, 6 ],
@@ -302,32 +294,34 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
   
   removeAction(){
     // this.dialogView.open(RemoveUserPopUpComponent);
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Remove'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          'Removed!',
-          'Member has been removed.',
-          'success'
-        )
+    if(this.isShow){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Remove'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Removed!',
+            'Member has been removed.',
+            'success'
+          )
+        }
+      });
+      if(this.isDisplay){
+        this.isDisplay=!this.isDisplay;
       }
-    });
-    if(this.isDisplay){
-      this.isDisplay=!this.isDisplay;
+      console.log("U removed search User Id : ",this.searchUserId);
+      this.searchUserIdArray=this.searchUserIdArray.filter(item=>item!=this.searchUserId);
+      console.log("Search User array after removing : ",this.searchUserIdArray);
+      //localStorage.clear();
+      localStorage.setItem("Search_EVENT_KEY@userId",JSON.stringify(this.searchUserIdArray));
+      console.log("New re-allocation array in local storage : ",localStorage.getItem("Search_EVENT_KEY@userId"));
     }
-    console.log("U removed search User Id : ",this.searchUserId);
-    this.searchUserIdArray=this.searchUserIdArray.filter(item=>item!=this.searchUserId);
-    console.log("Search User array after removing : ",this.searchUserIdArray);
-    //localStorage.clear();
-    localStorage.setItem("Search_EVENT_KEY@userId",JSON.stringify(this.searchUserIdArray));
-    console.log("New re-allocation array in local storage : ",localStorage.getItem("Search_EVENT_KEY@userId"));
   }
 
   loadElement(){
@@ -349,27 +343,10 @@ console.log("Show : "+this.isDisplay);
     console.log("Event Start Date : ",this.eventStartDate);
     this.eventStartTime=arg.event.startStr.substring(11,19);
     console.log("Event Start Time : ", this.eventStartTime);
+    this.getScheduleId();
+    this.grapAttandee();
 
-    //get scheduleId
-    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
-  async (response)=>{
-   this.scheduleIdHost=response;
-    console.log("Schedule Id Host : ",this.scheduleIdHost);
-    this.scheduleIdHost.map(
-      (data)=>{
-        this.scheduleId=data.id;
-        console.log("Schedule Id : ",this.scheduleId);
-        this.httpService.getMethod("http://localhost:8081/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
-    async (response)=>{
-    this.attendeesHost=response;
-    console.log("Attendee Host : ",this.attendeesHost);
-  }
-);
-      }
-    );
-  }
-);
-
+    //Problem : this is skipped by flow -->top -down not working as its flow
     this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
       async (response)=>{
         this.eventData=response;
@@ -378,11 +355,14 @@ console.log("Show : "+this.isDisplay);
         this.optimizedEventData=this.eventData.map(
           (data)=>{
             return{
+              userId:data.userId,
+              scheduleId:data.id,
               title:data.title,
               description:data.description,
               attendees:this.attendeesHost,
               start:data.start_time,
               end:data.end_time,
+              startDate:data.start
             };
           }
         );
@@ -405,8 +385,8 @@ console.log("Show : "+this.isDisplay);
     console.log("Attendee : ",this.attendeesHost);
 
     if(this.isEditable){
-      this.dialogView.open(PopupModalComponent,{
-        data:{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end},
+       this.dialogView.open(PopupModalComponent,{
+        data:this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
         width: '40vw', //sets width of dialog
           height:'70vh', //sets width of dialog
           maxWidth: '100vw', //overrides default width of dialog
@@ -426,21 +406,24 @@ console.log("Show : "+this.isDisplay);
     console.log("Event Start Date : ",this.eventStartDate);
     this.eventStartTime=arg.event.startStr.substring(11,19);
     console.log("Event Start Time : ", this.eventStartTime);
-
+    this.getScheduleId();
+    this.grapAttandee();
     this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.searchUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
       async (response)=>{
         this.searchEventData=response;
         console.log("Search Event Data : ",this.searchEventData);
-        this.grapAttandee(this.searchUserId,this.eventTitle,this.eventStartDate,this.eventStartTime);
         console.log("Search Attendee : ",this.attendeesHost);
         this.optimizedSearchEventData=this.searchEventData.map(
           (data)=>{
             return{
+              userId:data.userId,
+              scheduleId:data.id,
               title:data.title,
               description:data.description,
               attendees:this.attendeesHost,
               start:data.start_time,
               end:data.end_time,
+              startDate:data.start
             };
           }
         );
@@ -463,9 +446,9 @@ console.log("Show : "+this.isDisplay);
    
     if(this.isEditable){
        this.dialogView.open(PopupModalComponent,{
-         data:{title:this.searchtitle,description:this.searchdescription,attendees:this.searchattendees,start:this.searchstart,end:this.searchend},
+         data:this.optimizedSearchEventData,
          width: '40vw', //sets width of dialog
-           height:'70vh', //sets width of dialog
+           height:'70vh', //sets height of dialog
            maxWidth: '100vw', //overrides default width of dialog
            maxHeight: '100vh', //overrides default height of dialog
            disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
@@ -516,11 +499,11 @@ console.log("Show : "+this.isDisplay);
       this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+this.searchUserId).subscribe(
         async (response)=>{
           this.searchEventArray=response as any[];
-          console.log("The response : ",response);
+          console.log("The response : ",this.searchEventArray);
           this.optimizedSearchEventArray=this.searchEventArray.map(
             (e)=>{
-              var start=e.start+'T'+e.start_time;
-              var end=e.end+'T'+e.end_time;
+              var start=e.start+'T'+e.startTime;
+              var end=e.end+'T'+e.endTime;
               return{
                 resourceId: "1",
                 title:e.title,
@@ -575,11 +558,11 @@ console.log("Show : "+this.isDisplay);
        this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+previousSearchUserId).subscribe(
       async (response)=>{
         this.previousUser=response as any[];
-        console.log("The response : ",response);
+        console.log("The response : ",);
         this.optimizedPreviousUser=this.previousUser.map(
           (e)=>{
-            var start=e.start+'T'+e.start_time;
-            var end=e.end+'T'+e.end_time;
+            var start=e.start+'T'+e.startTime;
+            var end=e.end+'T'+e.endTime;
             return{
               resourceId: "1",
               title:e.title,
@@ -588,11 +571,12 @@ console.log("Show : "+this.isDisplay);
               color:this.colorization(e.status)
             };
           });
+          console.log("Previous search Data Event : ",this.optimizedPreviousUser);
           //get user name while searching
-          this.searchUsernameArray=this.previousUser.map(
+          this.previousUser.map(
             (data)=>{
-              this.staffname=data.uname;
-              console.log("Staff name change in searching ",this.staffname);
+              this.staffname=data.currentUserName;
+              console.log("Staff name change in searching ",this.staffname,data.currentUserName);
             }
           );
           this.searchCalendarOptions.events=this.optimizedPreviousUser;
@@ -630,11 +614,11 @@ console.log("Show : "+this.isDisplay);
      this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+nextSearchUserId).subscribe(
       async (response)=>{
         this.nextUser=response as any[];
-        console.log("The response : ",response);
+        console.log("The response : ",this.nextUser);
         this.optimizedNextUser=this.nextUser.map(
           (e)=>{
-            var start=e.start+'T'+e.start_time;
-            var end=e.end+'T'+e.end_time;
+            var start=e.start+'T'+e.startTime;
+            var end=e.end+'T'+e.endTime;
             return{
               resourceId: "1",
               title:e.title,
@@ -643,11 +627,12 @@ console.log("Show : "+this.isDisplay);
               color:this.colorization(e.status)
             };
           });
+
           //get search user name
-    this.searchUsernameArray=this.nextUser.map(
+    this.nextUser.map(
       (data)=>{
-        this.staffname=data.uname;
-        console.log("Staff name change in searching ",this.staffname);
+        this.staffname=data.currentUserName;
+        console.log("Staff name change in searching ",this.staffname,data.currentUserName);
       }
     );
           this.searchCalendarOptions.events=this.optimizedNextUser;
@@ -665,9 +650,18 @@ console.log("Show : "+this.isDisplay);
     localStorage.setItem("Search_EVENT_KEY@userId",JSON.stringify(this.searchUserIdArray));
   }
 
-  grapAttandee(id:any,title:string,start:any,starttime:any){
+  grapAttandee(){
+    //get attendee
+    this.httpService.getMethod("http://localhost:8081/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
+      async (response)=>{
+      this.attendeesHost=response;
+      console.log("Attendee Host : ",this.attendeesHost);
+    }
+  );
+  }
+  getScheduleId(){
     //get scheduleId
-    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+id+"&title="+title+"&start="+start+"&starttime="+starttime).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.currentLoginUserId+"&title="+this.eventTitle+"&start="+this.eventStartDate+"&starttime="+this.eventStartTime).subscribe(
   async (response)=>{
    this.scheduleIdHost=response;
     console.log("Schedule Id Host : ",this.scheduleIdHost);
@@ -675,12 +669,6 @@ console.log("Show : "+this.isDisplay);
       (data)=>{
         this.scheduleId=data.id;
         console.log("Schedule Id : ",this.scheduleId);
-        this.httpService.getMethod("http://localhost:8081/user/serchMeetingSchedule?scheduleId="+this.scheduleId).subscribe(
-    async (response)=>{
-    this.attendeesHost=response;
-    console.log("Attendee Host : ",this.attendeesHost);
-  }
-);
       }
     );
   }

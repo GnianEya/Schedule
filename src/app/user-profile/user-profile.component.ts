@@ -118,7 +118,7 @@ userdetails:any;
       //  headers.append('Content-Type', 'multipart/form-data');
        
       // this.HttpService.postMethod('http://localhost:8081/image/dejavu',formdata,headers);
-      
+       
    
       this.http.post('http://localhost:8081/image/dejavu?userId='+this.currentUserID,formdata).subscribe((result) => {
         console.log("Result => ", result);

@@ -31,6 +31,7 @@ import { WeeklyComponent } from "./weekly/weekly.component";
 import { HomeComponent } from "./home/home.component";
 import { NgToastModule } from "ng-angular-popup";
 import { ErrorComponent } from "./error/error.component";
+import { MatTabsModule } from "@angular/material/tabs";
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -60,7 +61,10 @@ import { ErrorComponent } from "./error/error.component";
     OverlayModule,
     FullCalendarModule,
     MatDialogModule,
+
     NgToastModule,
+
+    MatTabsModule,
   ],
   declarations: [
     HomeComponent,
