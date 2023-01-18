@@ -351,24 +351,25 @@ export class ScheduleComponent implements OnInit {
 
   selectFile: File[];
   urls: any = [];
-  files: File[];
+  files: any = [];
 
   saveFile(e: any) {
     if (e.target.files) {
       this.selectFile = e.target.files;
 
-      // for (var i = 0; i < this.selectFile.length; i++) {
-      //   if (this.selectFile[i].size < 5000000) {
-      //     this.urls.push(this.selectFile[i].name);
-      //     // this.file.docName = this.selectFile[i].name;
-      //     // this.file.docType = this.selectFile[i].type;
-      //     // this.file.data = this.selectFile[i].size;
-      //     this.files[i] = this.selectFile[i];
-      //     console.log(this.files + "\n" + this.urls);
-      //   } else {
-      //     alert("your attached file is larger than 5MB.");
-      //   }
-      // }
+      for (var i = 0; i < this.selectFile.length; i++) {
+        if (this.selectFile[i].size < 5000000) {
+          this.urls.push(this.selectFile[i].name);
+          this.files.push(this.selectFile[i]);
+          console.log(this.files + "\n" + this.urls);
+        } else {
+          this.toast.error({
+            detail: "Error Message",
+            summary: "Your attached file is larger than 5MB.",
+            duration: 5000,
+          });
+        }
+      }
     }
   }
 
@@ -387,7 +388,10 @@ export class ScheduleComponent implements OnInit {
 
   removeSelectedFile(index) {
     this.urls.splice(index, 1);
-    // this.selectFile.splice(index, 1);
+    // this.selectFile.slice(index, 1);
+    console.log("check it out");
+    console.log(this.urls);
+    console.log(this.selectFile);
   }
 
   // privacy
@@ -408,7 +412,7 @@ export class ScheduleComponent implements OnInit {
     this.schedule.membersList = this.preselected;
     this.schedule.schduleFile = this.selectFile;
     this.schedule.place = this.place;
-    this.schedule.createUser=JSON.parse(localStorage.getItem('id'));
+    this.schedule.createUser = JSON.parse(localStorage.getItem("id"));
     this.addSchedule();
     this.saveFiles();
     console.log(this.selectFile);
@@ -425,9 +429,19 @@ export class ScheduleComponent implements OnInit {
   addSchedule() {
     this.scheduleService.addSchedule(this.schedule).subscribe(
       (data: any) => {
+        this.toast.success({
+          detail: "Success Message",
+          summary: "Successfully registered.",
+          duration: 5000,
+        });
         console.log(data);
       },
       (error) => {
+        this.toast.error({
+          detail: "Error Message",
+          summary: "Appointment Failed : Invalid data",
+          duration: 5000,
+        });
         console.log(error);
       }
     );
