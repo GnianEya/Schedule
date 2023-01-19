@@ -109,8 +109,7 @@ export class DailyComponent implements OnInit, OnChanges {
     //  }
   }
   ngOnInit(): void {
-
-
+    console.log("isEditable in init : ",this.isEditable);
     console.log("init : " + this.isDisplay);
 
     this.currentLoginUserId = JSON.parse(localStorage.getItem("id"));
@@ -195,9 +194,9 @@ export class DailyComponent implements OnInit, OnChanges {
     this.calendarOptions = {
       // schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
       timeZone: "local",
-      plugins: [timeGridPlugin,dayGridPlugin,interactionPlugin],
-      allDaySlot:false, //remove allday header
-      contentHeight:500, //remove scroll bar and specify hight
+      plugins: [timeGridPlugin, dayGridPlugin, interactionPlugin],
+      allDaySlot: false, //remove allday header
+      contentHeight: 500, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
       slotMinTime: '07:00:00',
       slotMaxTime: '19:00:00',
@@ -209,7 +208,7 @@ export class DailyComponent implements OnInit, OnChanges {
       themeSystem: 'bootstrap',
       // dateClick: this.onDateClick.bind(this),
       // events:this.eventarray,
-      eventClick: this.isEditable ? this.handleEventClick.bind(this) : null,
+      eventClick: this.handleEventClick.bind(this),
       eventTimeFormat: { // like '14:30:00'
         hour: '2-digit',
         minute: '2-digit',
@@ -244,9 +243,9 @@ export class DailyComponent implements OnInit, OnChanges {
     this.searchCalendarOptions = {
       // schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
       timeZone: "local",
-      plugins: [timeGridPlugin,dayGridPlugin, interactionPlugin],
-      allDaySlot:false, //remove allday header
-      contentHeight:500, //remove scroll bar and specify hight
+      plugins: [timeGridPlugin, dayGridPlugin, interactionPlugin],
+      allDaySlot: false, //remove allday header
+      contentHeight: 500, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
       selectable: true,
       dayMaxEventRows: true,
@@ -259,7 +258,7 @@ export class DailyComponent implements OnInit, OnChanges {
       slotMaxTime: '19:00:00',
       // dateClick: this.onDateClick.bind(this),
       events: this.eventarray,
-      eventClick: this.isEditable ? this.searchHandleEventClick.bind(this) : null,
+      eventClick:this.searchHandleEventClick.bind(this),
       eventTimeFormat: { // like '14:30:00'
         hour: '2-digit',
         minute: '2-digit',
@@ -403,8 +402,10 @@ export class DailyComponent implements OnInit, OnChanges {
     );
 
     console.log("Attendee : ", this.attendeesHost);
+    console.log('This isEditable : ',this.isEditable);
 
-    if (this.isEditable) {
+    // if (this.isEditable) {
+      console.log('This isEditable : ',this.isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
         width: '40vw', //sets width of dialog
@@ -413,9 +414,9 @@ export class DailyComponent implements OnInit, OnChanges {
         maxHeight: '100vh', //overrides default height of dialog
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
       });
-    } else {
-      console.log("Meeting passed through.");
-    }
+    // } else {
+    //   console.log("Meeting passed through.");
+    // }
   }
 
   async searchHandleEventClick(arg: any) {
@@ -466,8 +467,9 @@ export class DailyComponent implements OnInit, OnChanges {
     //     }
     //   );
 
-
+    console.log("isEditable : ",this.isEditable);
     if (this.isEditable) {
+      console.log('This isEditable : ',this.isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedSearchEventData,
         width: '40vw', //sets width of dialog
@@ -483,11 +485,13 @@ export class DailyComponent implements OnInit, OnChanges {
   }
 
   colorization(status: string) {
-    if (status != 'ongoing') {
-      this.isEditable = false;
-    } else {
+    console.log("This is Colorization.",this.isEditable,status);
+    if (status == 'ongoing') {
       this.isEditable = true;
+    } else {
+      this.isEditable = false;
     }
+    console.log("This is colorization .",this.isEditable,status);
     return status == 'ongoing' ? '#1B98E080' : 'gray';
   }
   //searchbar
@@ -687,7 +691,7 @@ export class DailyComponent implements OnInit, OnChanges {
   }
   async getScheduleId() {
     console.log("Debug First")
-    //get scheduleId
+    //get scheduleId /serchUserSchedule
     let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.currentLoginUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
     this.scheduleIdHost = result;
     console.log("Schedule Id Host : ", this.scheduleIdHost);
@@ -700,7 +704,7 @@ export class DailyComponent implements OnInit, OnChanges {
   }
   async getSearchScheduleId() {
     console.log("Debug First")
-    //get scheduleId
+    //get scheduleId /serchUserSchedule
     let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.searchUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
     this.scheduleIdHost = result;
     console.log("Schedule Id Host : ", this.scheduleIdHost);

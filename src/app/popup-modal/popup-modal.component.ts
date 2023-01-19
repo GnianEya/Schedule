@@ -36,6 +36,7 @@ responseStaff:any;
 ownerId:any;
 isAppoint:boolean=false;
 changeOwner={};
+reAssignUserId:any;
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
   private dialogView:MatDialog,
   private httpService:HttpServiceService,
@@ -109,14 +110,15 @@ changeOwner={};
   }
 
   deletion(){
-    let map=new Map<any,any>();
-   map.set("scheduleId",this.scheduleId);
-   map.set("currentUserId",this.currentLoginUserId);
-   map.set("userId",''); //no processing in userId
-   map.set("ownerId",this.userId);
-   map.set("isDelete",true);
-   console.log("Delete Schedule map: ",map);
-   this.http.delete<any>('').subscribe(
+
+  
+  const obj={
+    scheduleId:this.scheduleId,
+    currentUserId:this.currentLoginUserId,
+    ownerId:this.userId,
+    isDelete:true
+  }
+   this.http.put<any>('http://localhost:8081/schedule/deleteSchedule',obj).subscribe(
     (result)=>{
       console.log("Delete Schedule Message : ",result);
     }
@@ -141,14 +143,7 @@ changeOwner={};
   }
 
   reAssign(id:any){
-   this.changeOwner={
-    scheduleId:this.scheduleId,
-    currentUserId:this.currentLoginUserId,
-    userId:id,
-    ownerId:this.ownerId,
-    isDelete:false
-   };
-   console.log("change Owner Object : ",this.changeOwner);
+    // this.reAssignUserId=id;
     Swal.fire({
       title: 'Are you sure?',
       text: "You want to appointment this.",
@@ -166,14 +161,20 @@ changeOwner={};
   }
   
   remove(id:any){
-    let map=new Map<any,any>();
-   map.set("scheduleId",this.scheduleId);
-   map.set("currentUserId",this.currentLoginUserId);
-   map.set("userId",id);
-   map.set("ownerId",this.userId);
-   map.set("isDelete",true);
-   console.log("Remove the Attendee map: ",map);
-   this.http.delete<any>("http://localhost:8081/schedule/removeUser").subscribe(
+  //   let map=new Map<any,any>();
+  //  map.set("scheduleId",this.scheduleId);
+  //  map.set("currentUserId",this.currentLoginUserId);
+  //  map.set("userId",id);
+  //  map.set("ownerId",this.userId);
+  //  map.set("isDelete",true);
+  const obj={
+    scheduleId:this.scheduleId,
+    currentUserId:this.currentLoginUserId,
+    userId:id,
+    ownerId:this.userId,
+  }
+   console.log("Remove the Attendee map: ",obj);
+   this.http.put<any>("http://localhost:8081/schedule/removeUser",obj).subscribe(
     (result)=>{
       console.log("Attendee deletion message: ",result);
     }
@@ -203,13 +204,11 @@ changeOwner={};
 
   appoint() {
     console.log("Search Show .");
-    for(let item of Object.keys(this.changeOwner)) {
-      if(this.changeOwner[item] =='ownerId') {
-          this.changeOwner[item] = this.searchUserId;
-          console.log("Appointed ID : ",this.searchUserId);
-          console.log("Owner ID changed to : ",this.changeOwner[item]);
-      }
-  }
+    this.changeOwner={
+      scheduleId:this.scheduleId,
+      currentUserId:this.currentLoginUserId,
+      userId:this.searchUserId,
+     };
   console.log("Optimized ChangeOner : ",this.changeOwner);
      this.http.put<any>('http://localhost:8081/schedule/changeOwner',this.changeOwner).subscribe(
            (result)=>{
@@ -222,6 +221,7 @@ changeOwner={};
       'success'
     );
     this.isAppoint=!this.isAppoint;
+    this.searchText='';
   }
   getUsername(staff:any){
     if (this.isOpen == true) {
