@@ -195,7 +195,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       timeZone: "local",
       plugins: [timeGridPlugin,dayGridPlugin,interactionPlugin],
       allDaySlot:false, //remove allday header
-      contentHeight:500, //remove scroll bar and specify hight
+      contentHeight:700, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
       slotMinTime:'07:00:00',
       slotMaxTime:'19:00:00',
@@ -244,7 +244,7 @@ constructor(private dialogView:MatDialog,private data:DataShareService,private h
       timeZone: "local",
       plugins: [timeGridPlugin,dayGridPlugin, interactionPlugin],
       allDaySlot:false, //remove allday header
-      contentHeight:500, //remove scroll bar and specify hight
+      contentHeight:700, //remove scroll bar and specify hight
       resources: [{ id: '1', title: 'Room A' }], //to insert json
       selectable: true,
       dayMaxEventRows: true,
