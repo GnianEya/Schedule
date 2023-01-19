@@ -10,6 +10,7 @@ import { SignupComponent } from "./signup/signup.component";
 import { PasswordComponent } from "./password/password.component";
 import { ForgetPassComponent } from "./forget-pass/forget-pass.component";
 import { UserLayoutComponent } from "./layouts/user-layout/user-layout.component";
+import { ErrorComponent } from "./error/error.component";
 
 const routes: Routes = [
   { path: "getstarted", component: GetstartedComponent },
@@ -20,11 +21,13 @@ const routes: Routes = [
     component: PasswordComponent,
   },
   { path: "forgetpass", component: ForgetPassComponent },
+  { path: "error", component: ErrorComponent },
   {
     path: "",
     redirectTo: "getstarted",
     pathMatch: "full",
   },
+
   {
     path: "",
     component: AdminLayoutComponent,

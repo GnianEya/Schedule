@@ -1,84 +1,119 @@
-<div  class="bg-transparent" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;margin-bottom: 20px;">
-<div class="example-header-image" mat-card-avatar></div>
-<span mat-dialog-close style="float:right;margin-top:-10px;margin-right:0px;"><i class="fa fa-window-close text-primary" aria-hidden="true"></i></span>
-<!-- <img src="assets/images/event.jpg" style=" position: absolute;
-left: 48%;
-top: 10%;
-width: 55px;height: 50px;"> -->
-<span class="text-primary" style="margin-left: 10px;font-size: large;">Meeting Details</span>
-<hr style="color:blue;">
-<mat-tab-group mat-align-tabs="center" backgroundColor="primary">
-    <mat-tab label="Schedule">
-        <fieldset class="border border-primary rounded-5">
-            <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Details</legend>
-            <div style="font-size:small">
-            <div class="list-group list-group-flush">
-                <div class="list-group-item">
-            <div class="row">
-                <div class="col-md-6">Title</div>
-                <div class="col-md-6"><div class="text-primary">{{title}}</div></div>
+<div class="bg-transparent" style="margin-top: 20px;margin-left: 20px;margin-right: 20px;margin-bottom: 20px;">
+    <div class="example-header-image" mat-card-avatar></div>
+    <span mat-dialog-close style="float:right;margin-top:-10px;margin-right:0px;"><i
+            class="fa fa-window-close text-primary" aria-hidden="true"></i></span>
+    <span class="text-primary" style="margin-left: 10px;font-size: large;">Meeting Details</span>
+    <hr style="color:blue;">
+    <div *ngIf="isAppoint">
+    <div class="input-group">
+        <div class="form-outline">
+          <input type="search" id="form1" class="form-control" [(ngModel)]="searchText" (keyup)="isOpen = !isOpen"
+            cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:32px;" />
+        </div>
+        <button type="button" class="btn btn-primary" (click)="appoint()">
+          Appoint
+        </button>
+    </div>
+    
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
+      (overlayOutsideClick)="isOpen = false">
+      <div class="card-deck bg-transparent d-flex align-items-center" style="max-width: 20rem;" id="filterResultSearch">
+        <div class="card-body text-info">
+          <div class="card-deck bg-light p-2 shadow shadow-info shadow-intensity-lg rounded-3" style="margin-bottom: 5px;width: 20rem;margin-left: 10px;" *ngFor="let staff of optimizedSearchFiltering | appFilter: searchText;let i=index;" id="listText" (click)="getUsername(staff);">
+            <img [src]="staff.userImage" width="50px" height="50px"/>
+            <span style="padding-left:5px;"></span><label style="font-style: bold;font-size: 13px;" id="staffName">{{staff.username}}</label><span style="padding-left:5px;">(</span><label id="staffDepartment" style="font-size: 8px;">{{staff.departmentname}}</label>)
+          </div>   
+        </div>
+      </div>
+    </ng-template>
+</div>
+    <mat-tab-group mat-align-tabs="center" backgroundColor="primary">
+        <mat-tab label="Schedule">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Details</legend>
+                <div style="font-size:small">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">Title</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{title}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Description</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{description}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Meeting start at</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{start_time}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Approximatly end at &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{approximated_end_time}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </mat-tab>
+        <mat-tab label="Attendee">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Attendees</legend>
+                <div *ngFor="let attendee of attendees;let i=index;" style="margin-top: 5px;margin-left: 50px;"
+                    id="fieldsetborder">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span style="color:blue;margin-right: 3px;"><i class="fa fa-user"></i></span>
+                                    <span style="color:blue;">{{attendee.uname}}</span>
+                                    <span> (</span><span style="color:blue;">{{attendee.teamName}}</span><span>)</span>
+                                </div>
+                                <div *ngIf="isLoginUser" class="col-md-6">
+                                    <div class="row">
+                                        <div *ngIf="attendee.userId == currentLoginUserId; else elseBlock" style="font-size: 10px;">You are in this meeting.
+                                        </div>
+                                        <ng-template #elseBlock>
+                                            <div class="col" (click)="reAssign(attendee.userId)" id="btn_animate">
+                                                <i style="color:blue;font-size: small;cursor:pointer;">Re-assign</i>
+                                            </div>
+                                            <div class="col" (click)="remove(attendee.userId)" id="btn_animate">
+                                                <i style="color:red;font-size: small;cursor:pointer;">Remove</i>
+                                            </div>
+                                        </ng-template>
+
+                                    </div>
+                                </div>
+                                <!-- <div *ngIf="isLoginUser" class="col-md-6"><i><small style="text-primary">You are in this meeting.</small></i></div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </mat-tab>
+    </mat-tab-group>
+    <div class="footer-daily">
+        <div class="row">
+            <div class="col-md-6">
+                <span style="color:rgb(245, 71, 48);margin-right: 15px;" (click)="deletion()" id="btn_animate"
+                    mat-dialog-close>
+                    Delete <i class="fa fa-trash" id="btn_animate" style="color:rgb(245, 71, 48);font-size:15px;"></i>
+                </span>
+                <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="Updatation()">
+                    Update <i class="fa fa-pencil-square" style="color:rgb(14, 143, 36);" id="btn_animate"></i>
+                </span>
             </div>
-            <div class="row">
-                <div class="col-md-6">Description</div>
-                <div class="col-md-6"><div class="text-primary">{{description}}</div></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">Meeting start at</div>
-                <div class="col-md-6"><div class="text-primary">{{start_time}}</div></div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">Approximatly end at &nbsp;&nbsp;&nbsp;</div>
-                <div class="col-md-6"><div class="text-primary">{{approximated_end_time}}</div></div>
-            </div>
+            <div class="col-md-6">
+                <span style="float:right;margin-right: 40px;"><Button mat-button mat-dialog-close
+                        class="btn btn-primary btn-sm" id="btn_animate">Cancel</Button></span>
             </div>
         </div>
     </div>
-        </fieldset>
-    </mat-tab>
-    <mat-tab label="Attendee">
-        <fieldset class="border border-primary rounded-5">
-            <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Attendees</legend>
-        <div *ngFor="let attendee of attendees;let i=index;" style="margin-top: 5px;margin-left: 50px;" id="fieldsetborder">
-            <div class="list-group list-group-flush">
-                <div class="list-group-item">
-                    <div class="row">
-                        <div class="col-md-6">
-                    <span style="color:blue;margin-right: 3px;"><i class="fa fa-user"></i></span>
-                    <span style="color:blue;">{{attendee.uname}}</span>
-                    <span> (</span><span style="color:blue;">{{attendee.teamName}}</span><span>)</span>
-                         </div>
-                        <div *ngIf="isLoginUser" class="col-md-6">
-                            <div class="row">
-                            <div class="col" (click)="reAssign(attendee.userId)" id="btn_animate">
-                                <i style="color:blue;font-size: small;">Re-assign</i>
-                            </div>
-                            <div class="col" (click)="remove(attendee.userId)" id="btn_animate">
-                                <i style="color:red;font-size: small;">Remove</i>
-                            </div>
-                        </div>
-                        </div>
-                        <!-- <div *ngIf="isLoginUser" class="col-md-6"><i><small style="text-primary">You are in this meeting.</small></i></div> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-        </fieldset>
-    </mat-tab>
-  </mat-tab-group>
-
-<div class="footer-daily">
-<div class="row">
-    <div class="col-md-6">
-<span style="color:rgb(245, 71, 48);margin-right: 15px;" (click)="deletion()" id="btn_animate" mat-dialog-close>
-    Delete <i class="fa fa-trash" id="btn_animate" style="color:rgb(245, 71, 48);font-size:15px;"></i>
-</span>
-<span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="Updatation()">
-     Update <i class="fa fa-pencil-square" style="color:rgb(14, 143, 36);" id="btn_animate"></i>
-    </span>
 </div>
-<div class="col-md-6">
-<span style="float:right;margin-right: 40px;"><Button mat-button mat-dialog-close class="btn btn-primary btn-sm" id="btn_animate">Cancel</Button></span>
-</div>
-</div>
-</div>
-            

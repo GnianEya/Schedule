@@ -16,6 +16,7 @@ import { ScheduleComponent } from "app/schedule/schedule.component";
 import { HomeComponent } from "app/home/home.component";
 import { WeeklyComponent } from "app/weekly/weekly.component";
 import { ChangePasswordComponent } from "app/change-password/change-password.component";
+import { ErrorComponent } from "app/error/error.component";
 
 @NgModule({
   imports: [
@@ -31,9 +32,7 @@ import { ChangePasswordComponent } from "app/change-password/change-password.com
     MatTooltipModule,
   ],
   declarations: [
-   
     UserProfileComponent,
-
     ScheduleComponent,
     ChangePasswordComponent,
   ],

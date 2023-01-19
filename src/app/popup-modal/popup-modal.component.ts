@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit ,Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from "@angular/material/dialog";
+import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 import { HttpServiceService } from 'services/http-service.service';
 import Swal from "sweetalert2";
@@ -27,22 +28,20 @@ approximated_end_time='';
 scheduleIdHost:any;
 scheduleIdUpdateDelete:any;
 isLoginUser:boolean=false;
+searchText:string;
+isOpen:boolean=false;
+optimizedSearchFiltering:any;
+searchUserId:any;
+responseStaff:any;
+ownerId:any;
+isAppoint:boolean=false;
+changeOwner={};
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
   private dialogView:MatDialog,
   private httpService:HttpServiceService,
-  private http:HttpClient
-  ) { 
-    
-        // this.title=data.title;
-        // this.description=data.description;
-        // this.attendees=data.attendees;
-        // this.start_time=data.start;
-        // this.approximated_end_time=data.end;
-        // console.log("Attendees : ",this.attendees);
-
-        console.log("Dialog Data : ",data);
-      
-  }
+  private http:HttpClient,
+  private sanitizer:DomSanitizer
+  ) { console.log("Dialog Data : ",data);}
 
   ngOnInit(): void {
     console.log("datum dialog");
@@ -76,12 +75,37 @@ isLoginUser:boolean=false;
   }
 );
      if(this.userId==this.currentLoginUserId){
+      console.log("Login ID : ",this.currentLoginUserId);
+      console.log("Owner ID : ",this.userId);
       console.log("Current User Id is the same with attendee Id .");
       this.isLoginUser=true;
      }else{
+      console.log("Login ID : ",this.currentLoginUserId);
+      console.log("Owner ID : ",this.userId);
       console.log("Current User Id is not the same with attendee Id .");
       this.isLoginUser=false;
      }
+
+     this.httpService.getMethod('http://localhost:8081/user/serchUsesDetails').subscribe(
+      async (response) => {
+        this.responseStaff = response as any[];
+        this.optimizedSearchFiltering = this.responseStaff.map((e, i) => {
+          return {
+            userId: e.userId,
+            username: e.uname,
+            departmentname: e.departmentName,
+            userImage: e.imageData
+          };
+        });
+
+        for (let e of this.optimizedSearchFiltering) {
+          e.userImage = await this.imageResolver(e.userImage);
+
+        }
+        console.log("Optimized array ", this.optimizedSearchFiltering);
+      },
+      (error) => { console.log(error); }
+    );
   }
 
   deletion(){
@@ -89,7 +113,7 @@ isLoginUser:boolean=false;
    map.set("scheduleId",this.scheduleId);
    map.set("currentUserId",this.currentLoginUserId);
    map.set("userId",''); //no processing in userId
-   map.set("ownId",this.userId);
+   map.set("ownerId",this.userId);
    map.set("isDelete",true);
    console.log("Delete Schedule map: ",map);
    this.http.delete<any>('').subscribe(
@@ -117,23 +141,14 @@ isLoginUser:boolean=false;
   }
 
   reAssign(id:any){
-    // private int scheduleId;
-    // private int currentUserId;
-    // private int userId; attendee
-    // private int ownerId;
-    // private Boolean isDelete;
-   let map=new Map<any,any>();
-   map.set("scheduleId",this.scheduleId);
-   map.set("currentUserId",this.currentLoginUserId);
-   map.set("userId",id);
-   map.set("ownId",this.userId);
-   map.set("isDelete",true);
-   console.log("Ressignment Change Owner map: ",map);
-    this.http.put<any>('http://localhost:8081/schedule/changeOwner',map).subscribe(
-      (result)=>{
-        console.log("Reassignment messagemet : ",result);
-      }
-    );
+   this.changeOwner={
+    scheduleId:this.scheduleId,
+    currentUserId:this.currentLoginUserId,
+    userId:id,
+    ownerId:this.ownerId,
+    isDelete:false
+   };
+   console.log("change Owner Object : ",this.changeOwner);
     Swal.fire({
       title: 'Are you sure?',
       text: "You want to appointment this.",
@@ -144,11 +159,8 @@ isLoginUser:boolean=false;
       confirmButtonText: 'Re-appoint'
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          'Appointment.',
-          'Member has been appointed.',
-          'success'
-        )
+        this.isAppoint=true;
+        
       }
     });
   }
@@ -158,7 +170,7 @@ isLoginUser:boolean=false;
    map.set("scheduleId",this.scheduleId);
    map.set("currentUserId",this.currentLoginUserId);
    map.set("userId",id);
-   map.set("ownId",this.userId);
+   map.set("ownerId",this.userId);
    map.set("isDelete",true);
    console.log("Remove the Attendee map: ",map);
    this.http.delete<any>("http://localhost:8081/schedule/removeUser").subscribe(
@@ -188,5 +200,40 @@ isLoginUser:boolean=false;
   Updatation(){
     //pending with boolean and scheduleId,userId
   }
+
+  appoint() {
+    console.log("Search Show .");
+    for(let item of Object.keys(this.changeOwner)) {
+      if(this.changeOwner[item] =='ownerId') {
+          this.changeOwner[item] = this.searchUserId;
+          console.log("Appointed ID : ",this.searchUserId);
+          console.log("Owner ID changed to : ",this.changeOwner[item]);
+      }
+  }
+  console.log("Optimized ChangeOner : ",this.changeOwner);
+     this.http.put<any>('http://localhost:8081/schedule/changeOwner',this.changeOwner).subscribe(
+           (result)=>{
+             console.log("Reassignment message : ",result);
+           }
+         );
+    Swal.fire(
+      'Appointment.',
+      'Member has been appointed.',
+      'success'
+    );
+    this.isAppoint=!this.isAppoint;
+  }
+  getUsername(staff:any){
+    if (this.isOpen == true) {
+      this.searchText = staff.username;
+      this.searchUserId = staff.userId;
+      console.log("search User Id : ", this.searchUserId);
+      console.log("Search User Name : ", this.searchText);
+    this.isOpen=!this.isOpen;  
+  }
+}
+imageResolver(byte: any[]) {
+  return this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + byte);
+}
 
 }

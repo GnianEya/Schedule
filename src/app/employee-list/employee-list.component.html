@@ -20,11 +20,19 @@
                   <th>Action</th>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>5001</td>
-                    <td>Naing Naing</td>
-                    <td class="text-primary">Offshore-1</td>
-                    <td>Intern</td>
+                  <tr *ngFor="let employee of employees">
+                    <td>{{ employee.employeeId }}</td>
+                    <td>{{ employee.employeeName }}</td>
+
+                    <td class="text-primary">
+                      <tr *ngFor="let teams of team">
+                        <div *ngIf="employee.team === teams.teamId">
+                          <td>{{ teams.teamName }}</td>
+                        </div>
+                      </tr>
+                    </td>
+
+                    <td>{{ employee.position }}</td>
                     <td>
                       <button class="btn btn-primary">Update</button>
                       <button

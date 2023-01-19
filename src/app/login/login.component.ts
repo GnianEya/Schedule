@@ -67,10 +67,17 @@ export class LoginComponent implements OnInit {
           // alert('** Login as admin role.');
           this.toast.success({
             detail: "Success Message",
-            summary: "Login as admin role",
+            summary: "Login as organizer role",
             duration: 5000,
           });
           this.router.navigate(["/home"]);
+        } else if(role === "admin"){
+          this.toast.success({
+            detail: "Success Message",
+            summary: "Login as admin role",
+            duration: 5000,
+          });
+          this.router.navigate(["/departments"]);
         } else {
           // alert('** Login as user role.');
           this.toast.success({

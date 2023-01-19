@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class HttpServiceService {
   constructor(private http:HttpClient) { }
-  getMethod(url:string):Observable<Object>{
+  getMethod(url:string):Observable<any>{
     return this.http.get(url);
   }
   postMethod(url:string){

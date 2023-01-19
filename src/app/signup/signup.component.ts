@@ -25,21 +25,21 @@ export class SignupComponent {
   submitted: boolean = false;
   users!: User[];
   user: User = new User();
-  currentUserLogin:number;
-  base64data:any;
+  currentUserLogin: number;
+  base64data: any;
 
   constructor(
     private fb: FormBuilder,
     private userCrudService: UserCrudService,
     private router: Router,
     private toast: NgToastService,
-    private httpService:HttpServiceService,
-    private scheduleService:ScheduleService
+    private httpService: HttpServiceService,
+    private scheduleService: ScheduleService
   ) {}
 
   ngOnInit(): void {
     //get logined user id
-    this.currentUserLogin=JSON.parse(localStorage.getItem("id"));
+    this.currentUserLogin = JSON.parse(localStorage.getItem("id"));
     //validation
     this.signUpForm = this.fb.group({
       employeeId: new FormControl(null, [
@@ -96,29 +96,23 @@ export class SignupComponent {
           summary: "Successfully registered.",
           duration: 5000,
         });
-        this.goToHome();
+        this.goToLogin();
       },
       (error) => {
-        // alert('**Register Failed : Invalid employee ID');
         this.toast.error({
           detail: "Error Message",
           summary: "Register Failed : Invalid employee ID",
           duration: 5000,
         });
         console.log(error);
-        // this.goToError();
       }
     );
   }
 
-
-  goToHome() {
+  goToLogin() {
     this.router.navigate(["/login"]);
   }
   goToError() {
     this.router.navigate(["/error"]);
   }
-
- 
-
 }

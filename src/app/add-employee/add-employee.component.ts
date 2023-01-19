@@ -10,6 +10,7 @@ import { Department } from "models/department";
 import { Employee } from "models/employee";
 import { Team } from "models/team";
 import { NgToastService } from "ng-angular-popup";
+import { EmployeeService } from "services/employee.service";
 import { ScheduleService } from "services/schedule.service";
 
 @Component({
@@ -22,6 +23,7 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private scheduleService: ScheduleService,
     private router: Router,
+    private employeeService: EmployeeService,
     private toast: NgToastService
   ) {
     this.department = [];
@@ -47,6 +49,7 @@ export class AddEmployeeComponent implements OnInit {
     this.employee.team = this.empTeam;
     console.log(this.employee);
     //service method
+    this.saveEmployee();
   }
 
   //department array
@@ -92,5 +95,27 @@ export class AddEmployeeComponent implements OnInit {
   onSelectPosition(e: any) {
     this.position = e.target.value;
     console.log(this.position);
+  }
+
+  //start methods
+  saveEmployee() {
+    this.employeeService.addEmployee(this.employee).subscribe(
+      (data: any) => {
+        this.toast.success({
+          detail: "Success Message",
+          summary: "Successfully Added.",
+          duration: 5000,
+        });
+        console.log(data);
+      },
+      (error) => {
+        this.toast.error({
+          detail: "Error Message",
+          summary: "Register Failed : Invalid Data",
+          duration: 5000,
+        });
+        console.log(error);
+      }
+    );
   }
 }

@@ -29,7 +29,9 @@ import { DailyComponent } from "./daily/daily.component";
 import { PasswordConfirmationPopupComponent } from "./password-confirmation-popup/password-confirmation-popup.component";
 import { WeeklyComponent } from "./weekly/weekly.component";
 import { HomeComponent } from "./home/home.component";
-import { MatTabsModule } from '@angular/material/tabs';
+import { NgToastModule } from "ng-angular-popup";
+import { ErrorComponent } from "./error/error.component";
+import { MatTabsModule } from "@angular/material/tabs";
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -46,11 +48,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 //   dayGridPlugin
 // ]);
 
-
-
-
-
-
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -64,7 +61,10 @@ import { MatTabsModule } from '@angular/material/tabs';
     OverlayModule,
     FullCalendarModule,
     MatDialogModule,
-    MatTabsModule
+
+    NgToastModule,
+
+    MatTabsModule,
   ],
   declarations: [
     HomeComponent,
@@ -81,6 +81,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     DailyComponent,
     WeeklyComponent,
     PasswordConfirmationPopupComponent,
+    ErrorComponent,
   ],
   providers: [
     AuthGuard,

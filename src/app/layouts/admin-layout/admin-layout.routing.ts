@@ -7,6 +7,7 @@ import { HomeComponent } from "app/home/home.component";
 import { WeeklyComponent } from "app/weekly/weekly.component";
 import { ChangePasswordComponent } from "app/change-password/change-password.component";
 import { AuthGuard } from "_auth/auth.guard";
+import { ErrorComponent } from "app/error/error.component";
 
 export const AdminLayoutRoutes: Routes = [
   {
