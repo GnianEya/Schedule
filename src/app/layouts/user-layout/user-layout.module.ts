@@ -12,6 +12,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { AddEmployeeComponent } from "app/add-employee/add-employee.component";
 import { EmployeeListComponent } from "app/employee-list/employee-list.component";
 import { DepartmentsComponent } from "app/departments/departments.component";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 @NgModule({
   imports: [
@@ -25,11 +27,9 @@ import { DepartmentsComponent } from "app/departments/departments.component";
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    // MatTableModule,
+    // MatPaginatorModule,
   ],
-  declarations: [
-    AddEmployeeComponent,
-    EmployeeListComponent,
-    DepartmentsComponent,
-  ],
+  declarations: [AddEmployeeComponent, DepartmentsComponent],
 })
 export class UserLayoutModule {}

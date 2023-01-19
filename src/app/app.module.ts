@@ -32,6 +32,9 @@ import { HomeComponent } from "./home/home.component";
 import { NgToastModule } from "ng-angular-popup";
 import { ErrorComponent } from "./error/error.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { EmployeeListComponent } from "./employee-list/employee-list.component";
+import { MatTableModule } from "@angular/material/table";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -61,10 +64,10 @@ import { MatTabsModule } from "@angular/material/tabs";
     OverlayModule,
     FullCalendarModule,
     MatDialogModule,
-
     NgToastModule,
-
     MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule,
   ],
   declarations: [
     HomeComponent,
@@ -82,6 +85,7 @@ import { MatTabsModule } from "@angular/material/tabs";
     WeeklyComponent,
     PasswordConfirmationPopupComponent,
     ErrorComponent,
+    EmployeeListComponent,
   ],
   providers: [
     AuthGuard,

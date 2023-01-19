@@ -111,7 +111,7 @@ export class AddEmployeeComponent implements OnInit {
       (error) => {
         this.toast.error({
           detail: "Error Message",
-          summary: "Register Failed : Invalid Data",
+          summary: "Duplicate ID cannot be added.",
           duration: 5000,
         });
         console.log(error);

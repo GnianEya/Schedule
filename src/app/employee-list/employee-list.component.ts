@@ -1,5 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
+import { Department } from "models/department";
 import { Employee } from "models/employee";
 import { Team } from "models/team";
 import { EmployeeService } from "services/employee.service";
@@ -11,15 +14,16 @@ import { ScheduleService } from "services/schedule.service";
   styleUrls: ["./employee-list.component.scss"],
 })
 export class EmployeeListComponent implements OnInit {
-  employees: Employee[];
+  employees: Employee[] = [];
   check = false;
+  dataSource!: MatTableDataSource<Employee>;
+  displayedColumns: string[] = ["ID", "Name", "Team", "Position"];
+
   constructor(
     private employeeService: EmployeeService,
     private scheduleService: ScheduleService,
     private router: Router
-  ) {
-    this.employees = [];
-  }
+  ) {}
   ngOnInit(): void {
     this.saveTeam();
     this.saveEmployee();
@@ -32,19 +36,30 @@ export class EmployeeListComponent implements OnInit {
         if (this.employees.length != 0) {
           this.check = true;
         }
+        this.dataSource = new MatTableDataSource<Employee>(this.employees);
+        this.dataSource.paginator = this.paginator;
       },
       error: (e) => console.log(e),
     });
   }
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  updateEmployee(employeeId: string) {
-    this.router.navigate(["updateEmployee", employeeId]);
-  }
+  // ngAfterViewInit() {
+  //   this.dataSource.paginator = this.paginator;
+  // }
+
+  // @ViewChild(MatPaginator) set matPaginator(paginator: MatPaginator) {
+  //   this.dataSource.paginator = paginator;
+  // }
+
+  // updateEmployee(employeeId: string) {
+  //   this.router.navigate(["updateEmployee", employeeId]);
+  // }
 
   deleteEmployee(employeeId: number) {
     this.employeeService.deleteEmployee(employeeId).subscribe({
       next: (data) => {
-        console.log(data);
+        //    console.log(data);
         this.saveEmployee();
       },
       error: (e) => console.log(e),
@@ -57,7 +72,7 @@ export class EmployeeListComponent implements OnInit {
     this.scheduleService.getTeamList().subscribe({
       next: (data) => {
         this.team = data;
-        console.log(this.team);
+        //       console.log(this.team);
       },
       error: (e) => console.log(e),
     });
