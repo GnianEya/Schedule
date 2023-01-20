@@ -17,7 +17,7 @@ export class EmployeeListComponent implements OnInit {
   employees: Employee[] = [];
   check = false;
   dataSource!: MatTableDataSource<Employee>;
-  displayedColumns: string[] = ["ID", "Name", "Team", "Position"];
+  displayedColumns: string[] = ["ID", "Name", "Team", "Position", "Action"];
 
   constructor(
     private employeeService: EmployeeService,
