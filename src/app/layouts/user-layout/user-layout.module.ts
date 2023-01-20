@@ -14,6 +14,8 @@ import { EmployeeListComponent } from "app/employee-list/employee-list.component
 import { DepartmentsComponent } from "app/departments/departments.component";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { AdminChangePasswordComponent } from "app/admin-change-password/admin-change-password.component";
+import { AdminUserProfileComponent } from "app/admin-user-profile/admin-user-profile.component";
 
 @NgModule({
   imports: [
@@ -27,9 +29,11 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-    // MatTableModule,
-    // MatPaginatorModule,
   ],
-  declarations: [AddEmployeeComponent, DepartmentsComponent],
+  declarations: [
+    AddEmployeeComponent,
+    AdminChangePasswordComponent,
+    AdminUserProfileComponent,
+  ],
 })
 export class UserLayoutModule {}

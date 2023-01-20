@@ -35,6 +35,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { EmployeeListComponent } from "./employee-list/employee-list.component";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { DepartmentsComponent } from "./departments/departments.component";
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -86,6 +87,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     PasswordConfirmationPopupComponent,
     ErrorComponent,
     EmployeeListComponent,
+    DepartmentsComponent,
   ],
   providers: [
     AuthGuard,

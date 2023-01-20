@@ -8,7 +8,7 @@ declare interface RouteInfo {
   class: string;
 }
 export const ROUTES2: RouteInfo[] = [
-  { path: "/departments", title: "Departments", icon: "home", class: "" },
+  { path: "/departments", title: "Departments", icon: "bookmarks", class: "" },
   {
     path: "/employeeList",
     title: "Employee List",
@@ -20,6 +20,21 @@ export const ROUTES2: RouteInfo[] = [
     path: "/addEmployee",
     title: "ADD Employee",
     icon: "note",
+    class: "",
+  },
+];
+
+export const ROUTES02: RouteInfo[] = [
+  {
+    path: "/adminChangePassword",
+    title: "Change Password",
+    icon: "lock",
+    class: "",
+  },
+  {
+    path: "/adminUserProfile",
+    title: "User Profile",
+    icon: "person",
     class: "",
   },
 ];
@@ -42,5 +57,9 @@ export class Sidebar2Component implements OnInit {
       return false;
     }
     return true;
+  }
+
+  clear() {
+    localStorage.clear();
   }
 }

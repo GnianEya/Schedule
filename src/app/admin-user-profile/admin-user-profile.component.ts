@@ -1,18 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: 'app-user-profile',
-//   templateUrl: './user-profile.component.html',
-//   styleUrls: ['./user-profile.component.css']
-// })
-// export class UserProfileComponent implements OnInit {
-
-//   constructor() { }
-
-//   ngOnInit() {
-//   }
-
-// }
 import { HttpServiceService } from "../../services/http-service.service";
 import { DataShareService } from "../../services/data-share.service";
 import { ProfileDTO } from "../../models/profileDTO";
@@ -25,11 +10,11 @@ import { EditProfileSender } from "../../models/editProfileSender";
 import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: "app-user-profile",
-  templateUrl: "./user-profile.component.html",
-  styleUrls: ["./user-profile.component.css"],
+  selector: "app-admin-user-profile",
+  templateUrl: "./admin-user-profile.component.html",
+  styleUrls: ["./admin-user-profile.component.scss"],
 })
-export class UserProfileComponent implements OnInit {
+export class AdminUserProfileComponent implements OnInit {
   isEdit: boolean = false;
   currentUserID: number;
   selectedFile: File;
