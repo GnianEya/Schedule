@@ -36,6 +36,7 @@ import { EmployeeListComponent } from "./employee-list/employee-list.component";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { DepartmentsComponent } from "./departments/departments.component";
+import { getSaver, SAVER } from "services/saver.providers";
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -98,6 +99,7 @@ import { DepartmentsComponent } from "./departments/departments.component";
     },
     UserService,
     PasswordService,
+    {provide: SAVER, useFactory: getSaver},
   ],
   bootstrap: [AppComponent],
 })

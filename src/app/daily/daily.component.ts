@@ -26,6 +26,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 //sweetAlert2
 import Swal from "sweetalert2";
+import { generateKey } from 'crypto';
 
 @Component({
   selector: 'app-daily',
@@ -37,7 +38,8 @@ export class DailyComponent implements OnInit, OnChanges {
   currentTime = new Date();
   isDisplay: boolean = false;
   calendarOptions: any;
-  isEditable = true;
+  // isEditable = true;
+  // isSearchEditable=true;
   currentLoginUserId: number;
   currentLoginUsername = '';
   currentLoginUsernameHost: any;
@@ -109,7 +111,6 @@ export class DailyComponent implements OnInit, OnChanges {
     //  }
   }
   ngOnInit(): void {
-    console.log("isEditable in init : ",this.isEditable);
     console.log("init : " + this.isDisplay);
 
     this.currentLoginUserId = JSON.parse(localStorage.getItem("id"));
@@ -141,18 +142,41 @@ export class DailyComponent implements OnInit, OnChanges {
         async (response) => {
           this.eventarray = response as any[];
 
-          console.log("The response : ", response);
+          console.log("The Scheduleresponse : ", response);
           this.optimizedeventarray = this.eventarray.map(
             (e) => {
               var start = e.start + 'T' + e.startTime;
               var end = e.end + 'T' + e.endTime;
-              return {
-                resourceId: "1",
-                title: e.title,
-                start: start,
-                end: end,
-                color: this.colorization(e.status)
-              };
+              //In order not to display deleted schedule
+              if(e.isDelete==1){
+                return {
+                  resourceId: "1",
+                  title: "Cancelled",
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+                };
+              }else{
+                if(e.privacy){
+                  console.log("Schedule Privacy : ",e.privacy);
+                  return {
+                    resourceId: "1",
+                    title: e.title,
+                    start: start,
+                    end: end,
+                    color: this.colorization(e.status,e.isDelete),
+                  };
+                }else{
+                  console.log("Schedule Privacy : ",e.privacy);
+                  return {
+                    resourceId: "1",
+                    title: "Personal Appointment",
+                    start: start,
+                    end: end,
+                    color: this.colorization(e.status,e.isDelete),
+                  };
+                }
+            }
             }
           );
           this.calendarOptions.events = this.optimizedeventarray;
@@ -215,9 +239,6 @@ export class DailyComponent implements OnInit, OnChanges {
         second: '2-digit',
         meridiem: true
       },
-      // eventTypes:[ { title: 'Type 1', id: 1, selected: true, color: 'red' },
-      // { title: 'Type 2', id: 2, selected: true, color: 'blue' },
-      // { title: 'Type 3', id: 3, selected: true, color: 'green' },],
       displayEventEnd: true,
       displayEventTime: true,
       editable: true,
@@ -344,9 +365,41 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Event Start Date : ", this.eventStartDate);
     this.eventStartTime = arg.event.startStr.substring(11, 19);
     console.log("Event Start Time : ", this.eventStartTime);
-    await this.getScheduleId();
-    await this.grapAttandee();
 
+    //isEditable Processing
+    let editableResponse:any=await firstValueFrom(this.httpService.getMethod('http://localhost:8081/user/serchUserSchedule?userId='+this.currentLoginUserId));
+    console.log("Editable Response Array : ",editableResponse);
+    let isEvent:any=editableResponse.filter(
+      (item)=>{
+        console.log("Filter properties : ",item.title,",",item.start,",",item.startTime);
+        if(item.title==this.eventTitle && item.start==this.eventStartDate && item.startTime){
+          console.log(item);
+         return item;  
+        }
+      }
+    );
+    console.log("Filtered A Event : ",isEvent);
+    let isEditable:boolean=false;
+    let isPrivacy:boolean=false;
+    isEvent.map(
+      (data)=>{
+        isPrivacy=data.privacy;
+        console.log("isPrivacy : ",isPrivacy);
+        console.log(data.status,' : ',data.isDelete);
+        if(data.status!='ongoing' || data.isDelete==1){
+          isEditable=false;
+        }
+        else{
+          isEditable=true;
+        }
+      }
+    );
+    console.log("isEditable becomes : ",isEditable);
+
+    //Pending Data to Pop up
+    await this.getScheduleId();
+    console.log("Schedule Id catching : ",this.scheduleId);
+    await this.grapAttandee();
     console.log("Debug Thrid");
     //rxj firstValueFrom converts Observable to Promise
     let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.currentLoginUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
@@ -402,10 +455,10 @@ export class DailyComponent implements OnInit, OnChanges {
     );
 
     console.log("Attendee : ", this.attendeesHost);
-    console.log('This isEditable : ',this.isEditable);
+   
 
-    // if (this.isEditable) {
-      console.log('This isEditable : ',this.isEditable);
+     if (!isPrivacy || isEditable) {
+      console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
         width: '40vw', //sets width of dialog
@@ -414,9 +467,9 @@ export class DailyComponent implements OnInit, OnChanges {
         maxHeight: '100vh', //overrides default height of dialog
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
       });
-    // } else {
-    //   console.log("Meeting passed through.");
-    // }
+   } else {
+     console.log("Meeting passed through.");
+    }
   }
 
   async searchHandleEventClick(arg: any) {
@@ -427,6 +480,36 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Event Start Date : ", this.eventStartDate);
     this.eventStartTime = arg.event.startStr.substring(11, 19);
     console.log("Event Start Time : ", this.eventStartTime);
+
+    //isEditable Processing
+    let editableResponse:any=await firstValueFrom(this.httpService.getMethod('http://localhost:8081/user/serchUserSchedule?userId='+this.searchUserId));
+    console.log("Editable Response Array : ",editableResponse);
+    let isEvent:any=editableResponse.filter(
+      (item)=>{
+        console.log("Filter properties : ",item.title,",",item.start,",",item.startTime);
+        if(item.title==this.eventTitle && item.start==this.eventStartDate && item.startTime){
+          console.log(item);
+         return item;  
+        }
+      }
+    );
+    console.log("Filtered A Event : ",isEvent);
+    let isEditable:boolean=false;
+    let isPrivacy:boolean=false;
+    isEvent.map(
+      (data)=>{
+        isPrivacy=data.privacy;
+        console.log("isPrivacy : ",isPrivacy);
+        if(data.status!='ongoing' || data.isDelete==1){
+          isEditable=false;
+        }
+        else{
+          isEditable=true;
+        }
+      }
+    );
+    console.log("isEditable becomes : ",isEditable);
+
     await this.getSearchScheduleId();
     await this.grapAttandee();
     console.log("Debug Third")
@@ -460,16 +543,9 @@ export class DailyComponent implements OnInit, OnChanges {
       }
     );
     console.log("Title: ", this.searchtitle, this.searchdescription, this.searchattendees, this.searchstart, this.searchend);
-
-    //  .subscribe(
-    //     async (response) => {
-
-    //     }
-    //   );
-
-    console.log("isEditable : ",this.isEditable);
-    if (this.isEditable) {
-      console.log('This isEditable : ',this.isEditable);
+    console.log("isEditable : ",isEditable);
+    if (!isPrivacy || isEditable) {
+      console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedSearchEventData,
         width: '40vw', //sets width of dialog
@@ -484,15 +560,15 @@ export class DailyComponent implements OnInit, OnChanges {
     }
   }
 
-  colorization(status: string) {
-    console.log("This is Colorization.",this.isEditable,status);
-    if (status == 'ongoing') {
-      this.isEditable = true;
-    } else {
-      this.isEditable = false;
+  colorization(status: string,isDelete:any) {
+    // return status == 'ongoing' ? '#1B98E080' : 'gray';
+    if(status!='ongoing'){
+      return 'gray';
+    }else if(isDelete==1){
+      return '#1be83055';
+    }else{
+      return '#1B98E080';
     }
-    console.log("This is colorization .",this.isEditable,status);
-    return status == 'ongoing' ? '#1B98E080' : 'gray';
   }
   //searchbar
   imageResolver(byte: any[]) {
@@ -514,6 +590,7 @@ export class DailyComponent implements OnInit, OnChanges {
       this.searchUserIdArray.push(this.searchUserId);
       this.isOpen = !this.isOpen;
       this.search_no_data = !this.search_no_data;
+      // this.isEditable=true;
 
     }
 
@@ -531,13 +608,36 @@ export class DailyComponent implements OnInit, OnChanges {
             (e) => {
               var start = e.start + 'T' + e.startTime;
               var end = e.end + 'T' + e.endTime;
-              return {
-                resourceId: "1",
-                title: e.title,
-                start: start,
-                end: end,
-                color: this.colorization(e.status)
-              };
+              //In order not to display deleted schedule
+              if(e.isDelete==1){
+                return {
+                  resourceId: "1",
+                  title: "Cancelled",
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+                };
+              }else{
+                if(e.privacy){
+                  console.log("Schedule Privacy : ",e.privacy);
+                  return {
+                    resourceId: "1",
+                    title: e.title,
+                    start: start,
+                    end: end,
+                    color: this.colorization(e.status,e.isDelete),
+                  };
+                }else{
+                  console.log("Schedule Privacy : ",e.privacy);
+                  return {
+                    resourceId: "1",
+                    title: "Personal Appointment",
+                    start: start,
+                    end: end,
+                    color: this.colorization(e.status,e.isDelete),
+                  };
+                }
+            }
             });
           this.searchCalendarOptions.events = this.optimizedSearchEventArray;
         }
@@ -580,7 +680,6 @@ export class DailyComponent implements OnInit, OnChanges {
       this.isDisplay = false;
     } else {
       this.isDisplay = true;
-
     }
     this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId=" + previousSearchUserId).subscribe(
       async (response) => {
@@ -590,13 +689,36 @@ export class DailyComponent implements OnInit, OnChanges {
           (e) => {
             var start = e.start + 'T' + e.startTime;
             var end = e.end + 'T' + e.endTime;
-            return {
-              resourceId: "1",
-              title: e.title,
-              start: start,
-              end: end,
-              color: this.colorization(e.status)
-            };
+            //In order not to display deleted schedule
+            if(e.isDelete==1){
+              return {
+                resourceId: "1",
+                  title: "Cancelled",
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+              };
+            }else{
+              if(e.privacy){
+                console.log("Schedule Privacy : ",e.privacy);
+                return {
+                  resourceId: "1",
+                  title: e.title,
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+                };
+              }else{
+                console.log("Schedule Privacy : ",e.privacy);
+                return {
+                  resourceId: "1",
+                  title: "Personal Appointment",
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+                };
+              }
+          }
           });
         console.log("Previous search Data Event : ", this.optimizedPreviousUser);
         //get user name while searching
@@ -646,13 +768,36 @@ export class DailyComponent implements OnInit, OnChanges {
           (e) => {
             var start = e.start + 'T' + e.startTime;
             var end = e.end + 'T' + e.endTime;
-            return {
-              resourceId: "1",
-              title: e.title,
-              start: start,
-              end: end,
-              color: this.colorization(e.status)
-            };
+            //In order not to display deleted schedule
+            if(e.isDelete==1){
+              return {
+                resourceId: "1",
+                  title: "Cancelled",
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+              };
+            }else{
+              if(e.privacy){
+                console.log("Schedule Privacy : ",e.privacy);
+                return {
+                  resourceId: "1",
+                  title: e.title,
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+                };
+              }else{
+                console.log("Schedule Privacy : ",e.privacy);
+                return {
+                  resourceId: "1",
+                  title: "Personal Appointment",
+                  start: start,
+                  end: end,
+                  color: this.colorization(e.status,e.isDelete),
+                };
+              }
+          }
           });
 
         //get search user name

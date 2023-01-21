@@ -41,10 +41,11 @@ export class UserProfileComponent implements OnInit {
   dejavupass: any;
   authority: string;
   password: string;
-  team: string;
+  teamName: string;
   nickname: string;
   userId: number;
   username: string;
+  departmentName:string;
   mail: string;
   biography: string;
   fbLink: any;
@@ -170,44 +171,35 @@ export class UserProfileComponent implements OnInit {
       ).subscribe(async (response) => {
         this.editProfile = response;
         console.log("Info Edit ", this.editProfile);
-
         this.editProfileData = this.editProfile.map((data) => {
           return {
             authority: data.authority,
             password: data.password,
-            team: data.team,
+            teamName: data.teamName,
             nickname: data.nickName,
             userId: data.userId,
             username: data.uname,
             mail: data.mail,
             biography: data.biography,
+            departmentName:data.departmentName
           };
         });
-        console.log("username: ", this.editProfileData);
+        console.log("Edit Info data ", this.editProfileData);
 
         this.editProfile.map((data) => {
           this.username = data.uname;
           this.nickname = data.nickName;
-          this.team = data.team;
+          this.teamName = data.teamName;
           this.biography = data.biography;
           this.mail = data.mail;
+          this.departmentName=data.departmentName;
           console.log("username " + this.username);
           console.log("Nick name", this.nickname);
+          console.log("team Name : ",this.teamName);
+          console.log("Biography : ",this.biography);
+          console.log("Mail : ",this.mail);
+          console.log("Department : ",this.departmentName);
         });
-
-        // this.authority=this.editProfile.authority;
-        // this.password=this.editProfile.password;
-        // this.team=this.editProfile.team;
-        // this.nickname=this.editProfile.nickname;
-        // this.userId=this.editProfile.userId;
-        // this.username=this.editProfile.uname;
-        // this.mail=this.editProfile.mail;
-        // this.biography=this.editProfile.biography;
-        // console.log("username "+this.username);
-        // console.log("nickname "+this.nickname);
-        // console.log("team "+this.team);
-        // console.log("mail"+this.mail);
-        // console.log("biography"+this.biography);
       });
     }
   }

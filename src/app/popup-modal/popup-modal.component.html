@@ -10,8 +10,8 @@
           <input type="search" id="form1" class="form-control" [(ngModel)]="searchText" (keyup)="isOpen = !isOpen"
             cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:32px;" />
         </div>
-        <button type="button" class="btn btn-primary" (click)="appoint()">
-          Appoint
+        <button type="button" class="btn btn-primary" (click)="appoint()" style="height: 38px;">
+         Add
         </button>
     </div>
     
@@ -21,7 +21,7 @@
         <div class="card-body text-info">
           <div class="card-deck bg-light p-2 shadow shadow-info shadow-intensity-lg rounded-3" style="margin-bottom: 5px;width: 20rem;margin-left: 10px;" *ngFor="let staff of optimizedSearchFiltering | appFilter: searchText;let i=index;" id="listText" (click)="getUsername(staff);">
             <img [src]="staff.userImage" width="50px" height="50px"/>
-            <span style="padding-left:5px;"></span><label style="font-style: bold;font-size: 13px;" id="staffName">{{staff.username}}</label><span style="padding-left:5px;">(</span><label id="staffDepartment" style="font-size: 8px;">{{staff.departmentname}}</label>)
+            <span style="padding-left:5px;"></span><label style="font-style: bold;font-size: 13px;" id="staffName">{{staff.username}}</label><span style="padding-left:5px;">(</span><label id="staffDepartment" style="font-size: 10px;">{{staff.departmentname}}</label>)
           </div>   
         </div>
       </div>
@@ -76,7 +76,7 @@
                                     <span style="color:blue;">{{attendee.uname}}</span>
                                     <span> (</span><span style="color:blue;">{{attendee.teamName}}</span><span>)</span>
                                 </div>
-                                <div *ngIf="isLoginUser" class="col-md-6">
+                                
                                     <div class="row">
                                         <div *ngIf="attendee.userId == currentLoginUserId; else elseBlock" style="font-size: 10px;">You are in this meeting.
                                         </div>
@@ -90,15 +90,31 @@
                                         </ng-template>
 
                                     </div>
-                                </div>
+                              
                                 <!-- <div *ngIf="isLoginUser" class="col-md-6"><i><small style="text-primary">You are in this meeting.</small></i></div> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </fieldset>
+            <Button (click)="addMember()" class="btn btn-primary" style="height:30px;padding-top: -15px;">Add Member</Button>
+        </mat-tab>
+        <mat-tab label="Meeting Materials">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Materials</legend>
+                <ul class="text-primary">
+                    <li><a href="#" style="cursor:pointer;">filename.png &nbsp;<i class="fa fa-download" style="color:#1b79ff"></i></a>
+                        <button (click)="download(slides)" mat-raised-button color="primary">Download</button>
+                        <mat-progress-bar *ngIf="download$ | async as download"
+                                [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'" 
+                            [value]="download.progress">
+                            </mat-progress-bar>
+                    </li>
+                </ul>
+                </fieldset>
         </mat-tab>
     </mat-tab-group>
+    
     <div class="footer-daily">
         <div class="row">
             <div class="col-md-6">

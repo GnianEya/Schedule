@@ -6,6 +6,8 @@ import {
   PathLocationStrategy,
 } from "@angular/common";
 import { Router } from "@angular/router";
+import { HttpServiceService } from "services/http-service.service";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-navbar",
@@ -19,18 +21,25 @@ export class NavbarComponent implements OnInit {
   private toggleButton: any;
   private sidebarVisible: boolean;
   private title01: any[];
+  isSetDefaultImage:boolean=true;
+  profile:any;
+  currentUserID:any;
   // private title02: any;
 
   constructor(
     location: Location,
     private element: ElementRef,
-    private router: Router
+    private router: Router,
+    private HttpService: HttpServiceService,
+    private sanitizer:DomSanitizer
   ) {
     this.location = location;
     this.sidebarVisible = false;
   }
 
   ngOnInit() {
+    this.currentUserID=JSON.parse(localStorage.getItem('id'));
+    console.log('Navigation Current User ID : ',this.currentUserID);
     this.listTitles = ROUTES1.filter((listTitle) => listTitle);
     this.title01 = ROUTES01.filter((list) => list);
     // this.title02 = ROUTES02;
@@ -44,6 +53,26 @@ export class NavbarComponent implements OnInit {
         this.mobile_menu_visible = 0;
       }
     });
+    this.HttpService.getMethod(
+      "http://localhost:8081/image/getImage?id=" + this.currentUserID
+    ).subscribe(async (response) => {
+      this.profile = response;
+      console.log(this.profile.userImageData);
+      this.profile = this.sanitizer.bypassSecurityTrustUrl(
+        "data:image/png;base64," + this.profile.userImageData
+      );
+      console.log("Profile image Data : ", this.profile);
+      console.log(typeof this.profile);
+      //setting default image
+      if (this.profile === undefined) {
+        console.log("Profile image in nav is not set yet.");
+        this.isSetDefaultImage = true;
+      } else {
+        console.log("Profile image in nav already exist.");
+        this.isSetDefaultImage = false;
+      }
+    });
+
   }
 
   sidebarOpen() {
