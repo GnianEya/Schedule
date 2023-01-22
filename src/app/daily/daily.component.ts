@@ -278,7 +278,7 @@ export class DailyComponent implements OnInit, OnChanges {
       slotMinTime: '07:00:00',
       slotMaxTime: '19:00:00',
       // dateClick: this.onDateClick.bind(this),
-      events: this.eventarray,
+      //events: this.eventarray,
       eventClick:this.searchHandleEventClick.bind(this),
       eventTimeFormat: { // like '14:30:00'
         hour: '2-digit',
@@ -402,7 +402,7 @@ export class DailyComponent implements OnInit, OnChanges {
     await this.grapAttandee();
     console.log("Debug Thrid");
     //rxj firstValueFrom converts Observable to Promise
-    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.currentLoginUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
+    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?scheduleId=" + this.scheduleId));
     this.eventData = result;
     console.log("Event Data : ", this.eventData);
     this.optimizedEventData = this.eventData.map(
@@ -513,7 +513,7 @@ export class DailyComponent implements OnInit, OnChanges {
     await this.getSearchScheduleId();
     await this.grapAttandee();
     console.log("Debug Third")
-    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.searchUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
+    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.scheduleId));
     this.searchEventData = result;
     console.log("Search Event Data : ", this.searchEventData);
     console.log("Search Attendee : ", this.attendeesHost);
@@ -837,12 +837,12 @@ export class DailyComponent implements OnInit, OnChanges {
   async getScheduleId() {
     console.log("Debug First")
     //get scheduleId /serchUserSchedule
-    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.currentLoginUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
+    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId=" + this.currentLoginUserId));
     this.scheduleIdHost = result;
     console.log("Schedule Id Host : ", this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data) => {
-        this.scheduleId = data.id;
+        this.scheduleId = data.scheduleId;
         console.log("Schedule Id : ", this.scheduleId);
       }
     );
@@ -850,12 +850,12 @@ export class DailyComponent implements OnInit, OnChanges {
   async getSearchScheduleId() {
     console.log("Debug First")
     //get scheduleId /serchUserSchedule
-    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.searchUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime));
+    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId=" + this.searchUserId));
     this.scheduleIdHost = result;
     console.log("Schedule Id Host : ", this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data) => {
-        this.scheduleId = data.id;
+        this.scheduleId = data.scheduleId;
         console.log("Schedule Id : ", this.scheduleId);
       }
     );
