@@ -76,13 +76,13 @@ slides =
      );
      console.log("User Id : ",this.userId);
      //get scheduleId for delete and update
-     this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId="+this.userId+"&title="+this.title+"&start="+this.start+"&starttime="+this.start_time).subscribe(
+     this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+this.userId).subscribe(
   async (response)=>{
    this.scheduleIdHost=response;
     console.log("Schedule Id Host : ",this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data)=>{
-        this.scheduleIdUpdateDelete=data.id;
+        this.scheduleIdUpdateDelete=data.scheduleId;
         console.log("Schedule Id : ",this.scheduleIdUpdateDelete);
       }
     );
