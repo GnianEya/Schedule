@@ -13,17 +13,29 @@ export const AdminLayoutRoutes: Routes = [
   {
     path: "home",
     component: HomeComponent,
-    // canActivate: [AuthGuard],
-    // data: { roles: ["organizer", "member"] },
+    canActivate: [AuthGuard],
+    data: { roles: ["organizer","member"] },
   },
-  { path: "user-profile", component: UserProfileComponent },
-  { path: "daily", component: DailyComponent },
+  {
+    path: "user-profile", component: UserProfileComponent, canActivate: [AuthGuard],
+    data: { roles: ["organizer","member"] },
+  },
+  {
+    path: "daily", component: DailyComponent, canActivate: [AuthGuard],
+    data: { roles: ["organizer","member"] },
+  },
   {
     path: "schedule",
     component: ScheduleComponent,
     canActivate: [AuthGuard],
     data: { roles: ["organizer"] },
   },
-  { path: "weekly", component: WeeklyComponent },
-  { path: "changePassword", component: ChangePasswordComponent },
+  {
+    path: "weekly", component: WeeklyComponent, canActivate: [AuthGuard],
+    data: { roles: ["organizer","member"] },
+  },
+  {
+    path: "changePassword", component: ChangePasswordComponent, canActivate: [AuthGuard],
+    data: { roles: ["organizer","member"] },
+  },
 ];
