@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     private userAuthService: UserAuthService,
     private router: Router,
     private userService: UserService
-  ) {}
+  ) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -43,9 +43,22 @@ export class AuthGuard implements CanActivate {
           console.log("success");
           return true;
         } else {
-          console.log("fail");
-          window.alert("You do not have permission to access this feature!");
-          return false;
+          var localItem: any;
+          var localRole: any;
+          localItem = JSON.parse(localStorage.getItem("id"));
+          localRole = JSON.parse(localStorage.getItem("roles"));
+          console.log(localRole);
+          if (localItem == null) {
+            window.alert("I'm watching you! 🙂");
+            this.router.navigate(['/login']);
+          } else if (localRole[0].roleName === "admin") {
+            window.alert("Lmao! your own app blocks you  (☞ﾟヮﾟ)☞");
+            this.router.navigate(['/login']);
+          } else {
+            console.log("fail");
+            window.alert("Think about your position and salary before clicking this feature 🤡");
+            return this.router.navigate(['/home']);
+          }
         }
       }
     }
