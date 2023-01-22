@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DataShareService } from 'services/data-share.service';
 import { Download } from 'services/download';
 import { DownloadService } from 'services/download.service';
 import { HttpServiceService } from 'services/http-service.service';
@@ -49,7 +50,8 @@ slides =
   private http:HttpClient,
   private sanitizer:DomSanitizer,
   private downloads: DownloadService,
-            @Inject(DOCUMENT) private document: Document
+  @Inject(DOCUMENT) private document: Document,
+  private dataShare:DataShareService
   ) { console.log("Dialog Data : ",data);}
   ngOnChanges(changes: SimpleChanges): void {
     
@@ -221,6 +223,10 @@ slides =
 
   Updatation(){
     //pending with boolean and scheduleId,userId
+    console.log("Updatation");
+    this.dataShare.changeIsUpdateMessage(true);
+    this.dataShare.changeScheduleIdChangerMessage(this.scheduleId);
+    this.dataShare.changeCreatorIdChangerMessage(this.userId);
   }
 
   appoint() {
