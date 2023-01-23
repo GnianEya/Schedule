@@ -4,11 +4,14 @@ import { Component, OnInit ,Inject, ChangeDetectionStrategy, OnChanges, SimpleCh
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from '@angular/platform-browser';
-import { BehaviorSubject, Observable } from 'rxjs';
+import * as e from 'express';
+import { Member } from 'models/member';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { DataShareService } from 'services/data-share.service';
 import { Download } from 'services/download';
 import { DownloadService } from 'services/download.service';
 import { HttpServiceService } from 'services/http-service.service';
+import { ScheduleService } from 'services/schedule.service';
 import Swal from "sweetalert2";
 
 // import { RemoveUserPopUpComponent } from "../remove-user-pop-up/remove-user-pop-up.component";
@@ -41,6 +44,9 @@ ownerId:any;
 isAppoint:boolean=false;
 changeOwner={};
 reAssignUserId:any;
+attendeeApoint:any;
+memberArrayay :any;
+membersList: any = [];
 slides = 
   {name: 'Zipping file', url: ''}
   download$!: Observable<Download>
@@ -50,6 +56,7 @@ slides =
   private http:HttpClient,
   private sanitizer:DomSanitizer,
   private downloads: DownloadService,
+  private scheduleService:ScheduleService,
   @Inject(DOCUMENT) private document: Document,
   private dataShare:DataShareService
   ) { console.log("Dialog Data : ",data);}
@@ -58,6 +65,7 @@ slides =
   }
 
   ngOnInit(): void {
+    this.saveMember();
     console.log("datum dialog");
     //get Logined userId
     this.currentLoginUserId=JSON.parse(localStorage.getItem("id"));
@@ -221,12 +229,45 @@ slides =
     });
   }
 
-  Updatation(){
+  finish(){
     //pending with boolean and scheduleId,userId
-    console.log("Updatation");
+    console.log("Finish");
     this.dataShare.changeIsUpdateMessage(true);
     this.dataShare.changeScheduleIdChangerMessage(this.scheduleId);
     this.dataShare.changeCreatorIdChangerMessage(this.userId);
+    
+    const obj={
+      scheduleId:this.scheduleId,
+      currentUserId:this.currentLoginUserId
+    };
+    Swal.fire({
+      title: 'Event',
+      text: "Has an Event been finished ?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'YES'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Model for finish Schedule : ",obj);
+    
+        this.http.put<any>('http://localhost:8081/schedule/finishSchedule',obj).subscribe(
+      (result)=>{
+        console.log('Finished Schedule : ',result);
+      }
+    );
+    // window.setInterval(
+    //   ()=>{
+        Swal.fire(
+          'Event',
+          'Event has been finished.',
+          'success'
+        );
+    //   },5000
+    // );
+      }
+    });
   }
 
   appoint() {
@@ -234,15 +275,18 @@ slides =
     console.log("Search User Name : ",this.searchText);
     console.log("Search User ID : ",this.searchUserId);
     console.log("All Attendee before added : ",this.attendees);
-    const add_Attendee=this.optimizedSearchFiltering.filter((item)=>item.userId==this.searchUserId);
-console.log("Member is added : ",add_Attendee);
+//     let add_Attendee =this.memberArrayay.filter((item)=>item.userId==this.searchUserId);
+    
+// console.log("A Member is added : ",add_Attendee);
+// this.membersList.push(add_Attendee);
+// console.log("Attendees to Appoint : ",this.membersList);
 
 const obj={
   scheduleId:this.scheduleId,
   addUserId:this.searchUserId,
   ownerId:this.userId,
   currentUserId:this.currentLoginUserId,
-  membersList:add_Attendee
+  membersList:this.membersList
  }
  Swal.fire({
   title: 'Are you sure?',
@@ -282,21 +326,58 @@ imageResolver(byte: any[]) {
   return this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + byte);
 }
 
+//member-db
+saveMember() {
+  this.scheduleService.getMemberList().subscribe({
+    next: (data) => {
+      this.memberArrayay = data;
+      console.log(this.memberArrayay);
+    },
+    error: (e) => console.log(e),
+  });
+}
+
 addMember(){
  this.isAppoint=true;
- 
+ console.log("Search Filtering Array(Original) : ",this.optimizedSearchFiltering);
+ console.log('All Member Lists : ',this.memberArrayay);
 for(let e of this.attendees){
   let attendeeId=e.userId;
   console.log('Filtered Attendees ID : ',attendeeId);
-  console.log("Search Filtering Array(Original) : ",this.optimizedSearchFiltering);
   this.optimizedSearchFiltering=this.optimizedSearchFiltering.filter((item)=>item.userId!=attendeeId);
+  for (let i = 0; i < this.memberArrayay.length; i++) {
+    for (let j=0; j< this.attendees.length; j++) {
+      if (this.memberArrayay[i].userId == this.attendees[j].userId) {
+        this.membersList.push(this.memberArrayay[i]);
+        this.memberArrayay[i].userId = 0;
+      }
+      
+    }
+  
+   }
 }
-
 console.log("Optimized Search Filtering Array Without Attendees : ",this.optimizedSearchFiltering);
+
+console.log("Filtered Member List : ",this.membersList);
 }
+ 
 
 download({name, url}: {name: string, url: string}) {
   this.download$ = this.downloads.download(url, name);
 }
+
+downloadRoutering(){
+  let response:any=firstValueFrom(this.httpService.getMethod('http://localhost:8081/file/all?scheduleId='));
+  response.map(
+    (data)=>{
+      this.slides.name=data.name;
+      this.slides.url=data.url;
+      console.log("Files for schedule : ",this.slides);
+    }
+  );
+}
+
+
+
 
 }

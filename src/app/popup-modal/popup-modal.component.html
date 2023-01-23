@@ -78,19 +78,15 @@
                                 </div>
                                 
                                     <div class="row">
-                                        <div *ngIf="attendee.userId == currentLoginUserId; else elseBlock" style="font-size: 10px;">You are in this meeting.
+                                        <div *ngIf="attendee.userId == userId; else elseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">Event Creator
                                         </div>
                                         <ng-template #elseBlock>
-                                            <div *ngIf="attendeeuserId == userId; else otherwiseBlock" style="font-size: 10px;">Event Creator</div>
-                                            <ng-template #otherwiseBlock>
                                                 <div class="col" (click)="reAssign(attendee.userId)" id="btn_animate">
-                                                    <i style="color:blue;font-size: small;cursor:pointer;">Re-assign</i>
+                                                    <i style="color:blue;font-size: small;cursor:pointer;">Re-assign Creator</i>
                                                 </div>
                                                 <div class="col" (click)="remove(attendee.userId)" id="btn_animate">
                                                     <i style="color:red;font-size: small;cursor:pointer;">Remove</i>
-                                                </div>
-                                            </ng-template>
-                                            
+                                                </div>  
                                         </ng-template>
 
                                     </div>
@@ -103,19 +99,28 @@
             </fieldset>
             <Button (click)="addMember()" class="btn btn-primary" style="height:30px;padding-top: -15px;">Add Member</Button>
         </mat-tab>
-        <mat-tab label="Meeting Materials">
+        <mat-tab label="Meeting Materials" style="margin-bottom:400px;">
             <fieldset class="border border-primary rounded-5">
                 <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Materials</legend>
                 <ul class="text-primary">
-                    <li><a href="#" style="cursor:pointer;">filename.png &nbsp;<i class="fa fa-download" style="color:#1b79ff"></i></a>
-                        <button (click)="download(slides)" mat-raised-button color="primary">Download</button>
+                    <li>
+                        <div class="row">
+                            <div class="col-md-4">
+                        <a href="#" style="cursor:pointer;color:#1b79ff;">{{slides.name}} &nbsp;&nbsp;<i class="fa fa-download" style="color:#1b79ff"></i></a>
+                        </div>
+                        <div class="col-md-4">
+                        <button (click)="download(slides)" class="btn btn-primary btn-sm" color="primary">Download</button>
+                    </div>
+                    <div class="col-md-2">
                         <mat-progress-bar *ngIf="download$ | async as download"
                                 [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'" 
                             [value]="download.progress">
-                            </mat-progress-bar>
+                        </mat-progress-bar>
+                       </div>
+                        </div>
                     </li>
                 </ul>
-                </fieldset>
+            </fieldset>
         </mat-tab>
     </mat-tab-group>
     
@@ -126,8 +131,8 @@
                     mat-dialog-close>
                     Delete <i class="fa fa-trash" id="btn_animate" style="color:rgb(245, 71, 48);font-size:15px;"></i>
                 </span>
-                <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="Updatation()">
-                    Update <i class="fa fa-pencil-square" style="color:rgb(14, 143, 36);" id="btn_animate"></i>
+                <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="finish()">
+                    Finish <i class="fa fa-pencil-square" style="color:rgb(14, 143, 36);" id="btn_animate"></i>
                 </span>
             </div>
             <div class="col-md-6">
