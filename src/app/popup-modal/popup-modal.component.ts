@@ -4,7 +4,7 @@ import { Component, OnInit ,Inject, ChangeDetectionStrategy, OnChanges, SimpleCh
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from '@angular/platform-browser';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { DataShareService } from 'services/data-share.service';
 import { Download } from 'services/download';
 import { DownloadService } from 'services/download.service';
@@ -41,6 +41,7 @@ ownerId:any;
 isAppoint:boolean=false;
 changeOwner={};
 reAssignUserId:any;
+attendeeApoint:any;
 slides = 
   {name: 'Zipping file', url: ''}
   download$!: Observable<Download>
@@ -221,12 +222,45 @@ slides =
     });
   }
 
-  Updatation(){
+  finish(){
     //pending with boolean and scheduleId,userId
-    console.log("Updatation");
+    console.log("Finish");
     this.dataShare.changeIsUpdateMessage(true);
     this.dataShare.changeScheduleIdChangerMessage(this.scheduleId);
     this.dataShare.changeCreatorIdChangerMessage(this.userId);
+    
+    const obj={
+      scheduleId:this.scheduleId,
+      currentUserId:this.currentLoginUserId
+    };
+    Swal.fire({
+      title: 'Event',
+      text: "Has an Event been finished ?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'YES'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Model for finish Schedule : ",obj);
+    
+        this.http.put<any>('http://localhost:8081/schedule/finishSchedule',obj).subscribe(
+      (result)=>{
+        console.log('Finished Schedule : ',result);
+      }
+    );
+    // window.setInterval(
+    //   ()=>{
+        Swal.fire(
+          'Event',
+          'Event has been finished.',
+          'success'
+        );
+    //   },5000
+    // );
+      }
+    });
   }
 
   appoint() {
@@ -234,15 +268,17 @@ slides =
     console.log("Search User Name : ",this.searchText);
     console.log("Search User ID : ",this.searchUserId);
     console.log("All Attendee before added : ",this.attendees);
-    const add_Attendee=this.optimizedSearchFiltering.filter((item)=>item.userId==this.searchUserId);
+    let add_Attendee:object=this.optimizedSearchFiltering.filter((item)=>item.userId==this.searchUserId);
 console.log("Member is added : ",add_Attendee);
+this.attendees=this.attendees.concat(add_Attendee);
+console.log("Attendees to Appoint : ",this.attendees);
 
 const obj={
   scheduleId:this.scheduleId,
   addUserId:this.searchUserId,
   ownerId:this.userId,
   currentUserId:this.currentLoginUserId,
-  membersList:add_Attendee
+  membersList:this.attendees
  }
  Swal.fire({
   title: 'Are you sure?',
@@ -284,19 +320,32 @@ imageResolver(byte: any[]) {
 
 addMember(){
  this.isAppoint=true;
- 
+ console.log("Search Filtering Array(Original) : ",this.optimizedSearchFiltering);
 for(let e of this.attendees){
   let attendeeId=e.userId;
   console.log('Filtered Attendees ID : ',attendeeId);
-  console.log("Search Filtering Array(Original) : ",this.optimizedSearchFiltering);
   this.optimizedSearchFiltering=this.optimizedSearchFiltering.filter((item)=>item.userId!=attendeeId);
 }
-
 console.log("Optimized Search Filtering Array Without Attendees : ",this.optimizedSearchFiltering);
+
+console.log("Existing Attendees : ",this.attendeeApoint);
+console.log("Existing Attendees  : ",this.attendees);
+
 }
 
 download({name, url}: {name: string, url: string}) {
   this.download$ = this.downloads.download(url, name);
+}
+
+downloadRoutering(){
+  let response:any=firstValueFrom(this.httpService.getMethod('http://localhost:8081/file/all?scheduleId='));
+  response.map(
+    (data)=>{
+      this.slides.name=data.name;
+      this.slides.url=data.url;
+      console.log("Files for schedule : ",this.slides);
+    }
+  );
 }
 
 }

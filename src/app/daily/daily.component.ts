@@ -91,6 +91,7 @@ export class DailyComponent implements OnInit, OnChanges {
   attendeesHost: any;
   optimizedattendeesHost: any;
   search_no_data: boolean = false;
+  isAttendee:boolean=false;
   constructor(private dialogView: MatDialog, private data: DataShareService, private httpService: HttpServiceService, private sanitizer: DomSanitizer) { }
   @ViewChild("calendar", { static: true })
   calendarComponent!: FullCalendarComponent;
@@ -118,6 +119,9 @@ export class DailyComponent implements OnInit, OnChanges {
 
     this.currentLoginUsername = JSON.parse(localStorage.getItem("name"));
     console.log("Current Logined User Name : ", this.currentLoginUsername);
+
+    console.log("Is Attendee  : ",this.isAttendee);
+     
 
 
     //get logined username
@@ -397,7 +401,7 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("isEditable becomes : ",isEditable);
 
     //Pending Data to Pop up
-    await this.getScheduleId();
+    await this.getScheduleId(this.eventTitle);
     console.log("Schedule Id catching : ",this.scheduleId);
     await this.grapAttandee();
     console.log("Debug Thrid");
@@ -420,10 +424,11 @@ export class DailyComponent implements OnInit, OnChanges {
       }
     );
     console.log("Optimized Event Data : ", this.optimizedEventData);
-    this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.currentLoginUserId + "&title=" + this.eventTitle + "&start=" + this.eventStartDate + "&starttime=" + this.eventStartTime).subscribe(
+    this.httpService.getMethod("http://localhost:8081/user/eventDetails?scheduleId=" +this.scheduleId).subscribe(
       async (response) => {
         this.eventData = response;
         console.log("Event Data : ", this.eventData);
+        console.log("attandes :", this.attendeesHost)
         this.optimizedEventData = this.eventData.map(
           (data) => {
             return {
@@ -455,9 +460,18 @@ export class DailyComponent implements OnInit, OnChanges {
     );
 
     console.log("Attendee : ", this.attendeesHost);
-   
 
-     if (!isPrivacy || isEditable) {
+    //who can have access in case of isPrivacy
+    let isPrivacyAccess:boolean=false;
+    for(let e of this.attendeesHost){
+      if (this.currentLoginUserId!=e.userId){
+        isPrivacyAccess=false;
+      }else{
+        isPrivacyAccess=true;
+      }
+    }
+    console.log("isPrivacyAccess : ",isPrivacyAccess);
+     if (!isPrivacy || isEditable || isPrivacyAccess) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
@@ -510,10 +524,11 @@ export class DailyComponent implements OnInit, OnChanges {
     );
     console.log("isEditable becomes : ",isEditable);
 
-    await this.getSearchScheduleId();
+    await this.getSearchScheduleId(this.eventTitle);
+    console.log('ScheduleId catching : ',this.scheduleId);
     await this.grapAttandee();
     console.log("Debug Third")
-    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?userId=" + this.scheduleId));
+    let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/eventDetails?scheduleId=" + this.scheduleId));
     this.searchEventData = result;
     console.log("Search Event Data : ", this.searchEventData);
     console.log("Search Attendee : ", this.attendeesHost);
@@ -544,7 +559,18 @@ export class DailyComponent implements OnInit, OnChanges {
     );
     console.log("Title: ", this.searchtitle, this.searchdescription, this.searchattendees, this.searchstart, this.searchend);
     console.log("isEditable : ",isEditable);
-    if (!isPrivacy || isEditable) {
+
+    //who can have access in case of isPrivacy
+    let isPrivacyAccess:boolean=false;
+    for(let e of this.attendeesHost){
+      if (this.currentLoginUserId!=e.userId){
+        isPrivacyAccess=false;
+      }else{
+        isPrivacyAccess=true;
+      }
+    }
+    console.log("isPrivacyAccess : ",isPrivacyAccess);
+    if (!isPrivacy || isEditable || isPrivacyAccess) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedSearchEventData,
@@ -834,7 +860,7 @@ export class DailyComponent implements OnInit, OnChanges {
     //   }
     // );
   }
-  async getScheduleId() {
+  async getScheduleId(title:any) {
     console.log("Debug First")
     //get scheduleId /serchUserSchedule
     let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId=" + this.currentLoginUserId));
@@ -842,12 +868,14 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Schedule Id Host : ", this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data) => {
-        this.scheduleId = data.scheduleId;
-        console.log("Schedule Id : ", this.scheduleId);
+        if(data.title==title){
+        this.scheduleId = data.scheduleId; 
+        }
       }
     );
+    console.log("Schedule Id for calendar : ", this.scheduleId);
   }
-  async getSearchScheduleId() {
+  async getSearchScheduleId(title:any) {
     console.log("Debug First")
     //get scheduleId /serchUserSchedule
     let result: any = await firstValueFrom(this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId=" + this.searchUserId));
@@ -855,10 +883,12 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Schedule Id Host : ", this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data) => {
+        if(data.title==title){
         this.scheduleId = data.scheduleId;
-        console.log("Schedule Id : ", this.scheduleId);
+        }
       }
     );
+    console.log("Schedule Id for search calendar : ", this.scheduleId);
   }
 }
 
