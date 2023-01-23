@@ -342,6 +342,7 @@ addMember(){
  console.log("Search Filtering Array(Original) : ",this.optimizedSearchFiltering);
  console.log('All Member Lists : ',this.memberArrayay);
 for(let e of this.attendees){
+
   let attendeeId=e.userId;
   console.log('Filtered Attendees ID : ',attendeeId);
   this.optimizedSearchFiltering=this.optimizedSearchFiltering.filter((item)=>item.userId!=attendeeId);
@@ -349,17 +350,25 @@ for(let e of this.attendees){
     for (let j=0; j< this.attendees.length; j++) {
       if (this.memberArrayay[i].userId == this.attendees[j].userId) {
         this.membersList.push(this.memberArrayay[i]);
-        this.memberArrayay[i].userId = 0;
+        //this.memberArrayay[i].userId = 0;
+        this.membersList = Array.from(new Set(this.membersList)); 
       }
       
     }
   
    }
 }
+
 console.log("Optimized Search Filtering Array Without Attendees : ",this.optimizedSearchFiltering);
 
 console.log("Filtered Member List : ",this.membersList);
 }
+
+// memberList : any[] = [];
+// shifting () {
+//   this.memberList.push(this.memberArrayay[i]);
+//   this.memberList.Array.from(new Set(this.memberList));
+// } 
  
 
 download({name, url}: {name: string, url: string}) {
