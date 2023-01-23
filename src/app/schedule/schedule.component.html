@@ -66,7 +66,7 @@
                         name="startMinute"
                         (click)="onSelectStartMin($event)"
                       >
-                        <option disabled selected>Minute</option>
+                        <option disabled selected value="00">Minute</option>
 
                         <option
                           class="time-option"
@@ -100,6 +100,7 @@
                         type="date"
                         class="form-control select-class"
                         id="end"
+                        formControlName="end"
                         name="date"
                         required
                       />
@@ -137,7 +138,7 @@
                         name="endMinute"
                         (change)="onSelectEndMin($event)"
                       >
-                        <option disabled selected>Minute</option>
+                        <option disabled selected value="00">Minute</option>
 
                         <option
                           *ngFor="let startMins of startMin"
@@ -545,6 +546,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <button
+                      [disabled]="scheduleForm.invalid || checkInvalid()"
                       type="submit"
                       class="btn btn-fill btn-primary btn-block mt-4"
                     >

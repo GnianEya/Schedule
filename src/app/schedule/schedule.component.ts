@@ -63,6 +63,7 @@ export class ScheduleComponent implements OnInit {
 
     this.scheduleForm = this.fb.group({
       start: new FormControl(null, [Validators.required]),
+      end: new FormControl(null, [Validators.required]),
       title: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
       privacy: new FormControl(null, [Validators.required]),
@@ -355,6 +356,13 @@ export class ScheduleComponent implements OnInit {
     console.log(this.removedU);
   }
 
+  checkInvalid() {
+    if (this.uniqueArr.length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   //file
 
   errorMessage = "";
