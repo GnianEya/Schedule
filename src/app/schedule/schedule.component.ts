@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
@@ -12,9 +12,8 @@ import { ScheduleService } from "services/schedule.service";
 import { UserCrudService } from "services/user-crud.service";
 import { Department } from "models/department";
 import { Team } from "models/team";
-// import { File } from "models/file";
 import { NgToastService } from "ng-angular-popup";
-import { title } from "process";
+
 @Component({
   selector: "app-schedule",
   templateUrl: "./schedule.component.html",
@@ -25,6 +24,7 @@ export class ScheduleComponent implements OnInit {
 
   currentDate: any = new Date();
   selectStartDate: any;
+
   selectEndDate: any;
   start: any;
   end: any;
@@ -41,7 +41,6 @@ export class ScheduleComponent implements OnInit {
     this.memberArr = [];
     this.member = [];
     this.scheduleArr = [];
-    this.unavailableArr = [];
   }
 
   department: Department[];
@@ -53,7 +52,6 @@ export class ScheduleComponent implements OnInit {
 
   scheduleArr: Schedule[];
 
-  unavailableArr: Schedule[] = [];
   ngOnInit() {
     // this.department = this.userCrudService.department();
     // this.pastDate();
@@ -105,15 +103,21 @@ export class ScheduleComponent implements OnInit {
     this.scheduleService.getScheduleList().subscribe({
       next: (data: any) => {
         this.scheduleArr = data;
-        // console.log(this.scheduleArr);
+        console.log(this.scheduleArr);
       },
       error: (e) => console.log(e),
     });
   }
 
   //date
+
   onChangeStart(e: any) {
     this.selectStartDate = new Date(e);
+
+    // var weekend = this.selectStartDate.getDay();
+    // if (weekend === 0 || weekend === 6) {
+    //   this.weekend = true;
+    // }
 
     var startDay = this.selectStartDate.getDate();
     if (startDay < 10) {
@@ -233,7 +237,6 @@ export class ScheduleComponent implements OnInit {
     );
 
     this.preselectedMember = this.multiselected[0];
-    // console.log(this.preselectedMember);
   }
 
   //add member list
@@ -241,7 +244,6 @@ export class ScheduleComponent implements OnInit {
   shifting() {
     this.preselected.push(this.preselectedMember); // duplicated members
     this.preselected = Array.from(new Set(this.preselected)); //clear duplicate key
-    // console.log(this.preselected);
   }
 
   //select-to-remove
@@ -255,48 +257,55 @@ export class ScheduleComponent implements OnInit {
     // console.log(this.removed);
   }
 
-  multiselectedUser: any = [];
   filterDate: any = [];
 
   //remove
   un_shifting() {
     const index = this.preselected.indexOf(this.removed);
 
-    const idx = this.unavailableArr.indexOf(this.removed);
+    const idx = this.uniqueArr.indexOf(this.removed);
     console.log(index + " space " + idx);
     this.preselected.splice(index, 1);
-    this.unavailableArr.splice(idx, 1);
+    this.uniqueArr.splice(idx, 1);
 
-    console.log(this.removed + "hello" + this.removedU);
+    console.log("after un-shifted");
+    console.log(this.preselected);
   }
 
   //check-available
   checkArr: any = [];
+  uniqueArr: any = [];
+
   checkAvailable() {
+    var multiselectedUser: any = [];
     this.checkArr = this.preselected;
+
+    console.log(this.preselected);
 
     for (let i = 0; i < this.checkArr.length; i++) {
       for (let j = 0; j < this.scheduleArr.length; j++) {
         if (this.checkArr[i].userId == this.scheduleArr[j].userId) {
-          this.multiselectedUser.push(this.scheduleArr[j]);
+          multiselectedUser.push(this.scheduleArr[j]);
         }
       }
     }
+    console.log("down, selected user's schedule");
+    console.log(multiselectedUser);
 
-    var newStart = new Date(this.start);
-    var newEnd = new Date(this.end);
+    var newStart = new Date(this.start).toUTCString();
+    var newEnd = new Date(this.end).toUTCString();
     var NewStartTimeHour = this.startTimeMin / 60 + this.startTimeHour;
     var NewEndTimeHour = this.endTimeMin / 60 + this.endTimeHour;
-
-    for (let i = 0; i < this.multiselectedUser.length; i++) {
-      var oldStart = new Date(this.multiselectedUser[i].start);
-      var oldEnd = new Date(this.multiselectedUser[i].end);
-      var oldStartTime = this.multiselectedUser[i].start_time;
+    var unavailableArr: Schedule[] = [];
+    for (let i = 0; i < multiselectedUser.length; i++) {
+      var oldStart = new Date(multiselectedUser[i].start).toUTCString();
+      var oldEnd = new Date(multiselectedUser[i].end).toUTCString();
+      var oldStartTime = multiselectedUser[i].start_time;
       var oldStartHour = oldStartTime.slice(0, 2);
       var oldStartMinute = oldStartTime.slice(3, 5);
       var oldStartTimeHour = oldStartMinute / 60 + oldStartHour;
 
-      var oldEndTime = this.multiselectedUser[i].end_time;
+      var oldEndTime = multiselectedUser[i].end_time;
       var oldEndHour = oldEndTime.slice(0, 2);
       var oldEndMinute = oldEndTime.slice(3, 5);
       var oldEndTimeHour = oldEndMinute / 60 + oldEndHour;
@@ -312,9 +321,17 @@ export class ScheduleComponent implements OnInit {
           NewStartTimeHour < oldStartTimeHour < NewStartTimeHour ||
           NewStartTimeHour < oldEndTimeHour < NewStartTimeHour
         ) {
-          this.unavailableArr.push(this.multiselectedUser[i]);
-          this.unavailableArr = Array.from(new Set(this.unavailableArr));
-          console.log(this.unavailableArr);
+          unavailableArr.push(multiselectedUser[i]);
+
+          let userIds = new Set();
+          this.uniqueArr = unavailableArr.filter((obj) => {
+            if (!userIds.has(obj.userId)) {
+              userIds.add(obj.userId);
+              return true;
+            } else {
+              return false;
+            }
+          });
         }
       }
     }
@@ -330,23 +347,16 @@ export class ScheduleComponent implements OnInit {
   removedU: any;
   //select-to-remove
   onSelect4(event: any) {
-    this.removedUser = this.unavailableArr.filter(
+    this.removedUser = this.uniqueArr.filter(
       (e) => e.userId == event.target.value
     );
 
     this.removedU = this.removedUser[0];
-    // console.log(this.removedU);
+    console.log(this.removedU);
   }
 
   //file
-  // what we facing-- muli upload allowed at once, but can't be choose 1 by 1 uploaded.
-  // selectFile: any[] = [];
-  // selectFile!: FileList;
-  // urls: any = [];
-  // files: any = [];
 
-  // filesArr!: File[];
-  // file: File = new File();
   errorMessage = "";
 
   selectFile: File[];
@@ -356,12 +366,13 @@ export class ScheduleComponent implements OnInit {
   saveFile(e: any) {
     if (e.target.files) {
       this.selectFile = e.target.files;
+      // this.fileText = e.target.files[0].name;
 
       for (var i = 0; i < this.selectFile.length; i++) {
         if (this.selectFile[i].size < 5000000) {
           this.urls.push(this.selectFile[i].name);
           this.files.push(this.selectFile[i]);
-          console.log(this.files + "\n" + this.urls);
+          //   console.log(this.files + "\n" + this.urls);
         } else {
           this.toast.error({
             detail: "Error Message",
@@ -374,24 +385,23 @@ export class ScheduleComponent implements OnInit {
   }
 
   saveFiles() {
-    this.scheduleService
-      .addFile(this.selectFile, this.schedule.title)
-      .subscribe(
-        (data: any) => {
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.scheduleService.addFile(this.files, this.schedule.title).subscribe(
+      (data: any) => {
+        console.log(data);
+        console.log("save files method works");
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   removeSelectedFile(index) {
     this.urls.splice(index, 1);
-    // this.selectFile.slice(index, 1);
-    console.log("check it out");
-    console.log(this.urls);
-    console.log(this.selectFile);
+    this.files.splice(index, 1);
+    // console.log("check it out");
+    // console.log(this.urls);
+    // console.log(this.files);
   }
 
   // privacy
@@ -410,17 +420,13 @@ export class ScheduleComponent implements OnInit {
     this.schedule.start_time = this.startTimeHour + ":" + this.startTimeMin;
     this.schedule.end_time = this.endTimeHour + ":" + this.endTimeMin;
     this.schedule.membersList = this.preselected;
-    this.schedule.schduleFile = this.selectFile;
+    this.schedule.schduleFile = this.files;
     this.schedule.place = this.place;
     this.schedule.createUser = JSON.parse(localStorage.getItem("id"));
     this.addSchedule();
     this.saveFiles();
-    console.log(this.selectFile);
+    console.log(this.files);
     console.log(this.schedule);
-  }
-
-  get f() {
-    return this.scheduleForm.controls;
   }
 
   scheduleForm!: FormGroup;

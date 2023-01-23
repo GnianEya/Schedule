@@ -242,7 +242,7 @@
                         name=""
                         (change)="onSelect1($event)"
                       >
-                        <option disabled selected>Select team</option>
+                        <option selected>Select team</option>
                         <option
                           *ngFor="let teams of team"
                           value="{{ teams.teamId }}"
@@ -312,10 +312,11 @@
                         (change)="onSelect2($event)"
                         class="form-select form-control select-class"
                         multiple
+                        size="5"
                         aria-label="multiple select example"
                         id="members rightValues"
                       >
-                        <option disabled selected>Select member</option>
+                        <option selected>Select member</option>
                         <option
                           *ngFor="let members of member"
                           value="{{ members.userId }}"
@@ -330,8 +331,11 @@
               </div>
 
               <div class="row">
-                <div class="col-md-4"></div>
-
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="col-form-label">Check Available</label>
+                  </div>
+                </div>
                 <div class="col-md-2" style="float: left">
                   <div>
                     <button
@@ -357,13 +361,10 @@
                         unavailableArr
                         <option disabled selected>Unavailabled member</option>
                         <option
-                          *ngFor="
-                            let multiselectedUser of unavailableArr;
-                            let index = index
-                          "
-                          value="{{ multiselectedUser.userId }}"
+                          *ngFor="let e of uniqueArr; let index = index"
+                          value="{{ e.userId }}"
                         >
-                          {{ multiselectedUser.uname }}
+                          {{ e.uname }}
                           <!-- <a (click)="removeSelectedUser(index)">remove</a> -->
                         </option>
                       </select>
@@ -473,31 +474,31 @@
                   </div>
                 </div>
               </div>
-
-              <div class="col-md-4"></div>
-              <div class="col-md-8">
-                <span
-                  class="sch-div"
-                  *ngFor="let url of urls; let index = index"
-                >
-                  <div class="col-md-10">
-                    {{ url }}
-                  </div>
-                  <div class="col-md-2">
-                    <!-- <input
+              <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-8">
+                  <span
+                    class="sch-div"
+                    *ngFor="let url of urls; let index = index"
+                  >
+                    <div class="col-sm-8">
+                      {{ url }}
+                    </div>
+                    <div class="col-sm-4">
+                      <!-- <input
                       type="button"
                       class="btn btn-info"
                       (click)="removeSelectedFile(index)"
                       value="remove"
                     /> -->
 
-                    <a (click)="removeSelectedFile(index)" style="color: red"
-                      >remove</a
-                    >
-                  </div>
-                </span>
+                      <a (click)="removeSelectedFile(index)" style="color: red"
+                        >remove</a
+                      >
+                    </div>
+                  </span>
+                </div>
               </div>
-
               <!--------------- file end ------------------>
 
               <!--------------- place start ------------------>
