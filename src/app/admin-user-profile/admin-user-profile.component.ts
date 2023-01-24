@@ -15,7 +15,7 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./admin-user-profile.component.scss"],
 })
 export class AdminUserProfileComponent implements OnInit {
-  isEdit: boolean = false;
+  isEdit: boolean = true;
   currentUserID: number;
   selectedFile: File;
   showAtOnceProfile: any;
@@ -26,10 +26,11 @@ export class AdminUserProfileComponent implements OnInit {
   dejavupass: any;
   authority: string;
   password: string;
-  team: string;
+  teamName: string;
   nickname: string;
   userId: number;
   username: string;
+  departmentName: string;
   mail: string;
   biography: string;
   fbLink: any;
@@ -50,6 +51,43 @@ export class AdminUserProfileComponent implements OnInit {
   ngOnInit() {
     this.currentUserID = JSON.parse(localStorage.getItem("id"));
     console.log("Current User Id : ", this.currentUserID);
+
+    this.HttpService.getMethod(
+      "http://localhost:8081/user/serchUserProfile?userId=" + this.currentUserID
+    ).subscribe(async (response) => {
+      this.editProfile = response;
+      console.log("Info Edit ", this.editProfile);
+      this.editProfileData = this.editProfile.map((data) => {
+        return {
+          authority: data.authority,
+          password: data.password,
+          teamName: data.teamName,
+          nickname: data.nickName,
+          userId: data.userId,
+          username: data.uname,
+          mail: data.mail,
+          biography: data.biography,
+          departmentName: data.departmentName,
+        };
+      });
+      console.log("Edit Info data ", this.editProfileData);
+
+      this.editProfile.map((data) => {
+        this.username = data.uname;
+        this.nickname = data.nickName;
+        this.teamName = data.teamName;
+        this.biography = data.biography;
+        this.mail = data.mail;
+        this.departmentName = data.departmentName;
+        console.log("username " + this.username);
+        console.log("Nick name", this.nickname);
+        console.log("team Name : ", this.teamName);
+        console.log("Biography : ", this.biography);
+        console.log("Mail : ", this.mail);
+        console.log("Department : ", this.departmentName);
+      });
+    });
+
     this.HttpService.getMethod(
       "http://localhost:8081/user/serchUserProfile?userId=" + this.currentUserID
     ).subscribe(async (params) => {
@@ -89,7 +127,7 @@ export class AdminUserProfileComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.isEdit = false;
+    this.isEdit = true;
   }
 
   onFileSelected(event) {
@@ -148,53 +186,44 @@ export class AdminUserProfileComponent implements OnInit {
 
   edit() {
     this.isEdit = !this.isEdit;
-    if (this.isEdit) {
-      this.HttpService.getMethod(
-        "http://localhost:8081/user/serchUserProfile?userId=" +
-          this.currentUserID
-      ).subscribe(async (response) => {
-        this.editProfile = response;
-        console.log("Info Edit ", this.editProfile);
+    // if (this.isEdit) {
+    //   this.HttpService.getMethod(
+    //     "http://localhost:8081/user/serchUserProfile?userId=" +
+    //       this.currentUserID
+    //   ).subscribe(async (response) => {
+    //     this.editProfile = response;
+    //     console.log("Info Edit ", this.editProfile);
+    //     this.editProfileData = this.editProfile.map((data) => {
+    //       return {
+    //         authority: data.authority,
+    //         password: data.password,
+    //         teamName: data.teamName,
+    //         nickname: data.nickName,
+    //         userId: data.userId,
+    //         username: data.uname,
+    //         mail: data.mail,
+    //         biography: data.biography,
+    //         departmentName: data.departmentName,
+    //       };
+    //     });
+    //     console.log("Edit Info data ", this.editProfileData);
 
-        this.editProfileData = this.editProfile.map((data) => {
-          return {
-            authority: data.authority,
-            password: data.password,
-            team: data.team,
-            nickname: data.nickName,
-            userId: data.userId,
-            username: data.uname,
-            mail: data.mail,
-            biography: data.biography,
-          };
-        });
-        console.log("username: ", this.editProfileData);
-
-        this.editProfile.map((data) => {
-          this.username = data.uname;
-          this.nickname = data.nickName;
-          this.team = data.team;
-          this.biography = data.biography;
-          this.mail = data.mail;
-          console.log("username " + this.username);
-          console.log("Nick name", this.nickname);
-        });
-
-        // this.authority=this.editProfile.authority;
-        // this.password=this.editProfile.password;
-        // this.team=this.editProfile.team;
-        // this.nickname=this.editProfile.nickname;
-        // this.userId=this.editProfile.userId;
-        // this.username=this.editProfile.uname;
-        // this.mail=this.editProfile.mail;
-        // this.biography=this.editProfile.biography;
-        // console.log("username "+this.username);
-        // console.log("nickname "+this.nickname);
-        // console.log("team "+this.team);
-        // console.log("mail"+this.mail);
-        // console.log("biography"+this.biography);
-      });
-    }
+    //     this.editProfile.map((data) => {
+    //       this.username = data.uname;
+    //       this.nickname = data.nickName;
+    //       this.teamName = data.teamName;
+    //       this.biography = data.biography;
+    //       this.mail = data.mail;
+    //       this.departmentName = data.departmentName;
+    //       console.log("username " + this.username);
+    //       console.log("Nick name", this.nickname);
+    //       console.log("team Name : ", this.teamName);
+    //       console.log("Biography : ", this.biography);
+    //       console.log("Mail : ", this.mail);
+    //       console.log("Department : ", this.departmentName);
+    //     });
+    //   });
+    // }
   }
 
   getNickname(value) {

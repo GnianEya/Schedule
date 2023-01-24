@@ -23,6 +23,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { PasswordConfirmationPopupComponent } from "app/password-confirmation-popup/password-confirmation-popup.component";
 import { EditProfileSender } from "../../models/editProfileSender";
 import { Component, OnInit } from "@angular/core";
+import { truncate } from "fs/promises";
 
 @Component({
   selector: "app-user-profile",
@@ -30,7 +31,7 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./user-profile.component.css"],
 })
 export class UserProfileComponent implements OnInit {
-  isEdit: boolean = false;
+  isEdit: boolean = true;
   currentUserID: number;
   selectedFile: File;
   showAtOnceProfile: any;
@@ -66,6 +67,43 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     this.currentUserID = JSON.parse(localStorage.getItem("id"));
     console.log("Current User Id : ", this.currentUserID);
+
+    this.HttpService.getMethod(
+      "http://localhost:8081/user/serchUserProfile?userId=" + this.currentUserID
+    ).subscribe(async (response) => {
+      this.editProfile = response;
+      console.log("Info Edit ", this.editProfile);
+      this.editProfileData = this.editProfile.map((data) => {
+        return {
+          authority: data.authority,
+          password: data.password,
+          teamName: data.teamName,
+          nickname: data.nickName,
+          userId: data.userId,
+          username: data.uname,
+          mail: data.mail,
+          biography: data.biography,
+          departmentName: data.departmentName,
+        };
+      });
+      console.log("Edit Info data ", this.editProfileData);
+
+      this.editProfile.map((data) => {
+        this.username = data.uname;
+        this.nickname = data.nickName;
+        this.teamName = data.teamName;
+        this.biography = data.biography;
+        this.mail = data.mail;
+        this.departmentName = data.departmentName;
+        console.log("username " + this.username);
+        console.log("Nick name", this.nickname);
+        console.log("team Name : ", this.teamName);
+        console.log("Biography : ", this.biography);
+        console.log("Mail : ", this.mail);
+        console.log("Department : ", this.departmentName);
+      });
+    });
+
     this.HttpService.getMethod(
       "http://localhost:8081/user/serchUserProfile?userId=" + this.currentUserID
     ).subscribe(async (params) => {
@@ -105,7 +143,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.isEdit = false;
+    this.isEdit = true;
   }
 
   onFileSelected(event) {
@@ -164,44 +202,44 @@ export class UserProfileComponent implements OnInit {
 
   edit() {
     this.isEdit = !this.isEdit;
-    if (this.isEdit) {
-      this.HttpService.getMethod(
-        "http://localhost:8081/user/serchUserProfile?userId=" +
-          this.currentUserID
-      ).subscribe(async (response) => {
-        this.editProfile = response;
-        console.log("Info Edit ", this.editProfile);
-        this.editProfileData = this.editProfile.map((data) => {
-          return {
-            authority: data.authority,
-            password: data.password,
-            teamName: data.teamName,
-            nickname: data.nickName,
-            userId: data.userId,
-            username: data.uname,
-            mail: data.mail,
-            biography: data.biography,
-            departmentName: data.departmentName,
-          };
-        });
-        console.log("Edit Info data ", this.editProfileData);
+    // if (this.isEdit) {
+    //   this.HttpService.getMethod(
+    //     "http://localhost:8081/user/serchUserProfile?userId=" +
+    //       this.currentUserID
+    //   ).subscribe(async (response) => {
+    //     this.editProfile = response;
+    //     console.log("Info Edit ", this.editProfile);
+    //     this.editProfileData = this.editProfile.map((data) => {
+    //       return {
+    //         authority: data.authority,
+    //         password: data.password,
+    //         teamName: data.teamName,
+    //         nickname: data.nickName,
+    //         userId: data.userId,
+    //         username: data.uname,
+    //         mail: data.mail,
+    //         biography: data.biography,
+    //         departmentName: data.departmentName,
+    //       };
+    //     });
+    //     console.log("Edit Info data ", this.editProfileData);
 
-        this.editProfile.map((data) => {
-          this.username = data.uname;
-          this.nickname = data.nickName;
-          this.teamName = data.teamName;
-          this.biography = data.biography;
-          this.mail = data.mail;
-          this.departmentName = data.departmentName;
-          console.log("username " + this.username);
-          console.log("Nick name", this.nickname);
-          console.log("team Name : ", this.teamName);
-          console.log("Biography : ", this.biography);
-          console.log("Mail : ", this.mail);
-          console.log("Department : ", this.departmentName);
-        });
-      });
-    }
+    //     this.editProfile.map((data) => {
+    //       this.username = data.uname;
+    //       this.nickname = data.nickName;
+    //       this.teamName = data.teamName;
+    //       this.biography = data.biography;
+    //       this.mail = data.mail;
+    //       this.departmentName = data.departmentName;
+    //       console.log("username " + this.username);
+    //       console.log("Nick name", this.nickname);
+    //       console.log("team Name : ", this.teamName);
+    //       console.log("Biography : ", this.biography);
+    //       console.log("Mail : ", this.mail);
+    //       console.log("Department : ", this.departmentName);
+    //     });
+    //   });
+    // }
   }
 
   getNickname(value) {
