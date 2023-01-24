@@ -1,6 +1,29 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group pt-3">
+          <div class="input-field">
+            <input
+              formControlName=""
+              type="text"
+              #searchTxt
+              placeholder="Enter ID or Name"
+            />
+            <!-- <span
+              class="fa fa-search p-2"
+              (click)="searchEmployee(searchTxt.value)"
+            >
+            </span> -->
+            <button type="button" (click)="searchEmployee(searchTxt.value)">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col-md-10 mx-auto">
         <div class="card">
           <div class="card-header card-header-primary">

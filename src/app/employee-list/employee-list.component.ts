@@ -77,4 +77,13 @@ export class EmployeeListComponent implements OnInit {
       error: (e) => console.log(e),
     });
   }
+
+  //search
+  searchEmployee(e: any) {
+    console.log(e);
+    console.log(this.employees);
+    this.employees = this.employees.filter(
+      (item) => item.employeeId == e.target.value
+    );
+  }
 }

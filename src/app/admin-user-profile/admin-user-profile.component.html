@@ -1,8 +1,8 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-8" *ngIf="isEdit">
-        <div class="card">
+      <div class="col-md-7" *ngIf="isEdit" style="margin-left: 4%">
+        <div class="card p-3">
           <div style="margin: 20px 20px 20px 20px">
             <div class="header">
               <h4 class="title">Edit Profile</h4>
@@ -42,7 +42,7 @@
                         type="text"
                         class="form-control"
                         placeholder="Dept Name"
-                        value="Dept"
+                        [value]="departmentName"
                         disabled
                       />
                     </div>
@@ -57,7 +57,7 @@
                         type="text"
                         class="form-control"
                         placeholder="Team Name"
-                        [value]="team"
+                        [value]="teamName"
                         disabled
                       />
                     </div>
@@ -81,7 +81,7 @@
                     <label
                       ><i
                         class="fa fa-facebook-square"
-                        style="color: #2ca8ff; font-size: 40px"
+                        style="color: #3b5998; font-size: 40px"
                       ></i
                     ></label>
                   </div>
@@ -105,7 +105,7 @@
                     <label
                       ><i
                         class="fa fa-twitter"
-                        style="color: #2ca8ff; font-size: 40px"
+                        style="color: #55acee; font-size: 40px"
                       ></i
                     ></label>
                   </div>
@@ -128,7 +128,7 @@
                     <label
                       ><i
                         class="fa fa-google-plus-square"
-                        style="color: #2ca8ff; font-size: 40px"
+                        style="color: #dd4b39; font-size: 40px"
                       ></i
                     ></label>
                   </div>
@@ -165,7 +165,7 @@
                     <div class="form-group">
                       <label>About Me</label>
                       <textarea
-                        rows="5"
+                        rows="3"
                         class="form-control"
                         placeholder="Here can be your description"
                         [value]="biography"
@@ -263,19 +263,19 @@
               <a [href]="fbLink" style="cursor: pointer"
                 ><i
                   class="fa fa-facebook-square"
-                  style="color: blue; font-size: 15px; margin-right: 20px"
+                  style="color: #3b5998; font-size: 15px; margin-right: 20px"
                 ></i
               ></a>
               <a [href]="ttLink"
                 ><i
                   class="fa fa-twitter"
-                  style="color: blue; font-size: 15px; margin-right: 20px"
+                  style="color: #55acee; font-size: 15px; margin-right: 20px"
                 ></i
               ></a>
               <a [href]="ggLink"
                 ><i
                   class="fa fa-google-plus-square"
-                  style="color: blue; font-size: 15px; margin-right: 20px"
+                  style="color: #dd4b39; font-size: 15px; margin-right: 20px"
                 ></i
               ></a>
             </div>

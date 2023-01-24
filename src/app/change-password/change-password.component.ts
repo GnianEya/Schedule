@@ -77,9 +77,19 @@ export class ChangePasswordComponent {
     this.passwordService.changePassword(this.changePassword).subscribe(
       (data: any) => {
         console.log(data);
+        this.toast.success({
+          detail: "Success Message",
+          summary: "Successfully changed password.",
+          duration: 5000,
+        });
       },
       (error) => {
         console.log(error);
+        this.toast.error({
+          detail: "Error Message",
+          summary: "Failed to change password.",
+          duration: 5000,
+        });
       }
     );
   }
