@@ -20,7 +20,23 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)">
-            <i class="material-icons">person</i>
+            <div id="picture">
+              <img
+                *ngIf="!isSetDefaultImage"
+                [src]="profile"
+                class="img-fluid"
+                id="wizardPicturePreview"
+                title=""
+              />
+              <img
+                *ngIf="isSetDefaultImage"
+                [src]="assets / img / avater.jpg"
+                class="img-fluid"
+                id="wizardPicturePreview"
+                title=""
+              />
+            </div>
+
             <p>
               <span class="d-lg-none d-md-block">Account</span>
             </p>

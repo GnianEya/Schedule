@@ -45,7 +45,7 @@ export class UserProfileComponent implements OnInit {
   nickname: string;
   userId: number;
   username: string;
-  departmentName:string;
+  departmentName: string;
   mail: string;
   biography: string;
   fbLink: any;
@@ -181,7 +181,7 @@ export class UserProfileComponent implements OnInit {
             username: data.uname,
             mail: data.mail,
             biography: data.biography,
-            departmentName:data.departmentName
+            departmentName: data.departmentName,
           };
         });
         console.log("Edit Info data ", this.editProfileData);
@@ -192,13 +192,13 @@ export class UserProfileComponent implements OnInit {
           this.teamName = data.teamName;
           this.biography = data.biography;
           this.mail = data.mail;
-          this.departmentName=data.departmentName;
+          this.departmentName = data.departmentName;
           console.log("username " + this.username);
           console.log("Nick name", this.nickname);
-          console.log("team Name : ",this.teamName);
-          console.log("Biography : ",this.biography);
-          console.log("Mail : ",this.mail);
-          console.log("Department : ",this.departmentName);
+          console.log("team Name : ", this.teamName);
+          console.log("Biography : ", this.biography);
+          console.log("Mail : ", this.mail);
+          console.log("Department : ", this.departmentName);
         });
       });
     }
