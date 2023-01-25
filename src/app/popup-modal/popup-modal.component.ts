@@ -216,7 +216,7 @@ fileIdHost:any;
     this.changeOwner={
       scheduleId:this.scheduleId,
       currentUserId:this.currentLoginUserId,
-      userId:this.searchUserId,
+      userId:this.userId,
      };
   console.log("Optimized ChangeOwner : ",this.changeOwner);
     Swal.fire({
@@ -397,7 +397,8 @@ for(let e of this.attendees){
     for (let j=0; j< this.attendees.length; j++) {
       if (this.memberArrayay[i].userId == this.attendees[j].userId) {
         this.membersList.push(this.memberArrayay[i]);
-        this.memberArrayay[i].userId = 0;
+        //this.memberArrayay[i].userId = 0;
+        this.membersList= Array.from(new Set(this.membersList));
       }
       
     }

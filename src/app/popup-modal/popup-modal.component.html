@@ -78,15 +78,18 @@
                                 </div>
                                 
                                     <div class="row">
-                                        <div *ngIf="attendee.userId == userId; else elseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">Event Creator
+                                        <div *ngIf="attendee.userId == userId; else elseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">Event Owner
                                         </div>
                                         <ng-template #elseBlock>
+                                            <div *ngIf="attendee.userId == currentLoginUserId; else otherwiseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">You are in this meeting.</div>
+                                        <ng-template #otherwiseBlock>
                                                 <div class="col" (click)="reAssign(attendee.userId)" id="btn_animate">
                                                     <i style="color:blue;font-size: small;cursor:pointer;">Re-assign Creator</i>
                                                 </div>
                                                 <div class="col" (click)="remove(attendee.userId)" id="btn_animate">
                                                     <i style="color:red;font-size: small;cursor:pointer;">Remove</i>
                                                 </div>  
+                                        </ng-template>
                                         </ng-template>
 
                                     </div>
