@@ -37,6 +37,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { DepartmentsComponent } from "./departments/departments.component";
 import { getSaver, SAVER } from "services/saver.providers";
+import { UserListComponent } from './user-list/user-list.component';
 
 //wmk
 //import { FullCalendarModule } from "@fullcalendar/angular";
@@ -89,6 +90,7 @@ import { getSaver, SAVER } from "services/saver.providers";
     ErrorComponent,
     EmployeeListComponent,
     DepartmentsComponent,
+    UserListComponent,
   ],
   providers: [
     AuthGuard,

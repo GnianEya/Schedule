@@ -17,6 +17,13 @@ export const ROUTES2: RouteInfo[] = [
   },
 
   {
+    path: "/userList",
+    title: "User List",
+    icon: "list",
+    class: "",
+  },
+
+  {
     path: "/addEmployee",
     title: "ADD Employee",
     icon: "note",

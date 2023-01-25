@@ -6,6 +6,7 @@ import { DepartmentsComponent } from "app/departments/departments.component";
 import { AdminChangePasswordComponent } from "app/admin-change-password/admin-change-password.component";
 import { AuthGuard } from "_auth/auth.guard";
 import { AdminUserProfileComponent } from "app/admin-user-profile/admin-user-profile.component";
+import { UserListComponent } from "app/user-list/user-list.component";
 
 export const UserLayoutRoutes: Routes = [
   {
@@ -17,6 +18,12 @@ export const UserLayoutRoutes: Routes = [
   {
     path: "employeeList",
     component: EmployeeListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ["admin"] },
+  },
+  {
+    path: "userList",
+    component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: ["admin"] },
   },

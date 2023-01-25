@@ -81,9 +81,12 @@ export class EmployeeListComponent implements OnInit {
   //search
   searchEmployee(e: any) {
     console.log(e);
-    console.log(this.employees);
-    this.employees = this.employees.filter(
-      (item) => item.employeeId == e.target.value
-    );
+    this.employeeService.searchEmployee(e).subscribe({
+      next: (data) => {
+        this.employees = data;
+        console.log("search data", this.employees);
+      },
+      error: (e) => console.log(e),
+    });
   }
 }

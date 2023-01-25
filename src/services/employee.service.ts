@@ -30,4 +30,10 @@ export class EmployeeService {
   // updateEmployee(employeeId: Number, employee: Employee): Observable<Object> {
   //   return this.httpClient.put(`${this.baseUrl}/${employeeId}`, employee);
   // }
+
+  searchEmployee(empId: number): Observable<Employee[]> {
+    return this.httpClient.get<Employee[]>(
+      `${this.baseUrl}/findEmployeeById/${empId}`
+    );
+  }
 }
