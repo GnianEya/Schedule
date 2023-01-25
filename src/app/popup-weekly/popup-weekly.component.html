@@ -1,0 +1,43 @@
+<span mat-dialog-close style="float:right;margin-top:-10px;margin-right:0px;"><i
+    class="fa fa-window-close text-primary" aria-hidden="true"></i></span>
+    <span class="text-primary" style="margin-left: 10px;font-size: large;">Meeting Details</span>
+    <hr style="color:blue;">
+    <mat-tab-group mat-align-tabs="center" backgroundColor="primary">
+        <mat-tab label="Schedule">
+            <fieldset class="border border-primary rounded-5">
+                <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Details</legend>
+                <div style="font-size:small">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col-md-6">Title</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{title}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Description</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{description}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Meeting start at</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{start_time}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Approximatly end at &nbsp;&nbsp;&nbsp;</div>
+                                <div class="col-md-6">
+                                    <div class="text-primary">{{approximated_end_time}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            </mat-tab>
+    </mat-tab-group>
+    <div style="float:right"><Button mat-button mat-dialog-close class="btn btn-primary btn-sm" id="btn_animate">Cancel</Button></div>
+

@@ -106,12 +106,13 @@
                     <li>
                         <div class="row">
                             <div class="col-md-4">
-                        <a href="#" style="cursor:pointer;color:#1b79ff;">{{slides.name}} &nbsp;&nbsp;<i class="fa fa-download" style="color:#1b79ff"></i></a>
+                        <a href="#" style="cursor:pointer;color:#1b79ff;">{{downloadMaterial.name}} &nbsp;&nbsp;<i class="fa fa-download" style="color:#1b79ff"></i></a>
                         </div>
                         <div class="col-md-4">
-                        <button (click)="download(slides)" class="btn btn-primary btn-sm" color="primary">Download</button>
+                        <button (click)="download(downloadMaterial)" class="btn btn-primary btn-sm" color="primary">Download</button>
                     </div>
                     <div class="col-md-2">
+                        <button (click)="upload(downloadMaterial)" class="btn btn-primary btn-sm" color="primary">Upload</button>
                         <mat-progress-bar *ngIf="download$ | async as download"
                                 [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'" 
                             [value]="download.progress">

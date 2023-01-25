@@ -38,6 +38,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { DepartmentsComponent } from "./departments/departments.component";
 import { getSaver, SAVER } from "services/saver.providers";
 import { UserListComponent } from "./user-list/user-list.component";
+import { PopupWeeklyComponent } from './popup-weekly/popup-weekly.component';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { UserListComponent } from "./user-list/user-list.component";
     EmployeeListComponent,
     DepartmentsComponent,
     UserListComponent,
+    PopupWeeklyComponent,
   ],
   providers: [
     AuthGuard,

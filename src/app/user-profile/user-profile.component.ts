@@ -24,6 +24,8 @@ import { PasswordConfirmationPopupComponent } from "app/password-confirmation-po
 import { EditProfileSender } from "../../models/editProfileSender";
 import { Component, OnInit } from "@angular/core";
 import { truncate } from "fs/promises";
+import Swal from "sweetalert2";
+
 
 @Component({
   selector: "app-user-profile",
@@ -294,7 +296,35 @@ export class UserProfileComponent implements OnInit {
         )
         .subscribe((result) => {
           console.log("Upload message =>", result);
-        });
+          if(result!=null){
+            Swal.fire(
+              'Successfully',
+              'Your Information is successfully updated',
+              'success'
+            )
+          }
+          
+          // }else if(){
+          //   Swal.fire({
+          //     icon: 'error',
+          //     title: 'Check Your User Information!!',
+          //     text: 'Something went wrong!',
+          //     // footer: '<a href="">Why do I have this issue?</a>'
+          //   })
+          // }
+        },
+        (error)=>{
+          if(error!=null){
+            Swal.fire({
+              icon: 'error',
+              title: 'Check Your User Information!!',
+              text: 'Something went wrong!',
+              // footer: '<a href="">Why do I have this issue?</a>'
+            })
+          }
+          
+        }
+        );
     });
   }
 }

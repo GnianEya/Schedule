@@ -5,7 +5,7 @@
     <div class="input-group">
       <div class="form-outline">
         <input type="search" id="form1" class="form-control" [(ngModel)]="searchText" (keyup)="isOpen = !isOpen"
-          cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:38px;" />
+          cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:38px;color: white;" />
       </div>
       <button type="button" class="btn btn-primary" (click)="isShow()">
         <i class="fa fa-search"></i>
@@ -36,15 +36,14 @@
     <Button class="btn btn-outline-success" (click)="currentweek()">&nbsp;&nbsp;This Week&nbsp;&nbsp;</Button>
     <Button (click)="nextProcess()" class="btn btn-info">></Button>
           <Button (click)="d.toggle()" type="button" class="btn btn-primary">>></Button>
-          <input [(ngModel)]="dataFromPicker" ngbDatepicker #d="ngbDatepicker" type="text" class="dateinput">
-    
+          <input [(ngModel)]="dataFromPicker" ngbDatepicker #d="ngbDatepicker" type="text" class="dateinput">    
     </div></div> -->
 </div>
 <div class="row">
 <div class="container-fluid">
   <div class="row flex-nowrap">
       <div class="col-md-2">
-        <div class="card card-block parent" style="margin: left 10px;">Member
+        <div class="card card-block parent" style="margin: left 10px;">&nbsp;&nbsp;&nbsp;Member
           <div id="picture">
                       <img
                       *ngIf="!isSetDefaultImage"
@@ -55,67 +54,43 @@
                     />
                     <img
                       *ngIf="isSetDefaultImage"
-                      [src]="assets/img/mike.jpg"
+                      [src]="assets/img/avater.jpg"
                       class="img-fluid"
                       id="wizardPicturePreview"
                       title=""
                     />
                       
                       </div>
-                      <div class="display_center">
-                     <div>{{username}}<br><label>(</label>{{teamname}}<label>)</label></div></div><hr>
+                    <div class="display_center">
+                     <div>
+                      {{username}}<br>
+                      <label>(</label>
+                      {{teamname}}
+                      <label>)</label>
+                    </div>
+                    </div><hr>
                       <div><div class="inner"><a href="#">Daily</a>&nbsp;&nbsp;<a href="#">Weekly</a></div>
                       </div>
         </div>
       </div>
       <div class="col-md-10">
+        <div class="card rounded-3">
+          <div style="margin-top:-55px;">
+              <div style="margin-left:10px;margin-left:10px;margin-right:10px;margin-bottom: 10px;">
         <full-calendar
                   #calendar
                   [options]="calendarOptions"
                   [deepChangeDetection]="true"
                 ></full-calendar>
-          <!-- <div class="card card-block" style="margin: left 10px;">Monday
-          <hr>
-          <div class="card bg-primary rounded-3 text-white">
-          
-          <div><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;7:00:00-8:00:00</div>
-          <div>This is our event to behave the meeting.</div>
-          </div>
-          <div class="card bg-primary rounded-3 text-white">
-          
-            <div><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;7:00:00-8:00:00</div>
-            <div>This is our event to behave the meeting.</div>
-            </div>
-            <div class="card bg-primary rounded-3 text-white">
-          
-              <div><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;7:00:00-8:00:00</div>
-              <div>This is our event to behave the meeting.</div>
-              </div>
-              <div class="card bg-primary rounded-3 text-white">
-          
-                <div><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;7:00:00-8:00:00</div>
-                <div>This is our event to behave the meeting.</div>
                 </div>
-                <div class="card bg-primary rounded-3 text-white">
-          
-                  <div><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;7:00:00-8:00:00</div>
-                  <div>This is our event to behave the meeting.</div>
-                  </div>
-                  <div class="card bg-primary rounded-3 text-white">
-          
-                    <div><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;7:00:00-8:00:00</div>
-                    <div>This is our event to behave the meeting.</div>
-                    </div>
-                    
-          
-          <div class="levitation"><i class="fa fa-calendar" aria-hidden="true" style="color:#1B98E0A6;font-size:40px;"></i></div>
-          </div> -->
+                </div>
+              </div>
       </div>
 </div>
-  <label>Searched Member :</label><hr style="background-color:red;margin-top: -10px;">
-  <div class="row flex-nowrap" *ngIf="isSearch">
+  <div *ngIf="isDisplay"><label style="color: yellow">Searched Member :</label><hr style="background-color:yellow;margin-top: -50px;"></div>
+  <div class="row flex-nowrap" *ngIf="isDisplay">
     <div class="col-2">
-      <div class="card card-block parent" style="margin: left 10px;">Member
+      <div class="card card-block parent" style="margin: left 10px;">&nbsp;&nbsp;&nbsp;Member
         <div id="picture">
           <img
           *ngIf="!isSetSearchDefaultImage"
@@ -126,24 +101,37 @@
         />
         <img
           *ngIf="isSetSearchDefaultImage"
-          src="assets/img/mike.jpg"
+          src="assets/img/avater.jpg"
           class="img-fluid"
           id="wizardPicturePreview"
           title=""
         />
                     
   </div>
-    <div>{{searchUsername}}<label><br>(</label>{{searchTeamname}}<label>)</label></div>
-        <hr>
+  <div class="display_center">
+    <div>
+      {{searchUsername}}<br>
+      <label>(</label>
+      {{searchTeamname}}
+      <label>)</label>
+    </div>
+  </div>
+<hr>
     <div><div class="inner"><a href="#">Daily</a>&nbsp;&nbsp;<a href="#">Weekly</a></div></div>
       </div>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-10" style="margin-top:0px;">
+      <div class="card rounded-4">
+        <div style="margin-top:-50px;">
+        <div style="margin-left:10px;margin-right:10px;margin-bottom: 10px;">
       <full-calendar
       #searchCalendar
       [options]="searchCalendarOptions"
       [deepChangeDetection]="true"
     ></full-calendar>
+    </div>
+    </div>
+    </div>
       </div>
   </div>
   </div>

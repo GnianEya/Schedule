@@ -4,7 +4,7 @@ import { Component, OnInit ,Inject, ChangeDetectionStrategy, OnChanges, SimpleCh
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from '@angular/platform-browser';
-import * as e from 'express';
+// import * as e from 'express';
 import { Member } from 'models/member';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { DataShareService } from 'services/data-share.service';
@@ -47,9 +47,17 @@ reAssignUserId:any;
 attendeeApoint:any;
 memberArrayay :any;
 membersList: any = [];
-slides = 
-  {name: 'Zipping file', url: ''}
-  download$!: Observable<Download>
+name:string='';
+filedata:any;
+download$!: Observable<Download>
+fileDownloadHost:any;
+fileDownload:any;
+downloadURL:any;
+downloadMaterial={name:'',url:''};
+image:any;
+fileURL:any;
+fileId:any;
+fileIdHost:any;
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
   private dialogView:MatDialog,
   private httpService:HttpServiceService,
@@ -83,6 +91,46 @@ slides =
       }
      );
      console.log("User Id : ",this.userId);
+
+     this.httpService.getMethod('http://localhost:8081/file/getAllScheduleFiles?scheduleId='+this.scheduleId).subscribe(
+      (response)=>{
+        this.fileIdHost=response;
+        console.log("FileID Host : ",this.fileIdHost);
+        this.fileIdHost.map(
+          (data)=>{
+            this.fileId=data.fileId;
+            console.log("File ID : ",this.fileId);
+          }
+        );
+      }
+     );
+
+     this.httpService.getMethod('http://localhost:8081/file/all?fileId='+this.fileId).subscribe(
+      (response)=>{
+        this.fileDownloadHost=response;
+        console.log("File Response : ",this.fileDownloadHost);
+
+        this.fileDownloadHost.map(
+          (datum)=>{
+            this.name=datum.name;
+            console.log("File Name : ",this.name);
+            this.fileURL=datum.url;
+            console.log('URL : ',this.fileURL);
+          
+            // this.downloadURL = window.URL.createObjectURL(new Blob(this.data));
+            // console.log("Download URL : ",this.downloadURL);
+            
+            this.downloadMaterial.name=this.name;
+            this.downloadMaterial.url=this.fileURL;
+
+            console.log('Download Material : ',this.downloadMaterial);
+          }
+        );
+
+      }
+     );
+
+
      //get scheduleId for delete and update
      this.httpService.getMethod("http://localhost:8081/user/serchUserSchedule?userId="+this.userId).subscribe(
   async (response)=>{
@@ -342,7 +390,6 @@ addMember(){
  console.log("Search Filtering Array(Original) : ",this.optimizedSearchFiltering);
  console.log('All Member Lists : ',this.memberArrayay);
 for(let e of this.attendees){
-
   let attendeeId=e.userId;
   console.log('Filtered Attendees ID : ',attendeeId);
   this.optimizedSearchFiltering=this.optimizedSearchFiltering.filter((item)=>item.userId!=attendeeId);
@@ -350,43 +397,38 @@ for(let e of this.attendees){
     for (let j=0; j< this.attendees.length; j++) {
       if (this.memberArrayay[i].userId == this.attendees[j].userId) {
         this.membersList.push(this.memberArrayay[i]);
-        //this.memberArrayay[i].userId = 0;
-        this.membersList = Array.from(new Set(this.membersList)); 
+        this.memberArrayay[i].userId = 0;
       }
       
     }
   
    }
 }
-
 console.log("Optimized Search Filtering Array Without Attendees : ",this.optimizedSearchFiltering);
 
 console.log("Filtered Member List : ",this.membersList);
 }
-
-// memberList : any[] = [];
-// shifting () {
-//   this.memberList.push(this.memberArrayay[i]);
-//   this.memberList.Array.from(new Set(this.memberList));
-// } 
  
 
 download({name, url}: {name: string, url: string}) {
   this.download$ = this.downloads.download(url, name);
 }
 
-downloadRoutering(){
-  let response:any=firstValueFrom(this.httpService.getMethod('http://localhost:8081/file/all?scheduleId='));
-  response.map(
-    (data)=>{
-      this.slides.name=data.name;
-      this.slides.url=data.url;
-      console.log("Files for schedule : ",this.slides);
-    }
-  );
+// downloadRoutering(){
+//   let response:any=firstValueFrom(this.httpService.getMethod('http://localhost:8081/file/getAllScheduleFiles?scheduleId='+this.scheduleId));
+//   console.log('Download Response : ',response);
+//   response.map(
+//     (data)=>{
+//       this.slides.name=data.name;
+//       this.slides.url=data.url;
+//       console.log("Files for schedule : ",this.slides);
+//     }
+//   );
+// }
+
+upload({name, url}: {name: string, url: string}){
+  
 }
-
-
 
 
 }
