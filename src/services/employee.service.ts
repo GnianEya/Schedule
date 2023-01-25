@@ -31,9 +31,9 @@ export class EmployeeService {
   //   return this.httpClient.put(`${this.baseUrl}/${employeeId}`, employee);
   // }
 
-  searchEmployee(empId: number): Observable<Employee[]> {
+  searchEmployee(empTxt: number): Observable<Employee[]> {
     return this.httpClient.get<Employee[]>(
-      `${this.baseUrl}/findEmployeeById/${empId}`
+      `${this.baseUrl}/searchEmployee?empTxt=${empTxt}`
     );
   }
 }

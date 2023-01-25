@@ -37,22 +37,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { DepartmentsComponent } from "./departments/departments.component";
 import { getSaver, SAVER } from "services/saver.providers";
-import { UserListComponent } from './user-list/user-list.component';
-
-//wmk
-//import { FullCalendarModule } from "@fullcalendar/angular";
-// import interactionPlugin from '@fullcalendar/interaction';
-// import dayGridPlugin from '@fullcalendar/daygrid'
-
-// FullCalendarModule.registerPlugins([
-//   interactionPlugin,
-//   dayGridPlugin
-// ]);
-
-// FullCalendarModule.regis([
-//   interactionPlugin,
-//   dayGridPlugin
-// ]);
+import { UserListComponent } from "./user-list/user-list.component";
 
 @NgModule({
   imports: [
@@ -101,7 +86,7 @@ import { UserListComponent } from './user-list/user-list.component';
     },
     UserService,
     PasswordService,
-    {provide: SAVER, useFactory: getSaver},
+    { provide: SAVER, useFactory: getSaver },
   ],
   bootstrap: [AppComponent],
 })

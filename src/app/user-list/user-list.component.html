@@ -7,13 +7,10 @@
             <input
               formControlName=""
               type="text"
-              #searchTxt
-              placeholder="Enter ID or Name"
+              placeholder="Search..."
+              (keyup)="searchFilter($event)"
             />
             <span class="fa fa-search p-2"> </span>
-            <!-- <button type="button" (click)="searchEmployee(searchTxt.value)">
-                <i class="fa fa-search"></i>
-              </button> -->
           </div>
         </div>
       </div>
