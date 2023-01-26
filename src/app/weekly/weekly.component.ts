@@ -520,7 +520,7 @@ searchCalendarComponent!: FullCalendarComponent;
   //get image profile
   this.isDisplay=true;
   this.HttpService.getMethod(
-    "http://localhost:8081/image/getImage?id=" + this.currentUserID
+    "http://localhost:8081/image/getImage?id=" + this.searchUserId
   ).subscribe(async (response) => {
     this.searchProfile = response;
     this.searchProfile = this.sanitizer.bypassSecurityTrustUrl(
@@ -682,6 +682,10 @@ async getSearchScheduleId(title:any) {
     }
   );
   console.log("Schedule Id for search calendar : ", this.scheduleId);
+}
+
+report(){
+  
 }
 
 }

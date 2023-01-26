@@ -1022,6 +1022,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 //sweetAlert2
 import Swal from "sweetalert2";
 import { generateKey } from 'crypto';
+import { createElement } from '@fullcalendar/core/preact';
 
 @Component({
   selector: 'app-daily',
@@ -1884,6 +1885,8 @@ export class DailyComponent implements OnInit, OnChanges {
       }
     );
     console.log("Schedule Id for search calendar : ", this.scheduleId);
+  }
+  report(){
   }
 }
 

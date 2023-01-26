@@ -14,7 +14,13 @@ export class HomeComponent implements OnInit {
     plugins: [dayGridPlugin],
     initialView: "dayGridMonth",
     weekends: false,
-    events: [{ start: new Date() }],
+    events: [{ start: new Date()}],
+    eventTimeFormat: { // like '14:30:00'
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      meridiem: true
+    },
   };
 
   constructor(private scheduleService: ScheduleService) {}
