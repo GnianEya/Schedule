@@ -43,7 +43,7 @@
 <div class="container-fluid">
   <div class="row flex-nowrap">
       <div class="col-md-2">
-        <div class="card card-block parent" style="margin: left 10px;">&nbsp;&nbsp;&nbsp;Member
+        <div class="card card-block parent" style="margin: left 10px;color: blue;font-weight: bold;">&nbsp;&nbsp;&nbsp;Member
           <div id="picture">
                       <img
                       *ngIf="!isSetDefaultImage"
@@ -61,15 +61,15 @@
                     />
                       
                       </div>
-                    <div class="display_center">
+                    <div class="display_center" style="color:blue;font-weight: bold;">
                      <div>
                       {{username}}<br>
                       <label>(</label>
                       {{teamname}}
                       <label>)</label>
                     </div>
-                    </div><hr>
-                      <div><div class="inner"><a href="#">Daily</a>&nbsp;&nbsp;<a href="#">Weekly</a></div>
+                    </div><hr style="background-color: blue;">
+                      <div><div class="inner"><a href="#">Daily</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">Weekly</a></div>
                       </div>
         </div>
       </div>
@@ -87,10 +87,10 @@
               </div>
       </div>
 </div>
-  <div *ngIf="isDisplay"><label style="color: yellow">Searched Member :</label><hr style="background-color:yellow;margin-top: -50px;"></div>
+  <div *ngIf="isDisplay"><label style="color: yellow;font-weight: bold;">Searched Member :</label><hr style="background-color:yellow;margin-top: -50px;font-weight: bolder;"></div>
   <div class="row flex-nowrap" *ngIf="isDisplay">
     <div class="col-2">
-      <div class="card card-block parent" style="margin: left 10px;">&nbsp;&nbsp;&nbsp;Member
+      <div class="card card-block parent" style="margin: left 10px;color:blue;font-weight: bold;">&nbsp;&nbsp;&nbsp;Member
         <div id="picture">
           <img
           *ngIf="!isSetSearchDefaultImage"
@@ -108,7 +108,7 @@
         />
                     
   </div>
-  <div class="display_center">
+  <div class="display_center" style="color:blue;font-weight: bold;">
     <div>
       {{searchUsername}}<br>
       <label>(</label>
@@ -116,8 +116,8 @@
       <label>)</label>
     </div>
   </div>
-<hr>
-    <div><div class="inner"><a href="#">Daily</a>&nbsp;&nbsp;<a href="#">Weekly</a></div></div>
+<hr style="background-color: blue;">
+    <div class="row"><div class="inner"><a href="#">Daily</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">Weekly</a></div></div>
       </div>
     </div>
     <div class="col-md-10" style="margin-top:0px;">

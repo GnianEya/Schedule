@@ -30,4 +30,29 @@
   a:hover{
     text-decoration: underline;
   }
+
+  /* input[type="file"] {
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 50%;
+    min-width: 50%;
+    color: transparent;
+  } */
   
+  .sch-div {
+    display: flex;
+  }
+
+ input[type="file"] {
+  color: transparent;
+  cursor: pointer;
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+} 

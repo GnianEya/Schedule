@@ -19,7 +19,7 @@ export class DownloadService {
       reportProgress: true,
       observe: 'events',
       responseType: 'blob'
-    }).pipe(download(blob => this.save(blob, filename)))
+    }).pipe(download(blob => this.save(blob, filename)));
   }
 
 

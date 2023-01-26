@@ -1,11 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit ,Inject, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from '@angular/platform-browser';
 // import * as e from 'express';
 import { Member } from 'models/member';
+import { NgToastService } from 'ng-angular-popup';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { DataShareService } from 'services/data-share.service';
 import { Download } from 'services/download';
@@ -53,11 +54,16 @@ download$!: Observable<Download>
 fileDownloadHost:any;
 fileDownload:any;
 downloadURL:any;
-downloadMaterial={name:'',url:''};
 image:any;
 fileURL:any;
 fileId:any;
 fileIdHost:any;
+fileID:any;
+docname:any;
+doctype:any;
+fileData:any;
+fileRemoveHost:any;
+isAttachmentExist:boolean=false;
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
   private dialogView:MatDialog,
   private httpService:HttpServiceService,
@@ -66,7 +72,8 @@ fileIdHost:any;
   private downloads: DownloadService,
   private scheduleService:ScheduleService,
   @Inject(DOCUMENT) private document: Document,
-  private dataShare:DataShareService
+  private dataShare:DataShareService,
+  private toast: NgToastService
   ) { console.log("Dialog Data : ",data);}
   ngOnChanges(changes: SimpleChanges): void {
     
@@ -97,38 +104,80 @@ fileIdHost:any;
         this.fileIdHost=response;
         console.log("FileID Host : ",this.fileIdHost);
         this.fileIdHost.map(
-          (data)=>{
-            this.fileId=data.fileId;
-            console.log("File ID : ",this.fileId);
-          }
-        );
-      }
-     );
-
-     this.httpService.getMethod('http://localhost:8081/file/all?fileId='+this.fileId).subscribe(
-      (response)=>{
-        this.fileDownloadHost=response;
-        console.log("File Response : ",this.fileDownloadHost);
-
-        this.fileDownloadHost.map(
           (datum)=>{
-            this.name=datum.name;
-            console.log("File Name : ",this.name);
-            this.fileURL=datum.url;
-            console.log('URL : ',this.fileURL);
-          
-            // this.downloadURL = window.URL.createObjectURL(new Blob(this.data));
-            // console.log("Download URL : ",this.downloadURL);
-            
-            this.downloadMaterial.name=this.name;
-            this.downloadMaterial.url=this.fileURL;
-
-            console.log('Download Material : ',this.downloadMaterial);
+            this.fileId=datum.fileId;
+            console.log('File ID : ',this.fileId);
+            if(this.fileId!=undefined || this.fileId!=null){
+              this.isAttachmentExist=true;
+              console.log("File Attachment exists at "+this.scheduleId);
+            }else{
+              this.isAttachmentExist=false;
+              console.log("File Attachment don't exist at "+this.scheduleId);
+            }
+            this.name=datum.docName;
+            this.fileData=datum.data;
+            let docType=datum.docType;
+       console.log("Files for schedule : ",this.name,this.fileData,docType);
+       this.fileURL=window.URL.createObjectURL(new Blob([this.fileData], {type: docType}));
+       console.log("File URL : ",this.fileURL);
           }
         );
-
       }
      );
+// console.log("this is file ID : ",this.fileId);
+//      this.httpService.getMethod('http://localhost:8081/file/all?fileId='+this.fileId).subscribe(
+//       (response)=>{
+//         this.fileRemoveHost=response;
+//         console.log("File Remove Host : ",this.fileRemoveHost);
+//         this.fileRemoveHost.map(
+//           (datum)=>{
+//             this.fileID=datum.fileId;
+//             this.docname=datum.docName;
+//             this.doctype=datum.docType;
+//             this.fileData=datum.data;
+//             this.fileURL=datum.url;
+//           }
+//         );
+//         console.log("File Remove Data : ",this.fileID,' : ',this.docname,' : ',this.doctype,' : ',this.fileData);
+//         this.downloadMaterial.name=this.docname;
+//         this.downloadMaterial.url=this.fileURL;
+//         console.log("Download Material : ",this.downloadMaterial);
+//       }
+//      );
+    // let response:any=firstValueFrom(this.httpService.getMethod('http://localhost:8081/file/getAllScheduleFiles?scheduleId='+this.scheduleId));
+//   console.log('Download Response : ',response);
+//   response.map(
+//     (data)=>{
+//       this.slides.name=data.name;
+//       this.slides.url=data.url;
+//       console.log("Files for schedule : ",this.slides);
+//     }
+//   );
+
+    //  this.httpService.getMethod('http://localhost:8081/file/all?fileId='+this.fileId).subscribe(
+    //   (response)=>{
+    //     this.fileDownloadHost=response;
+    //     console.log("File Response : ",this.fileDownloadHost);
+
+    //     this.fileDownloadHost.map(
+    //       (datum)=>{
+    //         this.name=datum.name;
+    //         console.log("File Name : ",this.name);
+    //         this.fileURL=datum.url;
+    //         console.log('URL : ',this.fileURL);
+          
+    //         // this.downloadURL = window.URL.createObjectURL(new Blob(this.data));
+    //         // console.log("Download URL : ",this.downloadURL);
+            
+    //         this.downloadMaterial.name=this.name;
+    //         this.downloadMaterial.url=this.fileURL;
+
+    //         console.log('Download Material : ',this.downloadMaterial);
+    //       }
+    //     );
+
+    //   }
+    //  );
 
 
      //get scheduleId for delete and update
@@ -354,6 +403,12 @@ const obj={
       }
     );
 
+    Swal.fire(
+      'Appointment',
+      'Member has been appointed.',
+      'success'
+    );
+
     console.log("is Appoint 1 : ",this.isAppoint);
         this.isAppoint=!this.isAppoint;
         console.log("is Appoint 1 : ",this.isAppoint);
@@ -411,7 +466,8 @@ console.log("Filtered Member List : ",this.membersList);
 }
  
 
-download({name, url}: {name: string, url: string}) {
+download(url: string, name: string) {
+  //setTimeout(function(){ window.URL.revokeObjectURL(url); }, 3000);
   this.download$ = this.downloads.download(url, name);
 }
 
@@ -427,9 +483,109 @@ download({name, url}: {name: string, url: string}) {
 //   );
 // }
 
-upload({name, url}: {name: string, url: string}){
-  
+async fileRemove(){
+  //to get fileid docname doctype data
+  this.fileRemoveHost=await firstValueFrom(this.httpService.getMethod('http://localhost:8081/file/getAllScheduleFiles?scheduleId='+this.scheduleId));
+  console.log("File Remove Host : ",this.fileRemoveHost);
+  this.fileRemoveHost.map(
+    (datum)=>{
+      this.fileID=datum.fileId;
+      this.docname=datum.docName;
+      this.doctype=datum.docType;
+      this.fileData=datum.data;
+    }
+  );
+  console.log("File Remove Data : ",this.fileID,' : ',this.docname,' : ',this.doctype,' : ',this.fileData);
+  await this.removeValidated();
 }
 
+async removeValidated(){
+  const obj={
+    fileId:this.fileID,
+    docName:this.docname,
+    docType:this.doctype,
+    data:this.fileData,
+    cuurrentUserId:this.currentLoginUserId,
+    scheduleId:this.scheduleId
+  };
+  console.log("Body : ",obj);
+  const options = {
+    body:obj,
+  };
+  //console.log("Options : ",options.body);
+  let result =await firstValueFrom(this.http.delete<any>('http://localhost:8081/file/deleteFile?fileId='+this.fileId+'&scheduleId='+this.scheduleId+'&cuurentUserId='+this.currentLoginUserId));
+  console.log("File Deletion : ",result);
+  if(result!=null){
+    Swal.fire(
+      'Removed',
+      'Attachment has been removed.',
+      'success'
+    );
+  }else{
+    Swal.fire({
+      icon: 'error',
+      title: 'Check Your User Information!!',
+      text: 'Something went wrong!',
+    }
+    );
+  }
+}
+selectFile: File[];
+  urls: any = [];
+  files: any = [];
 
+  saveFile(e: any) {
+    if (e.target.files) {
+      this.selectFile = e.target.files;
+      // this.fileText = e.target.files[0].name;
+
+      for (var i = 0; i < this.selectFile.length; i++) {
+        if (this.selectFile[i].size < 5000000) {
+          this.urls.push(this.selectFile[i].name);
+          this.files.push(this.selectFile[i]);
+          //   console.log(this.files + "\n" + this.urls);
+        } else {
+          this.toast.error({
+            detail: "Error Message",
+            summary: "Your attached file is larger than 5MB.",
+            duration: 5000,
+          });
+        }
+      }
+    }
+  }
+
+saveFiles() {
+  this.scheduleService.addFile(this.files, this.title).subscribe(
+    (data: any) => {
+      console.log(data);
+      console.log("save files method works");
+    },
+    (result)=>{
+      if(result!=null){
+        Swal.fire(
+          'File Upload',
+          'Attachment has been uploaded.',
+          'success'
+        );
+      }
+      else{
+        Swal.fire({
+          icon: 'error',
+          title: 'Check Your User Information!!',
+          text: 'Something went wrong!',
+        }
+        );
+      }
+    }, 
+  );
+}
+
+removeSelectedFile(index) {
+  this.urls.splice(index, 1);
+  this.files.splice(index, 1);
+  // console.log("check it out");
+  // console.log(this.urls);
+  // console.log(this.files);
+}
 }

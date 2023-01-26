@@ -310,14 +310,6 @@ searchCalendarComponent!: FullCalendarComponent;
     };
 
   }
-
-  ngAfterViewChecked() {
-  //   const currentdate=moment().format('YYYY.MM.DD');
-  //           const newDate = moment(currentdate).add(1, 'days').format('YYYY.MM.DD');
-  //  console.log('ngAfterViewChecked : ',this.calendarComponent.getApi().gotoDate(newDate));
-  console.log('ngAfterViewChecked : ');
-  }
-
   async handleEventClick(arg: any) {
     console.log("start : ", arg.event.startStr);//2023-01-09T08:00:00+06:30
     this.eventTitle = arg.event._def.title;
