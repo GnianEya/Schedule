@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { NgToastService } from "ng-angular-popup";
 
 declare const $: any;
 declare interface RouteInfo {
@@ -50,7 +51,7 @@ export const ROUTES01: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
 
-  constructor() {}
+  constructor(private toast: NgToastService) {}
 
   ngOnInit() {
     this.menuItems = ROUTES1.filter((menuItem) => menuItem);
@@ -64,5 +65,10 @@ export class SidebarComponent implements OnInit {
 
   clear() {
     localStorage.clear();
+    this.toast.success({
+      detail: "Success Message",
+      summary: "Successfully Logout",
+      duration: 5000,
+    });
   }
 }
