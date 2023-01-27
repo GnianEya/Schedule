@@ -314,10 +314,37 @@ export class ScheduleComponent implements OnInit {
       console.log("old", oldStartTimeHour, oldEndTimeHour);
       console.log("new", NewStartTimeHour, NewEndTimeHour);
       console.log(
-        "condition day",
+        "condition",
         newStart == oldStart,
         newEnd == oldStart,
         newStart > oldStart && newStart < oldEnd
+      );
+      console.log(
+        "condition day",
+        newStart == oldStart ||
+          newEnd == oldStart ||
+          (newStart > oldStart && newStart < oldEnd)
+      );
+      console.log(
+        "condition time",
+        (oldStartTimeHour < NewStartTimeHour &&
+          NewStartTimeHour < oldEndTimeHour) ||
+          (oldStartTimeHour < NewEndTimeHour &&
+            NewEndTimeHour < oldEndTimeHour) ||
+          (NewStartTimeHour < oldStartTimeHour &&
+            oldStartTimeHour < NewEndTimeHour) ||
+          (NewStartTimeHour < oldEndTimeHour &&
+            oldEndTimeHour < NewStartTimeHour)
+      );
+
+      console.log(
+        "time",
+        oldStartTimeHour < NewStartTimeHour &&
+          NewStartTimeHour < oldEndTimeHour,
+        oldStartTimeHour < NewEndTimeHour && NewEndTimeHour < oldEndTimeHour,
+        NewStartTimeHour < oldStartTimeHour &&
+          oldStartTimeHour < NewEndTimeHour,
+        NewStartTimeHour < oldEndTimeHour && oldEndTimeHour < NewStartTimeHour
       );
       if (
         newStart == oldStart ||
@@ -330,7 +357,7 @@ export class ScheduleComponent implements OnInit {
           (oldStartTimeHour < NewEndTimeHour &&
             NewEndTimeHour < oldEndTimeHour) ||
           (NewStartTimeHour < oldStartTimeHour &&
-            oldStartTimeHour < NewStartTimeHour) ||
+            oldStartTimeHour < NewEndTimeHour) ||
           (NewStartTimeHour < oldEndTimeHour &&
             oldEndTimeHour < NewStartTimeHour)
         ) {
