@@ -1467,7 +1467,7 @@ export class DailyComponent implements OnInit, OnChanges {
       }
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-     if (!isPrivacy || isEditable || isPrivacyAccess) {
+     if (!isPrivacy || isEditable) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
@@ -1477,6 +1477,8 @@ export class DailyComponent implements OnInit, OnChanges {
         maxHeight: '100vh', //overrides default height of dialog
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
       });
+      isPrivacy=!isPrivacy;
+      isEditable=!isEditable;
    } else {
      console.log("Meeting passed through.");
     }
@@ -1566,7 +1568,7 @@ export class DailyComponent implements OnInit, OnChanges {
       }
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-    if (!isPrivacy || isEditable || isPrivacyAccess) {
+    if (!isPrivacy || isEditable) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedSearchEventData,
@@ -1577,6 +1579,8 @@ export class DailyComponent implements OnInit, OnChanges {
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
 
       });
+      isPrivacy=!isPrivacy;
+      isEditable=!isEditable;
     } else {
       console.log("Meeting passed through.");
     }

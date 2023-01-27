@@ -84,10 +84,10 @@
                                             <div *ngIf="attendee.userId == currentLoginUserId; else otherwiseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">You are in this meeting.</div>
                                         <ng-template #otherwiseBlock>
                                                 <div class="col-md-6" (click)="reAssign(attendee.userId)" id="btn_animate">
-                                                    <a href="#" style="color:blue;font-size: small;cursor:pointer;">Re-assign</a>
+                                                    <a style="color:blue;font-size: small;cursor:pointer;">Re-assign</a>
                                                 </div>
                                                 <div class="col-md-6" (click)="remove(attendee.userId)" id="btn_animate">
-                                                    <a href="#" style="color:red;font-size: small;cursor:pointer;">Remove</a>
+                                                    <a style="color:red;font-size: small;cursor:pointer;">Remove</a>
                                                 </div>  
                                         </ng-template>
                                         </ng-template>
@@ -131,7 +131,7 @@
             </fieldset>
         <!-- <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Upload -->
 
-            <div class="row" style="margin-top:20px;margin-left: 10px;">
+            <!-- <div class="row" style="margin-top:20px;margin-left: 10px;">
               
                 <div class="col-md-10">
                   <div class="form-control">
@@ -145,7 +145,7 @@
                     <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Add</a>
                   </div>
                 </div>
-              </div>
+              </div>-->
               <div class="row">
                 
                 <div class="col-md-10">
@@ -183,7 +183,7 @@
                     Delete <i class="fa fa-trash" id="btn_animate" style="color:rgb(245, 71, 48);font-size:15px;"></i>
                 </span>
                 <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="finish()">
-                    Finish <i class="fa fa-pencil-square" style="color:rgb(14, 143, 36);" id="btn_animate"></i>
+                    Finish <i class="fa fa-pencil-square" style="color:rgb(39, 146, 181);" id="btn_animate"></i>
                 </span>
             </div>
             <div class="col-md-6">

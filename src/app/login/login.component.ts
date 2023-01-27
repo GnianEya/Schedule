@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
           // alert('** Login as user role.');
           this.toast.success({
             detail: "Success Message",
-            summary: "Login as user role",
+            summary: "Login as member role",
             duration: 5000,
           });
           this.router.navigate(["/home"]);

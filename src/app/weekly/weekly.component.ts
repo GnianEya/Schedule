@@ -409,7 +409,7 @@ searchCalendarComponent!: FullCalendarComponent;
       }
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-     if (!isPrivacy || isEditable || isPrivacyAccess) {
+     if (!isPrivacy || isEditable) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupWeeklyComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
@@ -419,6 +419,8 @@ searchCalendarComponent!: FullCalendarComponent;
         maxHeight: '100vh', //overrides default height of dialog
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
       });
+      isPrivacy=!isPrivacy;
+      isEditable=!isEditable;
    } else {
      console.log("Meeting passed through.");
     }
@@ -499,7 +501,7 @@ searchCalendarComponent!: FullCalendarComponent;
       }
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-    if (!isPrivacy || isEditable || isPrivacyAccess) {
+    if (!isPrivacy || isEditable) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupWeeklyComponent, {
         data: this.optimizedSearchEventData,
@@ -510,6 +512,8 @@ searchCalendarComponent!: FullCalendarComponent;
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
 
       });
+      isPrivacy=!isPrivacy;
+      isEditable=!isEditable;
     } else {
       console.log("Meeting passed through.");
     }
