@@ -161,21 +161,21 @@ export class ScheduleComponent implements OnInit {
     "18",
     "19",
   ];
-  startTimeHour: any;
+  startTimeHour: number;
   onSelectStartHour(e: any) {
     this.startTimeHour = e.target.value;
   }
-  endTimeHour: any;
+  endTimeHour: number;
   onSelectEndHour(e: any) {
     this.endTimeHour = e.target.value;
   }
 
   startMin: any = ["00", "15", "30", "45"];
-  startTimeMin: any;
+  startTimeMin: number;
   onSelectStartMin(e: any) {
     this.startTimeMin = e.target.value;
   }
-  endTimeMin: any;
+  endTimeMin: number;
   onSelectEndMin(e: any) {
     this.endTimeMin = e.target.value;
   }
@@ -295,32 +295,44 @@ export class ScheduleComponent implements OnInit {
 
     var newStart = new Date(this.start).toUTCString();
     var newEnd = new Date(this.end).toUTCString();
-    var NewStartTimeHour = this.startTimeMin / 60 + this.startTimeHour;
-    var NewEndTimeHour = this.endTimeMin / 60 + this.endTimeHour;
+    var NewStartTimeHour = this.startTimeMin / 60 + +this.startTimeHour;
+    var NewEndTimeHour = this.endTimeMin / 60 + +this.endTimeHour;
     var unavailableArr: Schedule[] = [];
     for (let i = 0; i < multiselectedUser.length; i++) {
       var oldStart = new Date(multiselectedUser[i].start).toUTCString();
       var oldEnd = new Date(multiselectedUser[i].end).toUTCString();
       var oldStartTime = multiselectedUser[i].start_time;
-      var oldStartHour = oldStartTime.slice(0, 2);
-      var oldStartMinute = oldStartTime.slice(3, 5);
-      var oldStartTimeHour = oldStartMinute / 60 + oldStartHour;
+      var oldStartHour: number = oldStartTime.slice(0, 2);
+      var oldStartMinute: number = oldStartTime.slice(3, 5);
+      var oldStartTimeHour = oldStartMinute / 60 + +oldStartHour;
 
       var oldEndTime = multiselectedUser[i].end_time;
-      var oldEndHour = oldEndTime.slice(0, 2);
-      var oldEndMinute = oldEndTime.slice(3, 5);
-      var oldEndTimeHour = oldEndMinute / 60 + oldEndHour;
+      var oldEndHour: number = oldEndTime.slice(0, 2);
+      var oldEndMinute: number = oldEndTime.slice(3, 5);
+      var oldEndTimeHour = oldEndMinute / 60 + +oldEndHour;
 
+      console.log("old", oldStartTimeHour, oldEndTimeHour);
+      console.log("new", NewStartTimeHour, NewEndTimeHour);
+      console.log(
+        "condition day",
+        newStart == oldStart,
+        newEnd == oldStart,
+        newStart > oldStart && newStart < oldEnd
+      );
       if (
         newStart == oldStart ||
         newEnd == oldStart ||
         (newStart > oldStart && newStart < oldEnd)
       ) {
         if (
-          oldStartTimeHour < NewStartTimeHour < oldEndTimeHour ||
-          oldStartTimeHour < NewEndTimeHour < oldEndTimeHour ||
-          NewStartTimeHour < oldStartTimeHour < NewStartTimeHour ||
-          NewStartTimeHour < oldEndTimeHour < NewStartTimeHour
+          (oldStartTimeHour < NewStartTimeHour &&
+            NewStartTimeHour < oldEndTimeHour) ||
+          (oldStartTimeHour < NewEndTimeHour &&
+            NewEndTimeHour < oldEndTimeHour) ||
+          (NewStartTimeHour < oldStartTimeHour &&
+            oldStartTimeHour < NewStartTimeHour) ||
+          (NewStartTimeHour < oldEndTimeHour &&
+            oldEndTimeHour < NewStartTimeHour)
         ) {
           unavailableArr.push(multiselectedUser[i]);
 
