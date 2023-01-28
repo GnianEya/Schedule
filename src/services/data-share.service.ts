@@ -18,6 +18,9 @@ export class DataShareService {
   public creatorIdChanger=new BehaviorSubject<any>(0);
   creatorIdChangerMessage=this.creatorIdChanger.asObservable();
 
+  public searchUserId=new BehaviorSubject<any>(0);
+  searchUserIdMessage=this.searchUserId.asObservable();
+
   constructor() { }
 
   //setter
@@ -39,5 +42,10 @@ export class DataShareService {
   changeCreatorIdChangerMessage(message:any){
     this.creatorIdChanger.next(message);
     console.log("Data Share Creator ID : ",message);
+  }
+
+  changeSearchUserIdMessage(message:any){
+    this.searchUserId.next(message);
+    console.log("Change Search User Id : ",message);
   }
 }

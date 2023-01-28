@@ -1,0 +1,69 @@
+<div class="main-content">
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+        <div class="card card-profile">
+            <div class="card wizard-card" data-color="orange" id="wizardProfile">
+              <!-- <input type="file" id="avatar-picture">
+                                      <img class="avatar border-gray" src="assets/img/faces/face-3.jpg" alt="..."/> -->
+              <div class="picture-container">
+                <div class="picture">
+                  <img
+                    [src]="showAtOnceProfile"
+                    class="img-fluid"
+                    id="wizardPicturePreview"
+                    title=""
+                  />
+                  <div>
+                  </div>
+                </div>
+                <h6
+                  class="edit-picture"
+                >
+                  <i
+                    class="fa fa-camera"  
+                    style="color: #2ca8ff; font-size: 25px"
+                  ></i>
+                </h6>
+              </div>
+            </div>
+  
+            <!-- <img *ngIf="!isSetDefaultImage" [src]="showAtOnceProfile" class="img-fluid" id="wizardPicturePreview" title=""/>
+                            <img *ngIf="isSetDefaultImage" src="assets/img/DAT.png" class="img-fluid" id="wizardPicturePreview" title=""/> 
+                            <div *ngIf="isEdit"><input type="file" id="wizard-picture" (change)='onFileSelected($event)'></div>
+                         -->
+  
+            <div class="card-body">
+              <h6 class="card-category text-gray">{{ username }}</h6>
+              <h4 class="card-title">{{ nickname }}</h4>
+              <p class="card-description">
+                {{ biography }}
+              </p>
+              <hr />
+              <div class="text-center">
+                <a [href]="fbLink" style="cursor: pointer"
+                  ><i
+                    class="fa fa-facebook-square"
+                    style="color: #3b5998; font-size: 15px; margin-right: 20px"
+                  ></i
+                ></a>
+                <a [href]="ttLink"
+                  ><i
+                    class="fa fa-twitter"
+                    style="color: #55acee; font-size: 15px; margin-right: 20px"
+                  ></i
+                ></a>
+                <a [href]="ggLink"
+                  ><i
+                    class="fa fa-google-plus-square"
+                    style="color: #dd4b39; font-size: 15px; margin-right: 20px"
+                  ></i
+                ></a>
+              </div>
+            </div>
+          </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
