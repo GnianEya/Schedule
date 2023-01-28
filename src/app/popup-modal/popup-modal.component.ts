@@ -673,6 +673,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
               .subscribe((result) => {
                 console.log("Add Member Message", result);
               });
+
             //alert msg
             this.toast.success({
               detail: "Success Message",
