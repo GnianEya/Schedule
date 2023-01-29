@@ -1,6 +1,6 @@
 <div class="main-content">
   <div class="container-fluid">
-<div class="row">
+<div class="row" *ngIf="scrolled">
   <div class="col-md-10">
     <div class="input-group">
       <div class="form-outline">
@@ -70,7 +70,7 @@
                       <label>)</label>
                     </div>
                     </div><hr style="background-color: blue;">
-                      <div><div class="inner"><a href='http://localhost:4200/daily' [routerLink]="['/daily']">Daily</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://localhost:4200/weekly' [routerLink]="['/weekly']">Weekly</a></div>
+                      <div style="height: 5px;background-color: dodgerblue;">
                       </div>
         </div>
       </div>
@@ -85,6 +85,7 @@
                 ></full-calendar>
                 </div>
                 </div>
+                <div style="height:3px;background-color: rgb(244, 244, 155);"></div>
               </div>
       </div>
 </div>
@@ -119,7 +120,8 @@
     </div>
   </div>
 <hr style="background-color: blue;">
-    <div class="row"><div class="inner"><a href='http://localhost:4200/daily' [routerLink]="['/daily']">Daily</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='http://localhost:4200/weekly' [routerLink]="['/weekly']">Weekly</a></div></div>
+<div style="height: 5px;background-color: dodgerblue;">
+</div>
       </div>
     </div>
     <div class="col-md-10" style="margin-top:0px;">
@@ -133,14 +135,15 @@
     ></full-calendar>
     </div>
     </div>
+    <div style="height:3px;background-color: rgb(244, 244, 155);"></div>
     </div>
       </div>
   </div>
   </div>
 </div>
 <div class="row" style="margin-left: 100px;">
-  <i class="fa fa-square" aria-hidden="true" style="color:black;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events Expired , Finished & Cancelled.</p>&nbsp;&nbsp;
-  <i class="fa fa-square" aria-hidden="true" style="color:#1B98E080;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events are ongining.</p>
+  <i class="fa fa-square" aria-hidden="true" style="color:black;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events Expired , Finished & Canceled.</p>&nbsp;&nbsp;
+  <i class="fa fa-square" aria-hidden="true" style="color:#1B98E080;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events are ongoing.</p>
   </div> 
 </div>
 </div>

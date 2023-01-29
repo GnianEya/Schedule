@@ -207,6 +207,10 @@ export class DailyComponent implements OnInit, OnChanges {
 
         }
         console.log("Optimized array ", this.optimizedSearchFiltering);
+
+        //search filter without current user ID
+        this.optimizedSearchFiltering=this.optimizedSearchFiltering.filter((item)=>item.userId!=this.currentLoginUserId.toString());
+        console.log("Filtered without current user Id : ",this.optimizedSearchFiltering);
       },
       (error) => { console.log(error); }
     );

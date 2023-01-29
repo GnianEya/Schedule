@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { SearchFiltering } from '../../models/searchFiltering';
@@ -58,6 +58,7 @@ search_no_data:boolean=false;
 searchEventArray:any;
 optimizedSearchEventArray:any;
 isDisplay:boolean=false;
+scrolled:boolean=true;
 @ViewChild("calendar", { static: true })
 calendarComponent!: FullCalendarComponent;
 @ViewChild("searchCalendar", { static: true })
@@ -71,6 +72,11 @@ searchCalendarComponent!: FullCalendarComponent;
     private dialogView: MatDialog,
     private toast:NgToastService
     ) { }
+
+  //   @HostListener('window:scroll', ['$event'])
+  //   onWindowScroll($event) {
+  //     this.scrolled = $event.srcElement.scrollTop >= 150;
+  // }
 
   ngOnInit() {
     this.currentUserID=JSON.parse(localStorage.getItem("id"));
@@ -97,6 +103,9 @@ searchCalendarComponent!: FullCalendarComponent;
           e.userImage = await this.imageResolver(e.userImage);
         }
         console.log("Optimized  search array : ", this.optimizedSearchFiltering);
+        //search filter without current user ID
+        this.optimizedSearchFiltering=this.optimizedSearchFiltering.filter((item)=>item.userId!=this.currentLoginUserId.toString());
+        console.log("Filtered without current user Id : ",this.optimizedSearchFiltering);
       },
       (error) => {
         console.log(error);
@@ -302,6 +311,7 @@ searchCalendarComponent!: FullCalendarComponent;
     };
 
   }
+  
   async handleEventClick(arg: any) {
     console.log("start : ", arg.event.startStr);//2023-01-09T08:00:00+06:30
     this.eventTitle = arg.event._def.title;
