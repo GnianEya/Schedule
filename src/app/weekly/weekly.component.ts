@@ -13,6 +13,7 @@ import { PopupModalComponent } from 'app/popup-modal/popup-modal.component';
 import { DataShareService } from 'services/data-share.service';
 import { PopupWeeklyComponent } from 'app/popup-weekly/popup-weekly.component';
 import { MatDialog } from '@angular/material/dialog';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-weekly',
@@ -67,7 +68,8 @@ searchCalendarComponent!: FullCalendarComponent;
     private sanitizer: DomSanitizer,
     private httpService: HttpServiceService,
     private data:DataShareService,
-    private dialogView: MatDialog
+    private dialogView: MatDialog,
+    private toast:NgToastService
     ) { }
 
   ngOnInit() {
@@ -315,7 +317,7 @@ searchCalendarComponent!: FullCalendarComponent;
     let isEvent:any=editableResponse.filter(
       (item)=>{
         console.log("Filter properties : ",item.title,",",item.start,",",item.startTime);
-        if(item.title==this.eventTitle && item.start==this.eventStartDate && item.startTime){
+        if(item.start==this.eventStartDate && item.startTime){
           console.log(item);
          return item;  
         }
@@ -391,29 +393,73 @@ searchCalendarComponent!: FullCalendarComponent;
 
     //who can have access in case of isPrivacy
     let isPrivacyAccess:boolean=false;
-    for(let e of this.attendeesHost){
-      if (this.currentLoginUserId!=e.userId){
-        isPrivacyAccess=false;
-      }else{
-        isPrivacyAccess=true;
-      }
+    let isPrivacyAccessArray:any[];
+    isPrivacyAccessArray=this.attendeesHost.filter((item)=>item.userId==this.currentLoginUserId);
+    console.log("Privacy Array : ",isPrivacyAccessArray);
+    if(isPrivacyAccessArray.length){
+      isPrivacyAccess = true;
+    }else{
+      isPrivacyAccess = false;
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-     if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
-      console.log('This isEditable : ',isEditable);
-      this.dialogView.open(PopupWeeklyComponent, {
-        data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
-        width: '40vw', //sets width of dialog
-        height: '50vh', //sets width of dialog
-        maxWidth: '100vw', //overrides default width of dialog
-        maxHeight: '100vh', //overrides default height of dialog
-        disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+    if(!isEditable){
+      this.toast.error({
+        detail: "Error Message",
+        summary: "Event have been finished.",
+        duration: 3000,
       });
-      isPrivacy=!isPrivacy;
-      isEditable=!isEditable;
-   } else {
-     console.log("Meeting passed through.");
+     }else
+      if(!isPrivacy && !isPrivacyAccess){
+        this.toast.error({
+          detail: "Error Message",
+          summary: "Do not have access to see the event.",
+          duration: 3000,
+        });
+      }
+    if(isPrivacy){
+
+      if(isEditable){
+        console.log('This isEditable : ', isEditable);
+        this.dialogView.open(PopupWeeklyComponent, {
+          data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
+          width: '40vw', //sets width of dialog
+          height: '50vh', //sets width of dialog
+          maxWidth: '100vw', //overrides default width of dialog
+          maxHeight: '100vh', //overrides default height of dialog
+          disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+        });
+      }
+ }else{ 
+       if(isEditable){
+           if(isPrivacyAccess){
+            console.log('This isEditable : ', isEditable);
+            this.dialogView.open(PopupWeeklyComponent, {
+              data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
+              width: '40vw', //sets width of dialog
+              height: '50vh', //sets width of dialog
+              maxWidth: '100vw', //overrides default width of dialog
+              maxHeight: '100vh', //overrides default height of dialog
+              disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+            });
+       }
+       }
+
     }
+  //    if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
+  //     console.log('This isEditable : ',isEditable);
+  //     this.dialogView.open(PopupWeeklyComponent, {
+  //       data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
+  //       width: '40vw', //sets width of dialog
+  //       height: '50vh', //sets width of dialog
+  //       maxWidth: '100vw', //overrides default width of dialog
+  //       maxHeight: '100vh', //overrides default height of dialog
+  //       disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+  //     });
+  //     isPrivacy=!isPrivacy;
+  //     isEditable=!isEditable;
+  //  } else {
+  //    console.log("Meeting passed through.");
+  //   }
   }
 
   
@@ -432,7 +478,7 @@ searchCalendarComponent!: FullCalendarComponent;
     let isEvent:any=editableResponse.filter(
       (item)=>{
         console.log("Filter properties : ",item.title,",",item.start,",",item.startTime);
-        if(item.title==this.eventTitle && item.start==this.eventStartDate && item.startTime){
+        if(item.start==this.eventStartDate && item.startTime){
           console.log(item);
          return item;  
         }
@@ -483,30 +529,77 @@ searchCalendarComponent!: FullCalendarComponent;
 
     //who can have access in case of isPrivacy
     let isPrivacyAccess:boolean=false;
-    for(let e of this.attendeesHost){
-      if (this.currentLoginUserId!=e.userId){
-        isPrivacyAccess=false;
-      }else{
-        isPrivacyAccess=true;
-      }
+    let isPrivacyAccessArray:any[];
+    isPrivacyAccessArray=this.attendeesHost.filter((item)=>item.userId==this.currentLoginUserId);
+    console.log("Privacy Array : ",isPrivacyAccessArray);
+    if(isPrivacyAccessArray.length){
+      isPrivacyAccess = true;
+    }else{
+      isPrivacyAccess = false;
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-    if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
-      console.log('This isEditable : ',isEditable);
-      this.dialogView.open(PopupWeeklyComponent, {
-        data: this.optimizedSearchEventData,
-        width: '40vw', //sets width of dialog
-        height: '50vh', //sets height of dialog
-        maxWidth: '100vw', //overrides default width of dialog
-        maxHeight: '100vh', //overrides default height of dialog
-        disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
-
+   if(!isEditable){
+    this.toast.error({
+      detail: "Error Message",
+      summary: "Event have been finished.",
+      duration: 3000,
+    });
+   }else
+    if(!isPrivacy && !isPrivacyAccess){
+      this.toast.error({
+        detail: "Error Message",
+        summary: "Do not have access to see the event.",
+        duration: 3000,
       });
-      isPrivacy=!isPrivacy;
-      isEditable=!isEditable;
-    } else {
-      console.log("Meeting passed through.");
     }
+   
+    if(isPrivacy){
+
+      if(isEditable){
+        console.log('This isEditable : ', isEditable);
+        this.dialogView.open(PopupWeeklyComponent, {
+          data: this.optimizedSearchEventData,
+          width: '40vw', //sets width of dialog
+          height: '50vh', //sets height of dialog
+          maxWidth: '100vw', //overrides default width of dialog
+          maxHeight: '100vh', //overrides default height of dialog
+          disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+  
+        });
+      }
+ }else{ 
+       if(isEditable){
+           if(isPrivacyAccess){
+            console.log('This isEditable : ', isEditable);
+            this.dialogView.open(PopupWeeklyComponent, {
+              data: this.optimizedSearchEventData,
+              width: '40vw', //sets width of dialog
+              height: '50vh', //sets height of dialog
+              maxWidth: '100vw', //overrides default width of dialog
+              maxHeight: '100vh', //overrides default height of dialog
+              disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+      
+            });
+       }
+       }
+
+    }
+    // if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
+    //   console.log('This isEditable : ',isEditable);
+    //   this.dialogView.open(PopupWeeklyComponent, {
+    //     data: this.optimizedSearchEventData,
+    //     width: '40vw', //sets width of dialog
+    //     height: '50vh', //sets height of dialog
+    //     maxWidth: '100vw', //overrides default width of dialog
+    //     maxHeight: '100vh', //overrides default height of dialog
+    //     disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+
+    //   });
+    //   isPrivacy=!isPrivacy;
+    //   isEditable=!isEditable;
+    // } else {
+    //   console.log("Meeting passed through.");
+    // }
   }
 
  isShow(){
@@ -639,7 +732,7 @@ async getScheduleId(title:any) {
   this.scheduleIdHost.map(
     (data) => {
       console.log(data.title ,':title :',title);
-      if(data.title==title){
+      if((data.title == title) || ( "Personal Appointment" == title)){
       this.scheduleId = data.scheduleId; 
       }
     }
@@ -655,7 +748,7 @@ async getSearchScheduleId(title:any) {
   this.scheduleIdHost.map(
     (data) => {
       console.log(data.title ,':tile :',title);
-      if(data.title==title){
+      if((data.title == title) || ( "Personal Appointment" == title)){
       this.scheduleId = data.scheduleId;
       }
     }

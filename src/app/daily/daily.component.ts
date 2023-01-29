@@ -27,6 +27,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Swal from "sweetalert2";
 import { generateKey } from 'crypto';
 import { createElement } from '@fullcalendar/core/preact';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-daily',
@@ -92,7 +93,7 @@ export class DailyComponent implements OnInit, OnChanges {
   optimizedattendeesHost: any;
   search_no_data: boolean = false;
   isAttendee: boolean = false;
-  constructor(private dialogView: MatDialog, private data: DataShareService, private httpService: HttpServiceService, private sanitizer: DomSanitizer) { }
+  constructor(private dialogView: MatDialog, private data: DataShareService, private httpService: HttpServiceService, private sanitizer: DomSanitizer,private toast:NgToastService) { }
   @ViewChild("calendar", { static: true })
   calendarComponent!: FullCalendarComponent;
   @ViewChild("searchCalendar", { static: true })
@@ -472,6 +473,20 @@ export class DailyComponent implements OnInit, OnChanges {
     //   }
     // }
     console.log("isPrivacyAccess : ", isPrivacyAccess);
+    if(!isEditable){
+      this.toast.error({
+        detail: "Error Message",
+        summary: "Event have been finished.",
+        duration: 3000,
+      });
+     }else
+      if(!isPrivacy && !isPrivacyAccess){
+        this.toast.error({
+          detail: "Error Message",
+          summary: "Do not have access to see the event.",
+          duration: 3000,
+        });
+      }
     if(isPrivacy){
 
       if(isEditable){
@@ -612,6 +627,20 @@ export class DailyComponent implements OnInit, OnChanges {
     //   }
     // }
     console.log("isPrivacyAccess : ", isPrivacyAccess);
+    if(!isEditable){
+      this.toast.error({
+        detail: "Error Message",
+        summary: "Event have been finished.",
+        duration: 3000,
+      });
+     }else
+      if(!isPrivacy && !isPrivacyAccess){
+        this.toast.error({
+          detail: "Error Message",
+          summary: "Do not have access to see the event.",
+          duration: 3000,
+        });
+      }
     if(isPrivacy){
 
       if(isEditable){
