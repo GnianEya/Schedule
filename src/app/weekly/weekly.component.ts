@@ -604,6 +604,8 @@ console.log("Clicked staff info in card : ",staff);
     this.searchUserId=staff.userId;
     console.log("Search UserId : ",this.searchUserId);
     this.searchUsername = staff.username;
+    //transfer data to weekly profile
+  this.data.changeSearchUserIdMessage(this.searchUserId);
     console.log("Search Username : "+this.searchUsername);
     this.searchTeamname = staff.departmentname;
     console.log("Search Team name : ",this.searchTeamname);

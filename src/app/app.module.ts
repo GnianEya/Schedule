@@ -39,6 +39,7 @@ import { DepartmentsComponent } from "./departments/departments.component";
 import { getSaver, SAVER } from "services/saver.providers";
 import { UserListComponent } from "./user-list/user-list.component";
 import { PopupWeeklyComponent } from './popup-weekly/popup-weekly.component';
+import { WeeklySearchProfileComponent } from './weekly-search-profile/weekly-search-profile.component';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { PopupWeeklyComponent } from './popup-weekly/popup-weekly.component';
     DepartmentsComponent,
     UserListComponent,
     PopupWeeklyComponent,
+    WeeklySearchProfileComponent,
   ],
   providers: [
     AuthGuard,

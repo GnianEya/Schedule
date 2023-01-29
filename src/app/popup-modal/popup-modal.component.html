@@ -10,7 +10,7 @@
           <input type="search" id="form1" class="form-control" [(ngModel)]="searchText" (keyup)="isOpen = !isOpen"
             cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:32px;" />
         </div>
-        <button type="button" class="btn btn-primary" (click)="appoint()" style="height: 38px;">
+        <button type="button" class="btn btn-primary btn-sm" (click)="appoint()" style="height: 38px;">
          Add
         </button>
     </div>
@@ -62,6 +62,17 @@
                     </div>
                 </div>
             </fieldset>
+            <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Upload
+              </a>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    <div style="background-color: #1b79ff;height: 2px;margin-top: -15px;filter: drop-shadow(16px 16px 20px rgb(243, 237, 237));"></div>
+                 Title : <input type="text" class="form-input" [(ngModel)]="title" placeholder="Title" style="color: #1b79ff;"/>
+                 Description : <input type="text" class="form-input" [(ngModel)]="description" placeholder="Description" style="color: #1b79ff;"/>
+                 <button class="btn btn-primary btn-sm" (click)="update()">Add</button>
+                </div>
+              </div>
         </mat-tab>
         <mat-tab label="Attendee">
             <fieldset class="border border-primary rounded-5">
@@ -101,21 +112,22 @@
                     </div>
                 </div>
             </fieldset>
-            <Button (click)="addMember()" class="btn btn-primary" style="height:30px;padding-top: -15px;">Add Member</Button>
+            <button (click)="addMember()" class="btn btn-primary">Add Member</button>
         </mat-tab>
         <mat-tab label="Meeting Materials" style="margin-bottom:400px;">
             <fieldset class="border border-primary rounded-5">
                 <legend class="w-auto" style="margin-top: -10px;font-size: 15px;">Materials</legend>
-                <div *ngIf="!isAttachmentExist; else elseAttachment" style="position:absolute;top:15%;left:30%;font-size: 10px;color:gray;font-style: italic;">Download Material has not insert yet.</div>
+                <div *ngIf="!isAttachmentExist; else elseAttachment" style="position:absolute;top:15%;left:30%;bottom:15%;font-size: 10px;color:gray;font-style: italic;">Download Material has not insert yet.</div>
                 <ng-template #elseAttachment>
-                <ul class="text-primary">
+                <ul class="text-primary"  *ngFor="let file of fileIdHost">
                     <li>
                         <div class="row">
                             <div class="col-md-6">
-                        <a style="cursor:pointer;color:#1b79ff;" (click)="download(fileURL,name)"><i class="fa fa-download" style="color:#1b79ff"></i>{{name}}</a>
+                        <a style="cursor:pointer;color:#1b79ff;" (click)="download(fileData,file.docName)">
+                            <i class="fa fa-download" style="color:#1b79ff"></i>{{file.docName}}</a>
                         </div>
                         <div class="col-md-6">
-                        <button (click)="download(fileURL,name)" class="btn btn-primary btn-sm" color="primary">Download</button>
+                        <button (click)="download(fileData,file.docName)" class="btn btn-primary btn-sm" color="primary">Download</button>
                         <button (click)="fileRemove()" class="btn btn-danger btn-sm" color="primary"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </div>
                     <div class="col">
@@ -131,21 +143,30 @@
             </fieldset>
         <!-- <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Upload -->
 
-            <!-- <div class="row" style="margin-top:20px;margin-left: 10px;">
+            <div class="row" style="margin-top:8px;">
               
                 <div class="col-md-10">
                   <div class="form-control">
-                    <input
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                          <input type="file" class="form-control" id="inputGroupFile02" (change)="saveFile($event)" multiple="multiple" style="color:#1b79ff">
+                          <button for="inputGroupFile02" aria-describedby="inputGroupFileAddon02"></button>
+                        </div>
+                        <div class="input-group-append">
+                          <a class="btn btn-primary btn-sm" id="inputGroupFileAddon02" (click)="saveFiles()" style="cursor:pointer">Add</a>
+                        </div>
+                      </div>
+                    <!-- <input
                       type="file"
                       class=""
                       id=""
                       (change)="saveFile($event)"
                       multiple="multiple"
-                    />
-                    <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Add</a>
+                    /> -->
+                    <!-- <a class="btn btn-success btn-sm" color="primary" style="cursor:pointer;height: 32px;">Add</a> -->
                   </div>
                 </div>
-              </div>-->
+              </div>
               <div class="row">
                 
                 <div class="col-md-10">
@@ -153,7 +174,7 @@
                     class="sch-div"
                     *ngFor="let url of urls; let index = index"
                   >
-                    <div class="col-sm-8">
+                    <div class="col-sm-8" style="color: #1b79ff;">
                       {{ url }}
                     </div>
                     <div class="col-sm-4">
@@ -178,13 +199,13 @@
     <div class="footer-daily">
         <div class="row">
             <div class="col-md-6">
-                <span style="color:rgb(245, 71, 48);margin-right: 15px;" (click)="deletion()" id="btn_animate"
+                <span class="btn btn-outline-danger btn-sm" style="color:rgb(245, 71, 48);margin-right: 15px;" (click)="deletion()" id="btn_animate"
                     mat-dialog-close>
                     Delete <i class="fa fa-trash" id="btn_animate" style="color:rgb(245, 71, 48);font-size:15px;"></i>
                 </span>
-                <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="finish()">
+                <!-- <span style="color:rgb(14, 143, 36);" id="btn_animate" mat-dialog-close (click)="finish()">
                     Finish <i class="fa fa-pencil-square" style="color:rgb(39, 146, 181);" id="btn_animate"></i>
-                </span>
+                </span> -->
             </div>
             <div class="col-md-6">
                 <span style="float:right;margin-right: 40px;"><Button mat-button mat-dialog-close

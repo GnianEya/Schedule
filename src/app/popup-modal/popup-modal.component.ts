@@ -128,7 +128,13 @@ export class PopupModalComponent implements OnInit, OnChanges {
             console.log("File Attachment don't exist at " + this.scheduleId);
           }
           this.name = datum.docName;
-          this.fileData = datum.data;
+          // this.fileData = datum.data;
+          var reader = new FileReader();
+          reader.readAsDataURL(new Blob([datum.data]));
+          reader.onloadend = (e)=>{
+              console.log('DataURL File Download :', e.target.result);
+              this.fileData=e.target.result;
+          };
           let docType = datum.docType;
           console.log(
             "Files for schedule : ",
@@ -136,10 +142,10 @@ export class PopupModalComponent implements OnInit, OnChanges {
             this.fileData,
             docType
           );
-          this.fileURL = window.URL.createObjectURL(
-            new Blob([this.fileData], { type: docType })
-          );
-          console.log("File URL : ", this.fileURL);
+          // this.fileURL = window.URL.createObjectURL(
+          //   new Blob([this.fileData], { type: docType })
+          // );
+          // console.log("File URL : ", this.fileURL);
         });
       });
     // console.log("this is file ID : ",this.fileId);
@@ -750,6 +756,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
   }
 
   download(url: string, name: string) {
+    console.log("File URL : ",name,url);
     //setTimeout(function(){ window.URL.revokeObjectURL(url); }, 3000);
     this.download$ = this.downloads.download(url, name);
   }
@@ -880,5 +887,38 @@ export class PopupModalComponent implements OnInit, OnChanges {
     // console.log("check it out");
     // console.log(this.urls);
     // console.log(this.files);
+  }
+
+  update(){
+    console.log("title on upload : ",this.title);
+    console.log("Description on load : ",this.description);
+    const obj={
+      scheduleId:this.scheduleId,
+      currentUserId:this.currentLoginUserId,
+      title:this.title,
+      description:this.description
+    }
+    this.http.put<any>('http://localhost:8081/schedule/editTitleAndDs',obj).subscribe(
+      (result)=>{
+        console.log("Upload message =>", result);
+        if(result!=null){
+          Swal.fire(
+            'Successfully',
+            'Your Information is successfully updated',
+            'success'
+          )
+        }
+      },
+      (error)=>{
+        console.log("Upload Messaage : ",error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Check Your User Information!!',
+          text: 'Something went wrong!',
+          // footer: '<a href="">Why do I have this issue?</a>'
+        })
+      
+      }
+    );
   }
 }

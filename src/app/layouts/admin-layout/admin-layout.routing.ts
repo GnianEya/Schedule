@@ -8,6 +8,7 @@ import { WeeklyComponent } from "app/weekly/weekly.component";
 import { ChangePasswordComponent } from "app/change-password/change-password.component";
 import { AuthGuard } from "_auth/auth.guard";
 import { ErrorComponent } from "app/error/error.component";
+import { WeeklySearchProfileComponent} from "app/weekly-search-profile/weekly-search-profile.component";
 
 export const AdminLayoutRoutes: Routes = [
   {
@@ -36,6 +37,10 @@ export const AdminLayoutRoutes: Routes = [
   },
   {
     path: "changePassword", component: ChangePasswordComponent, canActivate: [AuthGuard],
+    data: { roles: ["organizer","member"] },
+  },
+  {
+    path: "weeklyprofile", component: WeeklySearchProfileComponent, canActivate: [AuthGuard],
     data: { roles: ["organizer","member"] },
   },
 ];
