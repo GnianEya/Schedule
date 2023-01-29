@@ -230,7 +230,9 @@ export class PopupModalComponent implements OnInit, OnChanges {
         this.scheduleIdHost.map((data) => {
           this.scheduleIdUpdateDelete = data.scheduleId;
           console.log("Schedule Id : ", this.scheduleIdUpdateDelete);
-          if (data.title == this.title) {
+          console.log("Title : ",this.title);
+          console.log("Data Title : ",data.title);
+          if ((data.title == this.title) || ( "Personal Appointment" == this.title)) {
             this.ownerId = data.ownerId;
           }
           console.log("current Schedule ID : ", this.scheduleId);

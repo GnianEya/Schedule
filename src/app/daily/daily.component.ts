@@ -153,6 +153,7 @@ export class DailyComponent implements OnInit, OnChanges {
               var start = e.start + 'T' + e.startTime;
               var end = e.end + 'T' + e.endTime;
               if (e.privacy == true) {
+                //calling api for updating title
                 console.log("Schedule Privacy : ", e.privacy);
                 return {
                   resourceId: "1",
@@ -367,7 +368,7 @@ export class DailyComponent implements OnInit, OnChanges {
     let isEvent: any = editableResponse.filter(
       (item) => {
         console.log("Filter properties : ", item.title, ",", item.start, ",", item.startTime);
-        if (item.title == this.eventTitle && item.start == this.eventStartDate && item.startTime == this.eventStartTime) {
+        if (item.start == this.eventStartDate && item.startTime == this.eventStartTime) {
           console.log("Filtered item-event : ", item);
           return item;
         }
@@ -454,29 +455,69 @@ export class DailyComponent implements OnInit, OnChanges {
 
     //who can have access in case of isPrivacy
     let isPrivacyAccess: boolean = false;
-    for (let e of this.attendeesHost) {
-      if (this.currentLoginUserId != e.userId) {
-        isPrivacyAccess = false;
-      } else {
-        isPrivacyAccess = true;
-      }
+    let isPrivacyAccessArray:any[];
+    isPrivacyAccessArray=this.attendeesHost.filter((item)=>item.userId==this.currentLoginUserId);
+    console.log("Privacy Array : ",isPrivacyAccessArray);
+    if(isPrivacyAccessArray.length){
+      isPrivacyAccess = true;
+    }else{
+      isPrivacyAccess = false;
     }
+    // for (let e of this.attendeesHost) {
+    //   console.log("Check ID : ",e.userId,this.currentLoginUserId);
+    //   if (this.currentLoginUserId == e.userId) {
+    //     isPrivacyAccess = true;
+    //   } else {
+    //     isPrivacyAccess = false;
+    //   }
+    // }
     console.log("isPrivacyAccess : ", isPrivacyAccess);
-    if (isPrivacy || isEditable) {
-      console.log('This isEditable : ', isEditable);
-      this.dialogView.open(PopupModalComponent, {
-        data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
-        width: '40vw', //sets width of dialog
-        height: '80vh', //sets width of dialog
-        maxWidth: '100vw', //overrides default width of dialog
-        maxHeight: '100vh', //overrides default height of dialog
-        disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
-      });
-      isPrivacy = !isPrivacy;
-      isEditable = !isEditable;
-    } else {
-      console.log("Meeting passed through.");
+    if(isPrivacy){
+
+      if(isEditable){
+        this.dialogView.open(PopupModalComponent, {
+          data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
+          width: '40vw', //sets width of dialog
+          height: '80vh', //sets width of dialog
+          maxWidth: '100vw', //overrides default width of dialog
+          maxHeight: '100vh', //overrides default height of dialog
+          disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+        });
+      }
+ }
+
+
+
+    else{ 
+       if(isEditable){
+           if(isPrivacyAccess){
+            this.dialogView.open(PopupModalComponent, {
+              data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
+              width: '40vw', //sets width of dialog
+              height: '80vh', //sets width of dialog
+              maxWidth: '100vw', //overrides default width of dialog
+              maxHeight: '100vh', //overrides default height of dialog
+              disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+            });
+       }
+       }
+
     }
+    // if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
+    //   console.log('This isEditable : ', isEditable);
+    //   this.dialogView.open(PopupModalComponent, {
+    //     data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
+    //     width: '40vw', //sets width of dialog
+    //     height: '80vh', //sets width of dialog
+    //     maxWidth: '100vw', //overrides default width of dialog
+    //     maxHeight: '100vh', //overrides default height of dialog
+    //     disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+    //   });
+    //   isPrivacy = !isPrivacy;
+    //   isEditable = !isEditable;
+    // } else {
+    //   console.log("Meeting passed through.");
+    // }
   }
 
   async searchHandleEventClick(arg: any) {
@@ -494,7 +535,7 @@ export class DailyComponent implements OnInit, OnChanges {
     let isEvent: any = editableResponse.filter(
       (item) => {
         console.log("Filter properties : ", item.title, ",", item.start, ",", item.startTime);
-        if (item.title == this.eventTitle && item.start == this.eventStartDate && item.startTime) {
+        if (item.start == this.eventStartDate && item.startTime) {
           console.log(item);
           return item;
         }
@@ -507,7 +548,7 @@ export class DailyComponent implements OnInit, OnChanges {
       (data) => {
         isPrivacy = data.privacy;
         console.log("isPrivacy : ", isPrivacy);
-        if (data.status != 'ongoing' || data.isDelete == 1) {
+        if (data.status != 'ongoing') {
           isEditable = false;
         }
         else {
@@ -555,30 +596,60 @@ export class DailyComponent implements OnInit, OnChanges {
 
     //who can have access in case of isPrivacy
     let isPrivacyAccess: boolean = false;
-    for (let e of this.attendeesHost) {
-      if (this.currentLoginUserId != e.userId) {
-        isPrivacyAccess = false;
-      } else {
-        isPrivacyAccess = true;
-      }
+    let isPrivacyAccessArray:any[];
+    isPrivacyAccessArray=this.attendeesHost.filter((item)=>item.userId==this.currentLoginUserId);
+    console.log("Privacy Array : ",isPrivacyAccessArray);
+    if(isPrivacyAccessArray.length){
+      isPrivacyAccess = true;
+    }else{
+      isPrivacyAccess = false;
     }
+    // for (let e of this.attendeesHost) {
+    //   if (this.currentLoginUserId != e.userId) {
+    //     isPrivacyAccess = false;
+    //   } else {
+    //     isPrivacyAccess = true;
+    //   }
+    // }
     console.log("isPrivacyAccess : ", isPrivacyAccess);
-    if (isPrivacy || isEditable) {
-      console.log('This isEditable : ', isEditable);
-      this.dialogView.open(PopupModalComponent, {
-        data: this.optimizedSearchEventData,
-        width: '40vw', //sets width of dialog
-        height: '80vh', //sets height of dialog
-        maxWidth: '100vw', //overrides default width of dialog
-        maxHeight: '100vh', //overrides default height of dialog
-        disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+    if(isPrivacy){
 
-      });
-      isPrivacy = !isPrivacy;
-      isEditable = !isEditable;
-    } else {
-      console.log("Meeting passed through.");
+      if(isEditable){
+        console.log('This isEditable : ', isEditable);
+        this.dialogView.open(PopupModalComponent, {
+          data: this.optimizedSearchEventData,
+          width: '40vw', //sets width of dialog
+          height: '80vh', //sets height of dialog
+          maxWidth: '100vw', //overrides default width of dialog
+          maxHeight: '100vh', //overrides default height of dialog
+          disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+  
+        });
+      }
+ }else{ 
+       if(isEditable){
+           if(isPrivacyAccess){
+            console.log('This isEditable : ', isEditable);
+            this.dialogView.open(PopupModalComponent, {
+              data: this.optimizedSearchEventData,
+              width: '40vw', //sets width of dialog
+              height: '80vh', //sets height of dialog
+              maxWidth: '100vw', //overrides default width of dialog
+              maxHeight: '100vh', //overrides default height of dialog
+              disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
+      
+            });
+       }
+       }
+
     }
+    // if ((isPrivacy && isPrivacyAccess && isEditable)||(isPrivacy && isPrivacyAccess && isEditable)) {
+
+    //   isPrivacy = !isPrivacy;
+    //   isEditable = !isEditable;
+    // } else {
+    //   console.log("Meeting passed through.");
+    // }
   }
 
   colorization(status: string) {
@@ -826,7 +897,7 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Schedule Id Host : ", this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data) => {
-        if (data.title == title) {
+        if ((data.title == title) || ( "Personal Appointment" == title)){
           this.scheduleId = data.scheduleId;
         }
       }
@@ -841,7 +912,7 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Schedule Id Host : ", this.scheduleIdHost);
     this.scheduleIdHost.map(
       (data) => {
-        if (data.title == title) {
+        if ((data.title == title) || ( "Personal Appointment" == title)) {
           this.scheduleId = data.scheduleId;
         }
       }
