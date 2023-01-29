@@ -1472,7 +1472,7 @@ export class DailyComponent implements OnInit, OnChanges {
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
         width: '40vw', //sets width of dialog
-        height: '70vh', //sets width of dialog
+        height: '80vh', //sets width of dialog
         maxWidth: '100vw', //overrides default width of dialog
         maxHeight: '100vh', //overrides default height of dialog
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close
@@ -1573,7 +1573,7 @@ export class DailyComponent implements OnInit, OnChanges {
       this.dialogView.open(PopupModalComponent, {
         data: this.optimizedSearchEventData,
         width: '40vw', //sets width of dialog
-        height: '70vh', //sets height of dialog
+        height: '80vh', //sets height of dialog
         maxWidth: '100vw', //overrides default width of dialog
         maxHeight: '100vh', //overrides default height of dialog
         disableClose: true //disables closing on clicking outside box. You will need to make a dedicated button to close

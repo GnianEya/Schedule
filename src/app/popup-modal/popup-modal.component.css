@@ -49,7 +49,6 @@
   }
 
  input[type="file"] {
-  color: transparent;
   cursor: pointer;
     display: block;
     left: 0;
