@@ -50,6 +50,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
   optimizedSearchFiltering: any;
   searchUserId: any;
   responseStaff: any;
+  ownerHost: any;
   ownerId: any;
   isAppoint: boolean = false;
   changeOwner = {};
@@ -87,7 +88,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
   ) {
     console.log("Dialog Data : ", data);
   }
-  ngOnChanges(changes: SimpleChanges): void {}
+  ngOnChanges(changes: SimpleChanges): void { }
 
   ngOnInit(): void {
     this.saveMember();
@@ -108,11 +109,16 @@ export class PopupModalComponent implements OnInit, OnChanges {
       this.attendees = d.attendees;
     });
     console.log("User Id : ", this.userId);
+    // this.httpService.getMethod('http://localhost:8081/user/serchUserSchedule?userId='+this.userId).subscribe(
+    //   (response)=>{
+
+    //   }
+    // );
 
     this.httpService
       .getMethod(
         "http://localhost:8081/file/getAllScheduleFiles?scheduleId=" +
-          this.scheduleId
+        this.scheduleId
       )
       .subscribe((response) => {
         this.fileIdHost = response;
@@ -127,21 +133,31 @@ export class PopupModalComponent implements OnInit, OnChanges {
             this.isAttachmentExist = false;
             console.log("File Attachment don't exist at " + this.scheduleId);
           }
-          this.name = datum.docName;
+          // this.name = datum.docName;
           // this.fileData = datum.data;
-          var reader = new FileReader();
-          reader.readAsDataURL(new Blob([datum.data]));
-          reader.onloadend = (e)=>{
-              console.log('DataURL File Download :', e.target.result);
-              this.fileData=e.target.result;
-          };
-          let docType = datum.docType;
-          console.log(
-            "Files for schedule : ",
-            this.name,
-            this.fileData,
-            docType
-          );
+          // var reader = new FileReader();
+          // reader.readAsDataURL(new Blob([datum.data]));
+          // reader.onloadend = (e)=>{
+          //     console.log('DataURL File Download :', e.target.result);
+          //     this.fileData=e.target.result;
+          // };
+          // let docType = datum.docType;
+          // console.log(
+          //   "Files for schedule : ",
+          //   this.name,
+          //   this.fileData,
+          //   docType
+          // );
+
+          // var blob = new Blob([datum.data], { type: "*" });
+          // var downloadUrl = window.URL.createObjectURL(datum.data);
+          // var a = document.createElement("a");
+          // a.href = downloadUrl;
+          // a.download = "test";/
+          // document.body.appendChild(a);
+          // a.click();
+          // URL.revokeObjectURL(downloadUrl);
+          // console.log("Fucked Well")
           // this.fileURL = window.URL.createObjectURL(
           //   new Blob([this.fileData], { type: docType })
           // );
@@ -149,7 +165,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
         });
       });
     // console.log("this is file ID : ",this.fileId);
-    //      this.httpService.getMethod('http://localhost:8081/file/all?fileId='+this.fileId).subscribe(
+    //      this.httpService.getMethod('http://localhost:8081/fileas/all?fileId='+this.fileId).subscribe(
     //       (response)=>{
     //         this.fileRemoveHost=response;
     //         console.log("File Remove Host : ",this.fileRemoveHost);
@@ -208,15 +224,21 @@ export class PopupModalComponent implements OnInit, OnChanges {
       .getMethod(
         "http://localhost:8081/user/serchUserSchedule?userId=" + this.userId
       )
-      .subscribe(async (response) => {
+      .subscribe((response) => {
         this.scheduleIdHost = response;
         console.log("Schedule Id Host : ", this.scheduleIdHost);
         this.scheduleIdHost.map((data) => {
           this.scheduleIdUpdateDelete = data.scheduleId;
           console.log("Schedule Id : ", this.scheduleIdUpdateDelete);
+          if (data.title == this.title) {
+            this.ownerId = data.ownerId;
+          }
+          console.log("current Schedule ID : ", this.scheduleId);
+          console.log("Owner ID : ", this.ownerId);
         });
       });
-
+    console.log("Choosen Schedule Id Host : ", this.scheduleIdHost);
+    console.log("Choosen Owner ID : ", this.ownerId);
     if (this.userId == this.currentLoginUserId) {
       console.log("Login ID : ", this.currentLoginUserId);
       console.log("Owner ID : ", this.userId);
@@ -259,7 +281,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
     const obj = {
       scheduleId: this.scheduleId,
       currentUserId: this.currentLoginUserId,
-      ownerId: this.userId,
+      ownerId: this.ownerId,
       isDelete: true,
     };
     this.http
@@ -287,7 +309,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
     this.changeOwner = {
       scheduleId: this.scheduleId,
       currentUserId: this.currentLoginUserId,
-      userId: this.userId,
+      userId: id,
     };
     console.log("Optimized ChangeOwner : ", this.changeOwner);
     Swal.fire({
@@ -319,7 +341,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
       scheduleId: this.scheduleId,
       currentUserId: this.currentLoginUserId,
       userId: id,
-      ownerId: this.userId,
+      ownerId: this.ownerId,
     };
     Swal.fire({
       title: "Are you sure?",
@@ -336,8 +358,27 @@ export class PopupModalComponent implements OnInit, OnChanges {
           .put<any>("http://localhost:8081/schedule/removeUser", obj)
           .subscribe((result) => {
             console.log("Attendee deletion message: ", result);
+           if(result!=null){
+            Swal.fire("Removed!", "Member has been removed.", "success");
+           }else if(result=="Check Ur User Informantion!"){
+            Swal.fire({
+              icon: 'error',
+              title: 'Check Your User Information!!',
+              text: 'Something went wrong!',
+              // footer: '<a href="">Why do I have this issue?</a>'
+            })
+           }
+          },
+          (error)=>{
+            if(error!=null){
+              Swal.fire({
+                icon: 'error',
+                title: 'Check Your User Information!!',
+                text: 'Something went wrong!',
+                // footer: '<a href="">Why do I have this issue?</a>'
+              })
+            }
           });
-        Swal.fire("Removed!", "Member has been removed.", "success");
       }
     });
   }
@@ -399,106 +440,6 @@ export class PopupModalComponent implements OnInit, OnChanges {
 
   //check-available
   uniqueArr: Schedule[] = [];
-
-  // checkAvailable() {
-  //   var multiselectedUser: any = [];
-
-  //   console.log("new member added", this.addedMember);
-
-  //   for (let j = 0; j < this.scheduleArr.length; j++) {
-  //     if (this.addedMember.userId == this.scheduleArr[j].userId) {
-  //       multiselectedUser.push(this.scheduleArr[j]);
-  //     }
-  //   }
-
-  //   console.log("down, added member's schedule");
-  //   console.log(multiselectedUser);
-
-  //   var newStart = new Date(this.start).toUTCString();
-  //   var newEnd = new Date(this.end).toUTCString();
-  //   var newStartTime = this.start_time;
-  //   var newStartHour: any = newStartTime.slice(0, 2);
-  //   var newStartMinute: any = newStartTime.slice(3, 5);
-  //   var NewStartTimeHour = newStartMinute / 60 + +newStartHour;
-
-  //   var newEndTime = this.approximated_end_time;
-  //   var newEndHour: any = newStartTime.slice(0, 2);
-  //   var newEndMinute: any = newStartTime.slice(3, 5);
-  //   var NewEndTimeHour = newEndMinute / 60 + +newEndHour;
-
-  //   var unavailableMember: Schedule[] = [];
-  //   for (let i = 0; i < multiselectedUser.length; i++) {
-  //     var oldStart = new Date(multiselectedUser[i].start).toUTCString();
-  //     var oldEnd = new Date(multiselectedUser[i].end).toUTCString();
-  //     var oldStartTime = multiselectedUser[i].start_time;
-  //     var oldStartHour: number = oldStartTime.slice(0, 2);
-  //     var oldStartMinute: number = oldStartTime.slice(3, 5);
-  //     var oldStartTimeHour = oldStartMinute / 60 + +oldStartHour;
-
-  //     var oldEndTime = multiselectedUser[i].end_time;
-  //     var oldEndHour: number = oldEndTime.slice(0, 2);
-  //     var oldEndMinute: number = oldEndTime.slice(3, 5);
-  //     var oldEndTimeHour = oldEndMinute / 60 + +oldEndHour;
-
-  //     console.log("old", oldStartTimeHour, oldEndTimeHour);
-  //     console.log("new", NewStartTimeHour, NewEndTimeHour);
-  //     console.log(
-  //       "condition",
-  //       newStart == oldStart,
-  //       newEnd == oldStart,
-  //       newStart > oldStart && newStart < oldEnd
-  //     );
-  //     console.log(
-  //       "condition day",
-  //       newStart == oldStart ||
-  //         newEnd == oldStart ||
-  //         (newStart > oldStart && newStart < oldEnd)
-  //     );
-  //     console.log(
-  //       "condition time",
-  //       (oldStartTimeHour < NewStartTimeHour &&
-  //         NewStartTimeHour < oldEndTimeHour) ||
-  //         (oldStartTimeHour < NewEndTimeHour &&
-  //           NewEndTimeHour < oldEndTimeHour) ||
-  //         (NewStartTimeHour < oldStartTimeHour &&
-  //           oldStartTimeHour < NewEndTimeHour) ||
-  //         (NewStartTimeHour < oldEndTimeHour &&
-  //           oldEndTimeHour < NewStartTimeHour)
-  //     );
-
-  //     console.log(
-  //       "time",
-  //       oldStartTimeHour < NewStartTimeHour &&
-  //         NewStartTimeHour < oldEndTimeHour,
-  //       oldStartTimeHour < NewEndTimeHour && NewEndTimeHour < oldEndTimeHour,
-  //       NewStartTimeHour < oldStartTimeHour &&
-  //         oldStartTimeHour < NewEndTimeHour,
-  //       NewStartTimeHour < oldEndTimeHour && oldEndTimeHour < NewStartTimeHour
-  //     );
-  //     if (
-  //       newStart == oldStart ||
-  //       newEnd == oldStart ||
-  //       (newStart > oldStart && newStart < oldEnd)
-  //     ) {
-  //       if (
-  //         (oldStartTimeHour < NewStartTimeHour &&
-  //           NewStartTimeHour < oldEndTimeHour) ||
-  //         (oldStartTimeHour < NewEndTimeHour &&
-  //           NewEndTimeHour < oldEndTimeHour) ||
-  //         (NewStartTimeHour < oldStartTimeHour &&
-  //           oldStartTimeHour < NewEndTimeHour) ||
-  //         (NewStartTimeHour < oldEndTimeHour &&
-  //           oldEndTimeHour < NewStartTimeHour)
-  //       ) {
-  //         unavailableMember.push(multiselectedUser[i]);
-  //         console.log("unavailable-member-added", unavailableMember);
-  //         alert("unavailable member");
-  //       }
-  //     } else {
-  //       alert("added success!");
-  //     }
-  //   }
-  // }
   appoint() {
     var addedMember = this.memberArrayay.filter(
       (e) => e.userId == this.searchUserId
@@ -585,31 +526,31 @@ export class PopupModalComponent implements OnInit, OnChanges {
           console.log(
             "condition day",
             newStart == oldStart ||
-              newEnd == oldStart ||
-              (newStart > oldStart && newStart < oldEnd)
+            newEnd == oldStart ||
+            (newStart > oldStart && newStart < oldEnd)
           );
           console.log(
             "condition time",
             (oldStartTimeHour < NewStartTimeHour &&
               NewStartTimeHour < oldEndTimeHour) ||
-              (oldStartTimeHour < NewEndTimeHour &&
-                NewEndTimeHour < oldEndTimeHour) ||
-              (NewStartTimeHour < oldStartTimeHour &&
-                oldStartTimeHour < NewEndTimeHour) ||
-              (NewStartTimeHour < oldEndTimeHour &&
-                oldEndTimeHour < NewStartTimeHour)
+            (oldStartTimeHour < NewEndTimeHour &&
+              NewEndTimeHour < oldEndTimeHour) ||
+            (NewStartTimeHour < oldStartTimeHour &&
+              oldStartTimeHour < NewEndTimeHour) ||
+            (NewStartTimeHour < oldEndTimeHour &&
+              oldEndTimeHour < NewStartTimeHour)
           );
 
           console.log(
             "time",
             oldStartTimeHour < NewStartTimeHour &&
-              NewStartTimeHour < oldEndTimeHour,
+            NewStartTimeHour < oldEndTimeHour,
             oldStartTimeHour < NewEndTimeHour &&
-              NewEndTimeHour < oldEndTimeHour,
+            NewEndTimeHour < oldEndTimeHour,
             NewStartTimeHour < oldStartTimeHour &&
-              oldStartTimeHour < NewEndTimeHour,
+            oldStartTimeHour < NewEndTimeHour,
             NewStartTimeHour < oldEndTimeHour &&
-              oldEndTimeHour < NewStartTimeHour
+            oldEndTimeHour < NewStartTimeHour
           );
           if (
             newStart == oldStart ||
@@ -668,7 +609,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
             var obj = {
               scheduleId: this.scheduleId,
               addUserId: this.searchUserId,
-              ownerId: this.userId,
+              ownerId: this.ownerId,
               currentUserId: this.currentLoginUserId,
               membersList: this.membersList,
             };
@@ -755,10 +696,21 @@ export class PopupModalComponent implements OnInit, OnChanges {
     console.log("Filtered Member List : ", this.membersList);
   }
 
-  download(url: string, name: string) {
-    console.log("File URL : ",name,url);
-    //setTimeout(function(){ window.URL.revokeObjectURL(url); }, 3000);
-    this.download$ = this.downloads.download(url, name);
+  download(file: any) {
+  console.log("Debug => ", file);
+    var blob = new Blob([file.data], {type: "image/*"});
+    var downloadUrl = window.URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = file.docName;
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(downloadUrl);
+    // console.log("File URL : ", name, url);
+    // //setTimeout(function(){ window.URL.revokeObjectURL(url); }, 3000);
+    // this.download$ = this.downloads.download(url, name);
+
+
   }
 
   // downloadRoutering(){
@@ -778,7 +730,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
     this.fileRemoveHost = await firstValueFrom(
       this.httpService.getMethod(
         "http://localhost:8081/file/getAllScheduleFiles?scheduleId=" +
-          this.scheduleId
+        this.scheduleId
       )
     );
     console.log("File Remove Host : ", this.fileRemoveHost);
@@ -818,11 +770,11 @@ export class PopupModalComponent implements OnInit, OnChanges {
     let result = await firstValueFrom(
       this.http.delete<any>(
         "http://localhost:8081/file/deleteFile?fileId=" +
-          this.fileId +
-          "&scheduleId=" +
-          this.scheduleId +
-          "&cuurentUserId=" +
-          this.currentLoginUserId
+        this.fileId +
+        "&scheduleId=" +
+        this.scheduleId +
+        "&cuurentUserId=" +
+        this.currentLoginUserId
       )
     );
     console.log("File Deletion : ", result);
@@ -889,19 +841,19 @@ export class PopupModalComponent implements OnInit, OnChanges {
     // console.log(this.files);
   }
 
-  update(){
-    console.log("title on upload : ",this.title);
-    console.log("Description on load : ",this.description);
-    const obj={
-      scheduleId:this.scheduleId,
-      currentUserId:this.currentLoginUserId,
-      title:this.title,
-      description:this.description
+  update() {
+    console.log("title on upload : ", this.title);
+    console.log("Description on load : ", this.description);
+    const obj = {
+      scheduleId: this.scheduleId,
+      currentUserId: this.currentLoginUserId,
+      title: this.title,
+      description: this.description
     }
-    this.http.put<any>('http://localhost:8081/schedule/editTitleAndDs',obj).subscribe(
-      (result)=>{
+    this.http.put<any>('http://localhost:8081/schedule/editTitleAndDs', obj).subscribe(
+      (result) => {
         console.log("Upload message =>", result);
-        if(result!=null){
+        if (result != null) {
           Swal.fire(
             'Successfully',
             'Your Information is successfully updated',
@@ -909,15 +861,15 @@ export class PopupModalComponent implements OnInit, OnChanges {
           )
         }
       },
-      (error)=>{
-        console.log("Upload Messaage : ",error);
+      (error) => {
+        console.log("Upload Messaage : ", error);
         Swal.fire({
           icon: 'error',
           title: 'Check Your User Information!!',
           text: 'Something went wrong!',
           // footer: '<a href="">Why do I have this issue?</a>'
         })
-      
+
       }
     );
   }

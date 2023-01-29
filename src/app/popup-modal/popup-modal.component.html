@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <div *ngIf="attendee.userId == userId; else elseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">Event Owner
+                                        <div *ngIf="attendee.userId == ownerId; else elseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">Event lead
                                         </div>
                                         <ng-template #elseBlock>
                                             <div *ngIf="attendee.userId == currentLoginUserId; else otherwiseBlock" style="font-size: 10px;color:#8ca0bc;margin-left: 10px;">You are in this meeting.</div>
@@ -127,7 +127,7 @@
                             <i class="fa fa-download" style="color:#1b79ff"></i>{{file.docName}}</a>
                         </div>
                         <div class="col-md-6">
-                        <button (click)="download(fileData,file.docName)" class="btn btn-primary btn-sm" color="primary">Download</button>
+                        <button (click)="download(file)" class="btn btn-primary btn-sm" color="primary">Download</button>
                         <button (click)="fileRemove()" class="btn btn-danger btn-sm" color="primary"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     </div>
                     <div class="col">

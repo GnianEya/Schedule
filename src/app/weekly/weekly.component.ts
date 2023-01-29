@@ -204,24 +204,14 @@ searchCalendarComponent!: FullCalendarComponent;
             (e) => {
               var start = e.start + 'T' + e.startTime;
               var end = e.end + 'T' + e.endTime;
-              //In order not to display deleted schedule
-              if(e.isDelete==1){
-                return {
-                  resourceId: "1",
-                  title: "Cancelled",
-                  start: start,
-                  end: end,
-                  color: this.colorization(e.status,e.isDelete),
-                };
-              }else{
-                if(e.privacy){
+                if(e.privacy==true){
                   console.log("Schedule Privacy : ",e.privacy);
                   return {
                     resourceId: "1",
                     title: e.title,
                     start: start,
                     end: end,
-                    color: this.colorization(e.status,e.isDelete),
+                    color: this.colorization(e.status),
                   };
                 }else{
                   console.log("Schedule Privacy : ",e.privacy);
@@ -230,10 +220,10 @@ searchCalendarComponent!: FullCalendarComponent;
                     title: "Personal Appointment",
                     start: start,
                     end: end,
-                    color: this.colorization(e.status,e.isDelete),
+                    color: this.colorization(e.status),
                   };
                 }
-            }
+            
             }
           );
 
@@ -338,8 +328,8 @@ searchCalendarComponent!: FullCalendarComponent;
       (data)=>{
         isPrivacy=data.privacy;
         console.log("isPrivacy : ",isPrivacy);
-        console.log(data.status,' : ',data.isDelete);
-        if(data.status!='ongoing' || data.isDelete==1){
+        console.log(data.status,' : ');
+        if(data.status!='ongoing'){
           isEditable=false;
         }
         else{
@@ -409,7 +399,7 @@ searchCalendarComponent!: FullCalendarComponent;
       }
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-     if (!isPrivacy || isEditable) {
+     if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupWeeklyComponent, {
         data: this.optimizedEventData,//{title:this.title,description:this.description,attendees:this.attendees,start:this.start,end:this.end}
@@ -455,7 +445,7 @@ searchCalendarComponent!: FullCalendarComponent;
       (data)=>{
         isPrivacy=data.privacy;
         console.log("isPrivacy : ",isPrivacy);
-        if(data.status!='ongoing' || data.isDelete==1){
+        if(data.status!='ongoing'){
           isEditable=false;
         }
         else{
@@ -501,7 +491,7 @@ searchCalendarComponent!: FullCalendarComponent;
       }
     }
     console.log("isPrivacyAccess : ",isPrivacyAccess);
-    if (!isPrivacy || isEditable) {
+    if (isPrivacy || isEditable || (isPrivacy && isPrivacyAccess)) {
       console.log('This isEditable : ',isEditable);
       this.dialogView.open(PopupWeeklyComponent, {
         data: this.optimizedSearchEventData,
@@ -551,24 +541,14 @@ searchCalendarComponent!: FullCalendarComponent;
           (e) => {
             var start = e.start + 'T' + e.startTime;
             var end = e.end + 'T' + e.endTime;
-            //In order not to display deleted schedule
-            if(e.isDelete==1){
-              return {
-                resourceId: "1",
-                title: "Cancelled",
-                start: start,
-                end: end,
-                color: this.colorization(e.status,e.isDelete),
-              };
-            }else{
-              if(e.privacy){
+              if(e.privacy==true){
                 console.log("Schedule Privacy : ",e.privacy);
                 return {
                   resourceId: "1",
                   title: e.title,
                   start: start,
                   end: end,
-                  color: this.colorization(e.status,e.isDelete),
+                  color: this.colorization(e.status),
                 };
               }else{
                 console.log("Schedule Privacy : ",e.privacy);
@@ -577,10 +557,10 @@ searchCalendarComponent!: FullCalendarComponent;
                   title: "Personal Appointment",
                   start: start,
                   end: end,
-                  color: this.colorization(e.status,e.isDelete),
+                  color: this.colorization(e.status),
                 };
               }
-          }
+          
           });
         this.searchCalendarOptions.events = this.optimizedSearchEventArray;
       }
@@ -634,15 +614,8 @@ currentweek(){
 }
 
 
-colorization(status: string,isDelete:any) {
-  // return status == 'ongoing' ? '#1B98E080' : 'gray';
-  if(status!='ongoing'){
-    return 'gray';
-  }else if(isDelete==1){
-    return 'blue';
-  }else{
-    return 'blue';
-  }
+colorization(status: string) {
+ return status == 'ongoing' ? '#1B98E080' : 'gray';
 }
 async grapAttandee() {
   console.log("Debug Second")
