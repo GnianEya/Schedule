@@ -3,4 +3,6 @@ export class Employee {
   employeeName!: String;
   team!: String;
   position!: String;
+  departmentName!: String;
+  teamName!: String;
 }

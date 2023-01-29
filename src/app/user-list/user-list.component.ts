@@ -18,7 +18,13 @@ export class UserListComponent implements OnInit {
   member: Member[] = [];
   check = false;
   dataSource!: MatTableDataSource<Member>;
-  displayedColumns: string[] = ["ID", "Name", "Mail", "Team", "EmployeeID"];
+  displayedColumns: string[] = [
+    "ID",
+    "Name",
+    "Mail",
+    "Department(Team)",
+    "EmployeeID",
+  ];
 
   constructor(
     private employeeService: EmployeeService,
@@ -26,12 +32,12 @@ export class UserListComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.saveTeam();
+    // this.saveTeam();
     this.saveUser();
   }
 
   saveUser() {
-    this.scheduleService.getMemberList().subscribe({
+    this.scheduleService.getUserList().subscribe({
       next: (data) => {
         this.member = data;
         console.log(this.member);

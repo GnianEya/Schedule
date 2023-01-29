@@ -278,7 +278,7 @@
                           "
                           value="{{ preselectedMember.userId }}"
                         >
-                          <div *ngFor="let teams of team">
+                          <!-- <div *ngFor="let teams of team">
                             <div
                               *ngIf="preselectedMember.team === teams.teamId"
                             >
@@ -286,7 +286,10 @@
                                 teams.teamName
                               }})
                             </div>
-                          </div>
+                          </div> -->
+                          {{ preselectedMember.uname }} ({{
+                            preselectedMember.teamName
+                          }})
                         </option>
                       </select>
                     </div>

@@ -56,16 +56,14 @@
                     </td>
                   </ng-container>
 
-                  <ng-container matColumnDef="Team">
+                  <ng-container matColumnDef="Department(Team)">
                     <th mat-header-cell *matHeaderCellDef class="text-primary">
-                      Team
+                      Department(Team)
                     </th>
                     <td mat-cell *matCellDef="let element">
-                      <div *ngFor="let teams of team">
-                        <div *ngIf="element.team === teams.teamId">
-                          <td>{{ teams.teamName }}</td>
-                        </div>
-                      </div>
+                      {{ element.departmentName }} &nbsp;({{
+                        element.teamName
+                      }})
                     </td>
                   </ng-container>
 

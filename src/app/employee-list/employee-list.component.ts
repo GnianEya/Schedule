@@ -17,7 +17,13 @@ export class EmployeeListComponent implements OnInit {
   employees: Employee[] = [];
   check = false;
   dataSource!: MatTableDataSource<Employee>;
-  displayedColumns: string[] = ["ID", "Name", "Team", "Position", "Action"];
+  displayedColumns: string[] = [
+    "ID",
+    "Name",
+    "Department(Team)",
+    "Position",
+    "Action",
+  ];
 
   constructor(
     private employeeService: EmployeeService,
@@ -31,7 +37,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   saveEmployee() {
-    this.employeeService.getEmployeeList().subscribe({
+    this.employeeService.getEmployeeDataList().subscribe({
       next: (data) => {
         this.employees = data;
         if (this.employees.length != 0) {

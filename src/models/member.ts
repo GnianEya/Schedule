@@ -6,4 +6,6 @@ export class Member {
   userId!: Number;
   uname!: String;
   team!: String;
+  teamName!: String;
+  departmentName!: String;
 }

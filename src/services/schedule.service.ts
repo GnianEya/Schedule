@@ -55,6 +55,9 @@ export class ScheduleService {
     return this.httpClient.get<Member[]>(`${this.baseUrl}/user/allUser`);
   }
 
+  getUserList(): Observable<Member[]> {
+    return this.httpClient.get<Member[]>(`${this.baseUrl}/user/getUsers`);
+  }
   getScheduleList(): Observable<Schedule[]> {
     return this.httpClient.get<Schedule[]>(`${this.baseUrl}/user/getMembers`);
   }

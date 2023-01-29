@@ -91,7 +91,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   saveMember() {
-    this.scheduleService.getMemberList().subscribe({
+    this.scheduleService.getUserList().subscribe({
       next: (data) => {
         this.memberArr = data;
         console.log(this.memberArr);
