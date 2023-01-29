@@ -649,7 +649,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
             }
           });
 
-          console.log(this.uniqueArr, "this is available uniqueArr");
+          console.log(this.uniqueArr, "this is available schedule");
           if (this.uniqueArr.length != 0) {
             console.log("this is availabeMember ", availableMember);
             var uniArr = this.uniqueArr[0];
@@ -683,11 +683,11 @@ export class PopupModalComponent implements OnInit, OnChanges {
           }
 
           //  alert("added success!"); //true stage
+          console.log("is Appoint 1 : ", this.isAppoint);
+          this.isAppoint = !this.isAppoint;
+          console.log("is Appoint 1 : ", this.isAppoint);
+          this.searchText = "";
         }
-        console.log("is Appoint 1 : ", this.isAppoint);
-        this.isAppoint = !this.isAppoint;
-        console.log("is Appoint 1 : ", this.isAppoint);
-        this.searchText = "";
       }
     });
   }

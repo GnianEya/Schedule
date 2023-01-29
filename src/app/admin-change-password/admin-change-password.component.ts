@@ -40,7 +40,7 @@ export class AdminChangePasswordComponent {
         Validators.minLength(8),
         Validators.pattern(
           //  '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
-          "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-zd$@$!%*?&].{8,}$"
+          "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-zd$@$!%*?&].{7,}$"
         ),
       ]),
       coPassword: new FormControl(null, [Validators.required]),

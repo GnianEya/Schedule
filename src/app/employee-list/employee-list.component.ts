@@ -25,6 +25,7 @@ export class EmployeeListComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
+    this.saveDepartment();
     this.saveTeam();
     this.saveEmployee();
   }
@@ -73,6 +74,17 @@ export class EmployeeListComponent implements OnInit {
       next: (data) => {
         this.team = data;
         //       console.log(this.team);
+      },
+      error: (e) => console.log(e),
+    });
+  }
+
+  department: Department[];
+  saveDepartment() {
+    this.scheduleService.getDepartmentList().subscribe({
+      next: (data) => {
+        this.department = data;
+        // console.log(this.department);
       },
       error: (e) => console.log(e),
     });
