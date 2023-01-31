@@ -8,6 +8,7 @@ import { PopupModalComponent } from "../popup-modal/popup-modal.component";
 import { Attendee } from "../../models/attendee";
 import { bindCallback } from "rxjs";
 import { HttpServiceService } from "../../services/http-service.service";
+import { ScheduleService } from "../../services/schedule.service";
 import { Event } from "../../models/event";
 
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -29,6 +30,7 @@ import { generateKey } from 'crypto';
 import { createElement } from '@fullcalendar/core/preact';
 import { NgToastService } from 'ng-angular-popup';
 import { RefreshApiService } from 'services/refresh-api.service';
+import { InterSchedule } from 'models/interSchedule';
 
 @Component({
   selector: 'app-daily',
@@ -94,13 +96,15 @@ export class DailyComponent implements OnInit, OnChanges {
   optimizedattendeesHost: any;
   search_no_data: boolean = false;
   isAttendee: boolean = false;
+  interSchedule:InterSchedule;
   constructor(
     private dialogView: MatDialog, 
     private data: DataShareService, 
     private httpService: HttpServiceService, 
     private sanitizer: DomSanitizer,
     private toast:NgToastService,
-    private refreshApi:RefreshApiService
+    private refreshApi:RefreshApiService,
+    private sch: ScheduleService
     ) { 
       this.refreshApi.listenCurrentCalendar().subscribe(
         (refreshData)=>{
@@ -144,6 +148,9 @@ export class DailyComponent implements OnInit, OnChanges {
 
     this.currentLoginUserId = JSON.parse(localStorage.getItem("id"));
     console.log("Current Logined User ID : ", this.currentLoginUserId);
+
+    this.interSchedule=new InterSchedule(this.currentLoginUserId);
+    console.log("InterSchedule : ",this.interSchedule);
 
     this.currentLoginUsername = JSON.parse(localStorage.getItem("name"));
     console.log("Current Logined User Name : ", this.currentLoginUsername);
@@ -980,6 +987,19 @@ export class DailyComponent implements OnInit, OnChanges {
     console.log("Schedule Id for search calendar : ", this.scheduleId);
   }
   report() {
+  }
+
+  ReportMethod(interSchedule: InterSchedule){
+    this.sch.ReportMethod(interSchedule.userId).subscribe((response)=>{
+      console.log("userid - ", this.interSchedule.userId);
+      const file = new Blob ([response], {type: 'application/pdf'});
+      console.log("file - ",file);
+
+      const fileURL = URL.createObjectURL(file);
+      console.log("fileURL - ", fileURL);
+      window.open(fileURL);
+      console.log("open");
+    });
   }
 }
 

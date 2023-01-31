@@ -12,6 +12,8 @@ import { Team } from "../models/team";
 import { Member } from "../models/member";
 // import { File } from "../models/file";
 import { file } from "googleapis/build/src/apis/file";
+import { InterSchedule } from "models/interSchedule";
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: "root",
@@ -61,4 +63,18 @@ export class ScheduleService {
   getScheduleList(): Observable<Schedule[]> {
     return this.httpClient.get<Schedule[]>(`${this.baseUrl}/user/getMembers`);
   }
+
+  // for Daily Report 
+  ReportMethod(userId:any):any{
+    // let currentDate = new Date().toJSON().slice(0,10);
+    const start=moment().format('YYYY-MM-DD');
+    console.log("current date" , start);
+    const httpOptions = {
+      // responseType: 'arraybuffer'as 'json'
+      responseType: 'blob' as 'json'
+    };
+    return this.httpClient.get(`${this.baseUrl}/schedule/dailyReport?userId=${userId}&start=${start}`
+    );
+  }
 }
+  
