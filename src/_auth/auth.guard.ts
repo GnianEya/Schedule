@@ -49,14 +49,14 @@ export class AuthGuard implements CanActivate {
           localRole = JSON.parse(localStorage.getItem("roles"));
           console.log(localRole);
           if (localItem == null) {
-            window.alert("I'm watching you! 🙂");
+            window.alert("Please login first!");
             this.router.navigate(['/login']);
           } else if (localRole[0].roleName === "admin") {
-            window.alert("Lmao! your own app blocks you  (☞ﾟヮﾟ)☞");
+            window.alert("Unauthorized login");
             this.router.navigate(['/login']);
           } else {
             console.log("fail");
-            window.alert("Think about your position and salary before clicking this feature 🤡");
+            window.alert("You do not have permission to access this feature!");
             return this.router.navigate(['/home']);
           }
         }

@@ -8,7 +8,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { DomSanitizer } from "@angular/platform-browser";
 // import * as e from 'express';
@@ -20,6 +20,7 @@ import { DataShareService } from "services/data-share.service";
 import { Download } from "services/download";
 import { DownloadService } from "services/download.service";
 import { HttpServiceService } from "services/http-service.service";
+import { RefreshApiService } from "services/refresh-api.service";
 import { ScheduleService } from "services/schedule.service";
 import Swal from "sweetalert2";
 
@@ -84,10 +85,34 @@ export class PopupModalComponent implements OnInit, OnChanges {
     private scheduleService: ScheduleService,
     @Inject(DOCUMENT) private document: Document,
     private dataShare: DataShareService,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private dialogRef:MatDialogRef<PopupModalComponent>,
+    private refreshApi:RefreshApiService
   ) {
     console.log("Dialog Data : ", data);
+    this.refreshApi.listenTitleAndDescription().subscribe(
+      (result)=>{
+        result.map(
+          (data)=>{
+            this.title=data.title;
+            this.description=data.description;
+            console.log("refresh Api of Title and Description : ",this.title,this.description);
+          }
+        );
+      }
+    );
+    //refresh attendee
+    this.refreshApi.listenAttendee().subscribe(
+      (result)=>{
+        console.log("involed",result);
+        console.log("Refreshed Attendee : ",result);
+        this.attendees=result;
+        console.log("Refreshed Attendee : ",this.attendees);
+      }
+    );
   }
+  //refresh attendee
+  
   ngOnChanges(changes: SimpleChanges): void { }
 
   ngOnInit(): void {
@@ -286,11 +311,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
       ownerId: this.ownerId,
       isDelete: true,
     };
-    this.http
-      .put<any>("http://localhost:8081/schedule/deleteSchedule", obj)
-      .subscribe((result) => {
-        console.log("Delete Schedule Message : ", result);
-      });
+    
     Swal.fire({
       title: "Are you sure?",
       text: "You want to delete this.",
@@ -300,9 +321,28 @@ export class PopupModalComponent implements OnInit, OnChanges {
       cancelButtonColor: "#d33",
       confirmButtonText: "Delete",
     }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire("Removed.", "Member has been removed.", "success");
-      }
+      this.http
+      .delete<any>("http://localhost:8081/schedule/deleteSchedule?scheduleId="+this.scheduleId+"&currentUserId="+this.currentLoginUserId)
+      .subscribe((result) => {
+        console.log("Delete Schedule Message : ", result);
+        this.refreshApi.refreshDataCurrentCalendar(this.currentLoginUserId);
+        this.refreshApi.refreshDataSearchCalendar(this.userId);
+          if (result.isConfirmed) {
+            Swal.fire("Removed.", "Member has been removed.", "success");
+          } 
+      },
+      // (error)=>{
+      //   if(error!=null){
+      //     Swal.fire({
+      //       icon: 'error',
+      //       title: 'Check Your User Information!!',
+      //       text: 'Something went wrong!',
+      //       // footer: '<a href="">Why do I have this issue?</a>'
+      //     })
+      //   }
+      // }
+      );
+      
     });
   }
 
@@ -332,8 +372,22 @@ export class PopupModalComponent implements OnInit, OnChanges {
           )
           .subscribe((result) => {
             console.log("Reassignment message : ", result);
-          });
-        Swal.fire("Appointment.", "Member has been appointed.", "success");
+            if(result!=null){
+              Swal.fire("Appointment.", "Member has been appointed.", "success");
+            }
+          },
+          (error)=>{
+            if(error!=null){
+              Swal.fire({
+                icon: 'error',
+                title: 'Check Your User Information!!',
+                text: 'Something went wrong!',
+                // footer: '<a href="">Why do I have this issue?</a>'
+              })
+            }
+          }
+          );
+        
       }
     });
   }
@@ -619,16 +673,33 @@ export class PopupModalComponent implements OnInit, OnChanges {
 
             this.http
               .put<any>("http://localhost:8081/schedule/addMembers", obj)
-              .subscribe((result) => {
+              .subscribe(
+                (result) => {
+                this.refreshApi.refreshAttendee(this.scheduleId);
                 console.log("Add Member Message", result);
-              });
-
-            //alert msg
+                if(result!=null){
+                  //alert msg
             this.toast.success({
               detail: "Success Message",
               summary: "Member has been added to your meeting",
               duration: 5000,
             });
+                }
+                
+              },
+              (error)=>{
+                if(error!=null || error=="No Access"){
+                  //alert msg
+          this.toast.error({
+            detail: "Error Message",
+            summary: "No access to add member",
+            duration: 5000,
+          });
+                }
+              }
+              );
+
+            
           }
 
           //  alert("added success!"); //true stage
@@ -855,6 +926,7 @@ export class PopupModalComponent implements OnInit, OnChanges {
     this.http.put<any>('http://localhost:8081/schedule/editTitleAndDs', obj).subscribe(
       (result) => {
         console.log("Upload message =>", result);
+        this.refreshApi.refreshTitleAndDescription(this.scheduleId);
         if (result != null) {
           Swal.fire(
             'Successfully',
@@ -874,5 +946,12 @@ export class PopupModalComponent implements OnInit, OnChanges {
 
       }
     );
+  }
+  onClose(){
+    console.log("On Close Callbacked");
+    this.dialogRef.close();
+    this.refreshApi.refreshDataCurrentCalendar(this.currentLoginUserId);
+    this.refreshApi.refreshDataSearchCalendar(this.userId);
+    this.refreshApi.refreshAttendee(this.scheduleId);
   }
 }

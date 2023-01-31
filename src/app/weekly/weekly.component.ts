@@ -415,7 +415,7 @@ searchCalendarComponent!: FullCalendarComponent;
     if(!isEditable){
       this.toast.error({
         detail: "Error Message",
-        summary: "Event have been finished.",
+        summary: "Event has been finished.",
         duration: 3000,
       });
      }else
@@ -718,7 +718,7 @@ currentweek(){
 
 
 colorization(status: string) {
- return status == 'ongoing' ? '#1B98E080' : 'gray';
+ return status == 'ongoing' ? '1E88E5' : 'gray'; //#1B98E080
 }
 async grapAttandee() {
   console.log("Debug Second")

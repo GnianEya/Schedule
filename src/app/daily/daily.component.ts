@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 import { generateKey } from 'crypto';
 import { createElement } from '@fullcalendar/core/preact';
 import { NgToastService } from 'ng-angular-popup';
+import { RefreshApiService } from 'services/refresh-api.service';
 
 @Component({
   selector: 'app-daily',
@@ -93,7 +94,32 @@ export class DailyComponent implements OnInit, OnChanges {
   optimizedattendeesHost: any;
   search_no_data: boolean = false;
   isAttendee: boolean = false;
-  constructor(private dialogView: MatDialog, private data: DataShareService, private httpService: HttpServiceService, private sanitizer: DomSanitizer,private toast:NgToastService) { }
+  constructor(
+    private dialogView: MatDialog, 
+    private data: DataShareService, 
+    private httpService: HttpServiceService, 
+    private sanitizer: DomSanitizer,
+    private toast:NgToastService,
+    private refreshApi:RefreshApiService
+    ) { 
+      this.refreshApi.listenCurrentCalendar().subscribe(
+        (refreshData)=>{
+          this.calendarOptions.events=refreshData;
+          console.log("Refresh Data for current calendar : ",refreshData);
+        }
+      );
+      this.refreshApi.listenSearchCalendar().subscribe(
+        (refreshData)=>{
+          this.searchCalendarOptions.events=refreshData;
+          console.log("Refresh Data for search calendar : ",refreshData);
+        }
+      );
+      this.refreshApi.listenAttendee().subscribe(
+        (refreshData)=>{
+          this.attendeesHost=refreshData;
+        }
+      );
+    }
   @ViewChild("calendar", { static: true })
   calendarComponent!: FullCalendarComponent;
   @ViewChild("searchCalendar", { static: true })
@@ -333,11 +359,12 @@ export class DailyComponent implements OnInit, OnChanges {
             'Member has been removed.',
             'success'
           )
+          if (this.isDisplay) {
+            this.isDisplay = !this.isDisplay;
+          }
         }
       });
-      if (this.isDisplay) {
-        this.isDisplay = !this.isDisplay;
-      }
+      
       console.log("U removed search User Id : ", this.searchUserId);
       this.searchUserIdArray = this.searchUserIdArray.filter(item => item != this.searchUserId);
       console.log("Search User array after removing : ", this.searchUserIdArray);
