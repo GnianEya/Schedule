@@ -13,7 +13,7 @@
               cdkOverlayOrigin
               #trigger="cdkOverlayOrigin"
               placeholder="User Name"
-              style="width: 20rem; height: 38px;color: white;"
+              style="width: 20rem; height: 38px; color: white"
             />
           </div>
           <button type="button" class="btn btn-primary" (click)="isShow()">
@@ -61,7 +61,13 @@
         </div>
       </ng-template>
       <div class="col-md-2">
-        <button class="btn btn-primary" style="color:white;height:30px;" (click)="ReportMethod(interSchedule)"><i class="fa fa-download" style="color:white"></i>&nbsp;Daily Report</button>
+        <button
+          class="btn btn-primary"
+          style="color: white; height: 30px"
+          (click)="ReportMethod(interSchedule)"
+        >
+          <i class="fa fa-download" style="color: white"></i>&nbsp;Daily Report
+        </button>
       </div>
       <!-- <div class="col-md-2"><a href="\assets\img\avater.jpg" class="btn btn-primary" (click)="report()" style="color:white;height:30px;" download="Daily_Report.pdf"><i class="fa fa-download" style="color:white"></i>&nbsp;Daily Report</a></div> -->
     </div>
@@ -118,9 +124,7 @@
       <div class="card">
         <div class="card-header card-header-primary">
           <h4 class="card-title">Daily view</h4>
-          <p class="card-category">
-            Here is Daily Calendar Apppointment.
-          </p>
+          <p class="card-category">Here is Daily Calendar Appointment.</p>
         </div>
         <div class="card-body" style="display: flex">
           <div class="col" [ngStyle]="{ width: isDisplay ? '50%' : '100%' }">
@@ -144,9 +148,9 @@
                   [options]="calendarOptions"
                   [deepChangeDetection]="true"
                 ></full-calendar>
-              </div> 
-            <div style="height: 25px;"></div>
-        </div>
+              </div>
+              <div style="height: 25px"></div>
+            </div>
           </div>
           <div class="col" *ngIf="isDisplay">
             <div (change)="loadElement()">
@@ -174,8 +178,15 @@
       </div>
     </div>
   </div>
-  <div class="row" style="margin-left: 100px;">
-<i class="fa fa-square" aria-hidden="true" style="color:black;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events expired</p>&nbsp;&nbsp;
-<i class="fa fa-square" aria-hidden="true" style="color:#1B98E080;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events are ongoing.</p>
-</div>  
+  <div class="row" style="margin-left: 100px">
+    <i class="fa fa-square" aria-hidden="true" style="color: black"></i>
+    <p style="color: white; font-style: italic">
+      &nbsp;&nbsp; --- Events finished.
+    </p>
+    &nbsp;&nbsp;
+    <i class="fa fa-square" aria-hidden="true" style="color: #1b98e080"></i>
+    <p style="color: white; font-style: italic">
+      &nbsp;&nbsp; --- Events are ongoing.
+    </p>
+  </div>
 </div>

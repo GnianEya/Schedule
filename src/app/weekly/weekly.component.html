@@ -1,35 +1,80 @@
 <div class="main-content">
   <div class="container-fluid">
-<div class="row" *ngIf="scrolled">
-  <div class="col-md-10">
-    <div class="input-group">
-      <div class="form-outline">
-        <input type="search" id="form1" class="form-control" [(ngModel)]="searchText" (keyup)="isOpen = !isOpen"
-          cdkOverlayOrigin #trigger="cdkOverlayOrigin" placeholder="User Name" style="width: 20rem;height:38px;color: white;" />
-      </div>
-      <button type="button" class="btn btn-primary" (click)="isShow()">
-        <i class="fa fa-search"></i>
-      </button>
-    </div>
+    <div class="row" *ngIf="scrolled">
+      <div class="col-md-10">
+        <div class="input-group">
+          <div class="form-outline">
+            <input
+              type="search"
+              id="form1"
+              class="form-control"
+              [(ngModel)]="searchText"
+              (keyup)="isOpen = !isOpen"
+              cdkOverlayOrigin
+              #trigger="cdkOverlayOrigin"
+              placeholder="User Name"
+              style="width: 20rem; height: 38px; color: white"
+            />
+          </div>
+          <button type="button" class="btn btn-primary" (click)="isShow()">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
 
-  <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen"
-    (overlayOutsideClick)="isOpen = false">
-    <div class="card-deck bg-transparent d-flex align-items-center" style="max-width: 20rem;" id="filterResultSearch">
-      <div class="card-body text-info">
-        <div class="card-deck bg-light p-2 shadow shadow-info shadow-intensity-lg rounded-3" style="margin-bottom: 5px;width: 20rem;margin-left: 0px;" *ngFor="let staff of optimizedSearchFiltering | appFilter: searchText;let i=index;" id="listText" (click)="getUsername(staff);">
-          <img [src]="staff.userImage" width="50px" height="50px"/>
-          <span style="padding-left:0px;"></span><label style="font-style: bold;font-size: 13px;" id="staffName">{{staff.username}}</label><span style="padding-left:5px;">(</span><label id="staffDepartment" style="font-size: 8px;">{{staff.departmentname}}</label>)
-        </div>   
+        <ng-template
+          cdkConnectedOverlay
+          [cdkConnectedOverlayOrigin]="trigger"
+          [cdkConnectedOverlayOpen]="isOpen"
+          (overlayOutsideClick)="isOpen = false"
+        >
+          <div
+            class="card-deck bg-transparent d-flex align-items-center"
+            style="max-width: 20rem"
+            id="filterResultSearch"
+          >
+            <div class="card-body text-info">
+              <div
+                class="card-deck bg-light p-2 shadow shadow-info shadow-intensity-lg rounded-3"
+                style="margin-bottom: 5px; width: 20rem; margin-left: 0px"
+                *ngFor="
+                  let staff of optimizedSearchFiltering
+                    | appFilter : searchText;
+                  let i = index
+                "
+                id="listText"
+                (click)="getUsername(staff)"
+              >
+                <img [src]="staff.userImage" width="50px" height="50px" />
+                <span style="padding-left: 0px"></span
+                ><label
+                  style="font-style: bold; font-size: 13px"
+                  id="staffName"
+                  >{{ staff.username }}</label
+                ><span style="padding-left: 5px">(</span
+                ><label id="staffDepartment" style="font-size: 8px">{{
+                  staff.departmentname
+                }}</label
+                >)
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+      <div class="col-md-2">
+        <!-- <a
+          href="\assets\img\avater.jpg"
+          class="btn btn-primary"
+          (click)="report()"
+          style="color: white; height: 30px; margin-top: -25px"
+          download="Weekly_Report.pdf"
+          ><i class="fa fa-download" style="color: white"></i>&nbsp;Weekly
+          Report</a
+        > -->
       </div>
     </div>
-  </ng-template>
-
-  </div>
-  <div class="col-md-2"><a href="\assets\img\avater.jpg" class="btn btn-primary" (click)="report()" style="color:white;height: 30px;margin-top: -25px;" download="Weekly_Report.pdf"><i class="fa fa-download" style="color:white;"></i>&nbsp;Weekly Report</a></div>
-</div>
-<div class="row">
-  <div class="col-md-6"></div>
-  <!-- <div class="col-md-6"> <div>
+    <div class="row">
+      <div class="col-md-6"></div>
+      <!-- <div class="col-md-6"> <div>
     <input [(ngModel)]="dataFromPicker" ngbDatepicker #d="ngbDatepicker" type="text" class="dateinput">
     <Button (click)="d.toggle()" type="button" class="btn btn-primary"><<</Button>
     <Button (click)="previousProcess()" class="btn btn-info"><</Button>
@@ -38,113 +83,160 @@
           <Button (click)="d.toggle()" type="button" class="btn btn-primary">>></Button>
           <input [(ngModel)]="dataFromPicker" ngbDatepicker #d="ngbDatepicker" type="text" class="dateinput">    
     </div></div> -->
-</div>
-<div class="row">
-<div class="container-fluid">
-  <div class="row flex-nowrap">
-      <div class="col-md-2">
-        <div class="card card-block parent" style="margin: left 10px;color: blue;font-weight: bold;">&nbsp;&nbsp;&nbsp;Member
-          <div id="picture">
-            <a  [routerLink]="['/user-profile']">
-                      <img
-                      *ngIf="!isSetDefaultImage"
-                      [src]="profile"
-                      class="img-fluid"
-                      id="wizardPicturePreview"
-                      title=""
-                    />
-                    <img
-                      *ngIf="isSetDefaultImage"
-                      [src]="assets/img/avater.jpg"
-                      class="img-fluid"
-                      id="wizardPicturePreview"
-                      title=""
-                    />
-                      </a>
-                      </div>
-                    <div class="display_center" style="color:blue;font-weight: bold;">
-                     <div>
-                      {{username}}<br>
-                      <label>(</label>
-                      {{teamname}}
-                      <label>)</label>
-                    </div>
-                    </div><hr style="background-color: blue;">
-                      <div style="height: 5px;background-color: dodgerblue;">
-                      </div>
+    </div>
+    <div class="row">
+      <div class="container-fluid">
+        <div class="row flex-nowrap">
+          <div class="col-md-2">
+            <div
+              class="card card-block parent"
+              style="margin: left 10px; color: blue; font-weight: bold"
+            >
+              &nbsp;&nbsp;&nbsp;Member
+              <div id="picture">
+                <a [routerLink]="['/user-profile']">
+                  <img
+                    *ngIf="!isSetDefaultImage"
+                    [src]="profile"
+                    class="img-fluid"
+                    id="wizardPicturePreview"
+                    title=""
+                  />
+                  <img
+                    *ngIf="isSetDefaultImage"
+                    [src]="assets / img / avater.jpg"
+                    class="img-fluid"
+                    id="wizardPicturePreview"
+                    title=""
+                  />
+                </a>
+              </div>
+              <div
+                class="display_center"
+                style="color: blue; font-weight: bold"
+              >
+                <div>
+                  {{ username }}<br />
+                  <label>(</label>
+                  {{ teamname }}
+                  <label>)</label>
+                </div>
+              </div>
+              <hr style="background-color: blue" />
+              <div style="height: 5px; background-color: dodgerblue"></div>
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="card rounded-3">
+              <div style="margin-top: -55px">
+                <div
+                  style="
+                    margin-left: 10px;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                  "
+                >
+                  <full-calendar
+                    #calendar
+                    [options]="calendarOptions"
+                    [deepChangeDetection]="true"
+                  ></full-calendar>
+                </div>
+              </div>
+              <div
+                style="height: 3px; background-color: rgb(244, 244, 155)"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isDisplay">
+          <label style="color: yellow; font-weight: bold"
+            >Searched Member :</label
+          >
+          <hr
+            style="
+              background-color: yellow;
+              margin-top: -50px;
+              font-weight: bolder;
+            "
+          />
+        </div>
+        <div class="row flex-nowrap" *ngIf="isDisplay">
+          <div class="col-2">
+            <div
+              class="card card-block parent"
+              style="margin: left 10px; color: blue; font-weight: bold"
+            >
+              &nbsp;&nbsp;&nbsp;Member
+              <div id="picture">
+                <a [routerLink]="['/weeklyprofile']">
+                  <img
+                    *ngIf="!isSetSearchDefaultImage"
+                    [src]="searchProfile"
+                    class="img-fluid"
+                    id="wizardPicturePreview"
+                    title=""
+                  />
+                  <img
+                    *ngIf="isSetSearchDefaultImage"
+                    src="assets/img/avater.jpg"
+                    class="img-fluid"
+                    id="wizardPicturePreview"
+                    title=""
+                  />
+                </a>
+              </div>
+              <div
+                class="display_center"
+                style="color: blue; font-weight: bold"
+              >
+                <div>
+                  {{ searchUsername }}<br />
+                  <label>(</label>
+                  {{ searchTeamname }}
+                  <label>)</label>
+                </div>
+              </div>
+              <hr style="background-color: blue" />
+              <div style="height: 5px; background-color: dodgerblue"></div>
+            </div>
+          </div>
+          <div class="col-md-10" style="margin-top: 0px">
+            <div class="card rounded-4">
+              <div style="margin-top: -50px">
+                <div
+                  style="
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                  "
+                >
+                  <full-calendar
+                    #searchCalendar
+                    [options]="searchCalendarOptions"
+                    [deepChangeDetection]="true"
+                  ></full-calendar>
+                </div>
+              </div>
+              <div
+                style="height: 3px; background-color: rgb(244, 244, 155)"
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-10">
-        <div class="card rounded-3">
-          <div style="margin-top:-55px;">
-              <div style="margin-left:10px;margin-left:10px;margin-right:10px;margin-bottom: 10px;">
-        <full-calendar
-                  #calendar
-                  [options]="calendarOptions"
-                  [deepChangeDetection]="true"
-                ></full-calendar>
-                </div>
-                </div>
-                <div style="height:3px;background-color: rgb(244, 244, 155);"></div>
-              </div>
-      </div>
-</div>
-  <div *ngIf="isDisplay"><label style="color: yellow;font-weight: bold;">Searched Member :</label><hr style="background-color:yellow;margin-top: -50px;font-weight: bolder;"></div>
-  <div class="row flex-nowrap" *ngIf="isDisplay">
-    <div class="col-2">
-      <div class="card card-block parent" style="margin: left 10px;color:blue;font-weight: bold;">&nbsp;&nbsp;&nbsp;Member
-        <div id="picture">
-          <a  [routerLink]="['/weeklyprofile']">
-          <img
-          *ngIf="!isSetSearchDefaultImage"
-          [src]="searchProfile"
-          class="img-fluid"
-          id="wizardPicturePreview"
-          title=""
-        />
-        <img
-          *ngIf="isSetSearchDefaultImage"
-          src="assets/img/avater.jpg"
-          class="img-fluid"
-          id="wizardPicturePreview"
-          title=""
-        />
-        </a>         
-  </div>
-  <div class="display_center" style="color:blue;font-weight: bold;">
-    <div>
-      {{searchUsername}}<br>
-      <label>(</label>
-      {{searchTeamname}}
-      <label>)</label>
+    </div>
+    <div class="row" style="margin-left: 100px">
+      <i class="fa fa-square" aria-hidden="true" style="color: black"></i>
+      <p style="color: white; font-style: italic">
+        &nbsp;&nbsp; --- Events finished.
+      </p>
+      &nbsp;&nbsp;
+      <i class="fa fa-square" aria-hidden="true" style="color: #1b98e080"></i>
+      <p style="color: white; font-style: italic">
+        &nbsp;&nbsp; --- Events are ongoing.
+      </p>
     </div>
   </div>
-<hr style="background-color: blue;">
-<div style="height: 5px;background-color: dodgerblue;">
 </div>
-      </div>
-    </div>
-    <div class="col-md-10" style="margin-top:0px;">
-      <div class="card rounded-4">
-        <div style="margin-top:-50px;">
-        <div style="margin-left:10px;margin-right:10px;margin-bottom: 10px;">
-      <full-calendar
-      #searchCalendar
-      [options]="searchCalendarOptions"
-      [deepChangeDetection]="true"
-    ></full-calendar>
-    </div>
-    </div>
-    <div style="height:3px;background-color: rgb(244, 244, 155);"></div>
-    </div>
-      </div>
-  </div>
-  </div>
-</div>
-<div class="row" style="margin-left: 100px;">
-  <i class="fa fa-square" aria-hidden="true" style="color:black;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events expired.</p>&nbsp;&nbsp;
-  <i class="fa fa-square" aria-hidden="true" style="color:#1B98E080;"></i><p style="color:white;font-style: italic;">&nbsp;&nbsp; --- Events are ongoing.</p>
-  </div> 
-</div>
-</div>
-
