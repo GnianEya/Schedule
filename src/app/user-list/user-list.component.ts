@@ -18,13 +18,7 @@ export class UserListComponent implements OnInit {
   member: Member[] = [];
   check = false;
   dataSource!: MatTableDataSource<Member>;
-  displayedColumns: string[] = [
-    "ID",
-    "Name",
-    "Mail",
-    "Department(Team)",
-    "EmployeeID",
-  ];
+  displayedColumns: string[] = ["ID", "Name", "Mail", "Department(Team)"];
 
   constructor(
     private employeeService: EmployeeService,
